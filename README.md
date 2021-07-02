@@ -48,7 +48,7 @@ React.useEffect(() => {
 
 Enable module:
 
-**Before using module on Android, check if system support (`android:windowSoftInputMode="adjustResize"` in Android manifest for <activity> tag) is enough for your use case.**
+**Before using module on Android, check if system support (`android:windowSoftInputMode="adjustResize"` in Android manifest for `<activity>` tag) is enough for your use case.**
 
 If you cannot use system support, then enable module and set `android:windowSoftInputMode` attribute to `adjustNothing` either in manifest or programmatically with `setAdjustNothing` method
 
