@@ -27,10 +27,11 @@ const FullScreenView: React.FC = () => {
       AvoidSoftinput.setEnabled(true);
     };
   }, []);
+
   useFocusEffect(onFocusEffect);
 
   return (
-    <SafeAreaView edges={['left', 'bottom', 'right']} style={styles.container}>
+    <SafeAreaView edges={[ 'left', 'bottom', 'right' ]} style={styles.container}>
       <View style={styles.contentContainer}>
         <SingleInput placeholder="1" />
         <View style={styles.spacer}>

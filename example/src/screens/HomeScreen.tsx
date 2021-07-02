@@ -23,7 +23,7 @@ const HomeScreen: React.FC = () => {
         contentContainerStyle={styles.scrolContainer}
         data={EXAMPLES}
         keyExtractor={(example) => example.name}
-        renderItem={({ item }) => (
+        renderItem={({ item }) => 
           <View style={styles.item}>
             <Button
               onPress={() => navigation.navigate(item.name)}
@@ -31,42 +31,40 @@ const HomeScreen: React.FC = () => {
             />
             <Text style={styles.label}>{item.description}</Text>
           </View>
-        )}
+        }
       />
-      {Platform.OS === 'android' ? (
-        <View style={styles.adjustContainer}>
-          <View style={styles.adjustItem}>
-            <Button
-              onPress={() => AvoidSoftInput.setAdjustNothing()}
-              title="Adjust Nothing"
-            />
-          </View>
-          <View style={styles.adjustItem}>
-            <Button
-              onPress={() => AvoidSoftInput.setAdjustPan()}
-              title="Adjust Pan"
-            />
-          </View>
-          <View style={styles.adjustItem}>
-            <Button
-              onPress={() => AvoidSoftInput.setAdjustResize()}
-              title="Adjust Resize"
-            />
-          </View>
-          <View style={styles.adjustItem}>
-            <Button
-              onPress={() => AvoidSoftInput.setAdjustUnspecified()}
-              title="Adjust Unspecified"
-            />
-          </View>
-          <View style={styles.adjustItem}>
-            <Button
-              onPress={() => AvoidSoftInput.setDefaultAppSoftInputMode()}
-              title="Default softinput mode"
-            />
-          </View>
+      {Platform.OS === 'android' ? <View style={styles.adjustContainer}>
+        <View style={styles.adjustItem}>
+          <Button
+            onPress={() => AvoidSoftInput.setAdjustNothing()}
+            title="Adjust Nothing"
+          />
         </View>
-      ) : null}
+        <View style={styles.adjustItem}>
+          <Button
+            onPress={() => AvoidSoftInput.setAdjustPan()}
+            title="Adjust Pan"
+          />
+        </View>
+        <View style={styles.adjustItem}>
+          <Button
+            onPress={() => AvoidSoftInput.setAdjustResize()}
+            title="Adjust Resize"
+          />
+        </View>
+        <View style={styles.adjustItem}>
+          <Button
+            onPress={() => AvoidSoftInput.setAdjustUnspecified()}
+            title="Adjust Unspecified"
+          />
+        </View>
+        <View style={styles.adjustItem}>
+          <Button
+            onPress={() => AvoidSoftInput.setDefaultAppSoftInputMode()}
+            title="Default softinput mode"
+          />
+        </View>
+      </View> : null}
       <StatusBar
         animated={true}
         backgroundColor={'transparent'}

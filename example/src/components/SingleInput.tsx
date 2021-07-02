@@ -1,10 +1,9 @@
 import React from 'react';
-import { StyleSheet, TextInput, TextInputProps } from 'react-native';
+import type { TextInputProps } from 'react-native';
+import { StyleSheet, TextInput } from 'react-native';
 
-interface Props extends TextInputProps {}
-
-const SingleInput: React.FC<Props> = (props) => {
-  return <TextInput {...props} style={[styles.input, props.style]} />;
+const SingleInput: React.FC<TextInputProps> = (props) => {
+  return <TextInput {...props} style={[ styles.input, props.style ]} />;
 };
 
 const styles = StyleSheet.create({

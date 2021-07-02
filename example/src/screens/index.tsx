@@ -10,13 +10,11 @@ const Navigation: React.FC = () => {
   return (
     <Stack.Navigator initialRouteName="Home">
       <Stack.Screen name="Home" component={HomeScreen} />
-      {EXAMPLES.map((example) => (
-        <Stack.Screen
-          key={example.name}
-          name={example.name}
-          component={example.component}
-        />
-      ))}
+      {EXAMPLES.map((example) => <Stack.Screen
+        key={example.name}
+        name={example.name}
+        component={example.component}
+      />)}
     </Stack.Navigator>
   );
 };

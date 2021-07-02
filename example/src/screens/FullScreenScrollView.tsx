@@ -3,6 +3,7 @@ import React, { useCallback } from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
 import * as AvoidSoftinput from 'react-native-avoid-softinput';
 import { SafeAreaView } from 'react-native-safe-area-context';
+
 import MultipleInputs from '../components/MultipleInputs';
 
 const FullScreenScrollView: React.FC = () => {
@@ -26,10 +27,11 @@ const FullScreenScrollView: React.FC = () => {
       AvoidSoftinput.setEnabled(true);
     };
   }, []);
+
   useFocusEffect(onFocusEffect);
 
   return (
-    <SafeAreaView edges={['left', 'bottom', 'right']} style={styles.container}>
+    <SafeAreaView edges={[ 'left', 'bottom', 'right' ]} style={styles.container}>
       <ScrollView
         contentContainerStyle={styles.scrollContainer}
         contentInsetAdjustmentBehavior="always"

@@ -19,7 +19,7 @@ const BottomScrollView: React.FC = () => {
     let headerHeight = 0;
 
     if (Platform.OS === 'ios') {
-      if (isLandscape) {
+      if (isLandscape && !Platform.isPad) {
         headerHeight = 32;
       } else {
         headerHeight = 44;
@@ -29,7 +29,7 @@ const BottomScrollView: React.FC = () => {
     }
 
     return headerHeight + insets.top;
-  }, [isLandscape, insets.top]);
+  }, [ isLandscape, insets.top ]);
   const onFocusEffect = useCallback(() => {
     AvoidSoftinput.setEnabled(true);
 
@@ -50,11 +50,12 @@ const BottomScrollView: React.FC = () => {
       AvoidSoftinput.setEnabled(true);
     };
   }, []);
+
   useFocusEffect(onFocusEffect);
 
   return (
     <SafeAreaView
-      edges={['left', 'bottom', 'right', 'top']}
+      edges={[ 'left', 'bottom', 'right', 'top' ]}
       style={styles.container}
     >
       <View
@@ -70,7 +71,7 @@ const BottomScrollView: React.FC = () => {
           <MultipleInputs />
         </ScrollView>
       </View>
-      <View style={[styles.spacer, { height: HALF_SCREEN - HEADER_HEIGHT }]}>
+      <View style={[ styles.spacer, { height: HALF_SCREEN - HEADER_HEIGHT }]}>
         <Text style={styles.label}>SPACER</Text>
       </View>
     </SafeAreaView>
@@ -98,7 +99,6 @@ const styles = StyleSheet.create({
   spacer: {
     alignItems: 'center',
     backgroundColor: 'pink',
-    // justifyContent: 'center',
   },
 });
 

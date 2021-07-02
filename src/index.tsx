@@ -1,13 +1,21 @@
+import type { EmitterSubscription } from 'react-native';
 import { NativeEventEmitter, NativeModules, Platform } from 'react-native';
 
 const eventEmitter = new NativeEventEmitter(NativeModules.AvoidSoftinput);
+
+// eslint-disable-next-line @typescript-eslint/no-empty-function
+const NOOP = () => {};
 
 /**
  * Fires event with current soft input height, when soft input is shown
  */
 export function onSoftInputShown(
   listener: ({ softInputHeight }: { softInputHeight: number }) => void
-) {
+): EmitterSubscription {
+  if (![ 'android', 'ios' ].includes(Platform.OS)) {
+    return { remove: NOOP } as EmitterSubscription;
+  }
+
   return eventEmitter.addListener('softInputShown', listener);
 }
 
@@ -17,6 +25,10 @@ export function onSoftInputShown(
 export function onSoftInputHidden(
   listener: ({ softInputHeight }: { softInputHeight: number }) => void
 ) {
+  if (![ 'android', 'ios' ].includes(Platform.OS)) {
+    return { remove: NOOP } as EmitterSubscription;
+  }
+
   return eventEmitter.addListener('softInputHidden', listener);
 }
 
@@ -24,6 +36,10 @@ export function onSoftInputHidden(
  * Set whether module is enabled
  */
 export function setEnabled(enabled: boolean) {
+  if (![ 'android', 'ios' ].includes(Platform.OS)) {
+    return;
+  }
+
   NativeModules.AvoidSoftinput.setEnabled(enabled);
 }
 
