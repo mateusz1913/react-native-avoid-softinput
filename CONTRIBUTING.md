@@ -45,13 +45,7 @@ To fix formatting errors, run the following:
 yarn lint --fix
 ```
 
-Remember to add tests for your change if possible. Run the unit tests by:
-
-```sh
-yarn test
-```
-
-To edit the Objective-C files, open `example/ios/AvoidSoftinputExample.xcworkspace` in XCode and find the source files at `Pods > Development Pods > react-native-avoid-softinput`.
+To edit the Swift and Objective-C files, open `example/ios/AvoidSoftinputExample.xcworkspace` in XCode and find the source files at `Pods > Development Pods > react-native-avoid-softinput`.
 
 To edit the Kotlin files, open `example/android` in Android studio and find the source files at `reactnativeavoidsoftinput` under `Android`.
 
