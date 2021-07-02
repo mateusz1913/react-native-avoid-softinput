@@ -33,6 +33,10 @@
   },
   "keywords": [
     "react-native",
+    "soft input",
+    "keyboard",
+    "avoid soft input",
+    "avoid keyboard",
     "ios",
     "android"
   ],
