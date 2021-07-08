@@ -1,6 +1,6 @@
 # `react-native-avoid-softinput`
 
-Native solution for common React Native problem of focused views being covered by soft input view. It is solved by listening for soft input events and applying bottom padding to react root view entirely on native side and only if currently focused view is covered by soft input frame. It supports focused views being positioned in scroll views and regular views (check out example app).
+Native solution for common React Native problem of focused views being covered by soft input view. It is solved by listening for soft input events and applying translation to react root view (or bottom padding if focused element's parent is scroll view) entirely on native side and only if currently focused view is covered by soft input frame. It supports focused views being positioned in scroll views and regular views (check out example app). It also supports modal content, when content is wrapped in [AvoidSoftInputView](#AvoidSoftInputView)
 
 # Table of Contents
 
@@ -8,7 +8,9 @@ Native solution for common React Native problem of focused views being covered b
 2. [Usage](#Usage)
    - [iOS](#usage-ios)
    - [Android](#usage-android)
+   - [Additional offset](#additional-offset)
    - [Listening to events](#listening-events)
+   - [AvoidSoftInputView](#AvoidSoftInputView)
    - [`android:windowSoftInputMode` attribute (Android only)](#android-window-soft-input-mode)
 3. [Contributing](#Contributing)
 4. [Licence](#Licence)
@@ -35,11 +37,11 @@ Enable module:
 
 ```ts
 import React from "react";
-import * as AvoidSoftinput from "react-native-avoid-softinput";
+import { AvoidSoftInput } from "react-native-avoid-softinput";
 
 //...
 React.useEffect(() => {
-  AvoidSoftinput.setEnabled(true);
+  AvoidSoftInput.setEnabled(true);
 }, []);
 //...
 ```
@@ -56,15 +58,30 @@ If you cannot use system support, then enable module and set `android:windowSoft
 
 ```ts
 import React from "react";
-import * as AvoidSoftinput from "react-native-avoid-softinput";
+import { AvoidSoftInput } from "react-native-avoid-softinput";
 
 //...
 React.useEffect(() => {
-  AvoidSoftinput.setAdjustNothing();
-  AvoidSoftinput.setEnabled(true);
+  AvoidSoftInput.setAdjustNothing();
+  AvoidSoftInput.setEnabled(true);
 }, []);
 //...
 ```
+
+### Additional offset <a name="additional-offset"></a>
+
+If you want to increase/decrease amount of translation/padding applied to react root view/scroll view, you can use `setAvoidOffset` method
+
+```ts
+import React from "react";
+import { AvoidSoftInput } from "react-native-avoid-softinput";
+
+//...
+AvoidSoftInput.setAvoidOffset(40); // It will result in applied value 40dp greater than standard one
+//...
+```
+
+> :warning **Value applied to that method is persisted, so if you want to use that in a single use case, remember to clear it (just pass 0 as an argument)**
 
 ### Listening to events <a name="listening-events"></a>
 
@@ -72,11 +89,11 @@ If you want to listen to events when soft input is shown/hidden:
 
 ```ts
 import React from "react";
-import * as AvoidSoftinput from "react-native-avoid-softinput";
+import { AvoidSoftInput } from "react-native-avoid-softinput";
 
 //...
 React.useEffect(() => {
-  const unsubscribeShown = AvoidSoftinput.onSoftInputShown(
+  const unsubscribeShown = AvoidSoftInput.onSoftInputShown(
     ({ softInputHeight }) => {
       console.log("soft input shown", softInputHeight); // Soft input is shown with height
     }
@@ -93,6 +110,43 @@ React.useEffect(() => {
 //...
 ```
 
+## AvoidSoftInputView
+
+If your form is rendered inside modal, wrap your modal content inside AvoidSoftInputView. It will manage whether form's content should be pushed above soft input frame. It accepts regular view props with addition of `avoidOffset` prop and `onSoftInputShown` and `onSoftInputHidden` callbacks
+
+```ts
+import React from "react";
+import { Modal } from "react-native";
+import { AvoidSoftInput } from "react-native-avoid-softinput";
+
+const MyComponent = () => {
+  //...
+  function onSoftInputShown(e) {
+    console.log(e.nativeEvent.softInputHeight);
+    // Do sth
+  }
+  //...
+  function onSoftInputHidden() {
+    // Do sth
+  }
+  //...
+  return (
+    //...
+    <Modal {...modalProps}>
+      <AvoidSoftInputView
+        avoidOffset={10}
+        onSoftInputShown={onSoftInputShown}
+        onSoftInputHidden={onSoftInputHidden}
+        style={styles.avoidSoftInputView}
+      >
+        <View>{/** Rest of form's content */}</View>
+      </AvoidSoftInputView>
+    </Modal>
+    //...
+  );
+};
+```
+
 ### `android:windowSoftInputMode` attribute (Android only) <a name="android-window-soft-input-mode"></a>
 
 Library exposes methods for managing `android:windowSoftInputMode` value:
@@ -102,10 +156,10 @@ Library exposes methods for managing `android:windowSoftInputMode` value:
 Sets `android:windowSoftInputMode` to `adjustNothing` value
 
 ```ts
-import * as AvoidSoftinput from "react-native-avoid-softinput";
+import { AvoidSoftInput } from "react-native-avoid-softinput";
 
 //...
-AvoidSoftinput.setAdjustNothing();
+AvoidSoftInput.setAdjustNothing();
 //...
 ```
 
@@ -114,10 +168,10 @@ AvoidSoftinput.setAdjustNothing();
 Sets `android:windowSoftInputMode` to `adjustPan` value
 
 ```ts
-import * as AvoidSoftinput from "react-native-avoid-softinput";
+import { AvoidSoftInput } from "react-native-avoid-softinput";
 
 //...
-AvoidSoftinput.setAdjustPan();
+AvoidSoftInput.setAdjustPan();
 //...
 ```
 
@@ -126,10 +180,10 @@ AvoidSoftinput.setAdjustPan();
 Sets `android:windowSoftInputMode` to `adjustResize` value
 
 ```ts
-import * as AvoidSoftinput from "react-native-avoid-softinput";
+import { AvoidSoftInput } from "react-native-avoid-softinput";
 
 //...
-AvoidSoftinput.setAdjustResize();
+AvoidSoftInput.setAdjustResize();
 //...
 ```
 
@@ -138,10 +192,10 @@ AvoidSoftinput.setAdjustResize();
 Sets `android:windowSoftInputMode` to `adjustUnspecified` value
 
 ```ts
-import * as AvoidSoftinput from "react-native-avoid-softinput";
+import { AvoidSoftInput } from "react-native-avoid-softinput";
 
 //...
-AvoidSoftinput.setAdjustUnspecified();
+AvoidSoftInput.setAdjustUnspecified();
 //...
 ```
 
@@ -150,10 +204,10 @@ AvoidSoftinput.setAdjustUnspecified();
 sets `android:windowSoftInputMode` to default value from Android manifest
 
 ```ts
-import * as AvoidSoftinput from "react-native-avoid-softinput";
+import { AvoidSoftInput } from "react-native-avoid-softinput";
 
 //...
-AvoidSoftinput.setDefaultAppSoftInputMode();
+AvoidSoftInput.setDefaultAppSoftInputMode();
 //...
 ```
 
