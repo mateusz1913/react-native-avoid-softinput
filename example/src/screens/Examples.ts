@@ -4,6 +4,9 @@ import BottomScrollView from './BottomScrollView';
 import BottomScrollViewWithFlex from './BottomScrollViewWithFlex';
 import FullScreenScrollView from './FullScreenScrollView';
 import FullScreenView from './FullScreenView';
+import FullScreenViewWithOffset from './FullScreenViewWithOffset';
+import ModalScrollView from './ModalScrollView';
+import ModalView from './ModalView';
 
 type Example = {
   name: string;
@@ -34,5 +37,21 @@ export const EXAMPLES: Array<Example> = [
     description:
       'Screen with scroll view (with fixed height) in bottom half of screen',
     component: BottomScrollView,
+  },
+  {
+    name: 'ModalScrollView',
+    description: 'Modal with scroll view with multiple inputs',
+    component: ModalScrollView,
+  },
+  {
+    name: 'ModalView',
+    description: 'Modal with not scrollable view with input in bottom part of the screen',
+    component: ModalView,
+  },
+  {
+    name: 'FullScreenViewWithOffset',
+    description:
+      'Full screen not scrollable view with input in bottom part of the screen, with additional offset applied',
+    component: FullScreenViewWithOffset,
   },
 ];

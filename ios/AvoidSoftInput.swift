@@ -1,7 +1,7 @@
 import UIKit
 
-@objc(AvoidSoftinput)
-class AvoidSoftinput: RCTEventEmitter {
+@objc(AvoidSoftInput)
+class AvoidSoftInput: RCTEventEmitter {
     let SOFT_INPUT_HEIGHT_KEY = "softInputHeight"
     let SOFT_INPUT_SHOWN = "softInputShown"
     let SOFT_INPUT_HIDDEN = "softInputHidden"
@@ -13,6 +13,8 @@ class AvoidSoftinput: RCTEventEmitter {
     var rootViewOriginY: CGFloat? = nil
     var focusedInput: UIView? = nil
     var hasListeners = false
+    var bottomOffset: CGFloat = 0
+    var _avoidOffset: CGFloat = 0
     
     override static func requiresMainQueueSetup() -> Bool {
         return true
@@ -27,14 +29,19 @@ class AvoidSoftinput: RCTEventEmitter {
         isEnabled = enabled.boolValue
     }
     
+    @objc(setAvoidOffset:)
+    func setAvoidOffset(offset: NSNumber) {
+        _avoidOffset = CGFloat(offset.floatValue)
+    }
+    
     @objc func keyboardWillShow(notification: NSNotification) {
-        guard let userInfo = notification.userInfo else {
+        if isRootViewSlideUp {
             return
         }
-        guard let keyboardSize = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else {
+
+        guard let userInfo = notification.userInfo, let keyboardSize = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else {
             return
         }
-        
         let keyboardFrame = keyboardSize.cgRectValue
         
         if hasListeners {
@@ -45,52 +52,49 @@ class AvoidSoftinput: RCTEventEmitter {
             return
         }
         
-        guard let viewController = RCTPresentedViewController() else {
-            return
-        }
-
-        guard let focusedInput = findFirstResponder(view: viewController.view) else {
+        guard let viewController = RCTPresentedViewController(), let focusedInput = findFirstResponder(view: viewController.view), let rootView = viewController.view else {
             return
         }
         
-        self.focusedInput = focusedInput
-
-        guard let positionInRootView = focusedInput.superview?.convert(focusedInput.frame, to: viewController.view) else {
+        if checkIfNestedInAvoidSoftInputView(view: focusedInput) {
             return
         }
-        
-        let shouldAvoidSoftInput = (positionInRootView.origin.y + positionInRootView.height) > viewController.view.frame.height - keyboardFrame.height
         
         if rootViewOriginY == nil {
-            rootViewOriginY = viewController.view.frame.origin.y
+            rootViewOriginY = rootView.frame.origin.y
+        }
+        self.focusedInput = focusedInput
+
+        guard let keyboardOffset = computeKeyboardOffset(keyboardHeight: keyboardFrame.height, firstResponder: focusedInput, containerView: rootView, rootView: rootView) else {
+            return
         }
         
-        if shouldAvoidSoftInput {
-            UIView.animate(withDuration: 0.66, delay: 0.3) {
-                if let scrollView = self.findScrollViewForFirstResponder(view: focusedInput) {
-                    let contentInsets = UIEdgeInsets.init(top: 0.0, left: 0.0, bottom: keyboardFrame.height, right: 0.0)
-                    self.scrollContentInset = scrollView.contentInset
-                    self.scrollIndicatorInsets = scrollView.scrollIndicatorInsets
-                    scrollView.contentInset = contentInsets
-                    scrollView.scrollIndicatorInsets = contentInsets
-                } else {
-                    if let rootViewOriginY = self.rootViewOriginY {
-                        viewController.view.frame.origin.y = rootViewOriginY - keyboardFrame.height
-                    }
+        if rootViewOriginY == nil {
+            rootViewOriginY = rootView.frame.origin.y
+        }
+        
+        self.bottomOffset = keyboardOffset + _avoidOffset
+        UIView.animate(withDuration: 0.66, delay: 0.3) {
+            if let scrollView = findScrollViewForFirstResponder(view: focusedInput, rootView: rootView) {
+                let contentInsets = UIEdgeInsets.init(top: 0.0, left: 0.0, bottom: self.bottomOffset, right: 0.0)
+                self.scrollContentInset = scrollView.contentInset
+                self.scrollIndicatorInsets = scrollView.scrollIndicatorInsets
+                scrollView.contentInset = contentInsets
+                scrollView.scrollIndicatorInsets = contentInsets
+            } else {
+                if let rootViewOriginY = self.rootViewOriginY {
+                    rootView.frame.origin.y = rootViewOriginY - self.bottomOffset
                 }
             }
+        } completion: { isCompleted in
+            self.isRootViewSlideUp = true
         }
     }
     
     @objc func keyboardWillHide(notification: NSNotification) {
-        guard let userInfo = notification.userInfo else {
+        if !isRootViewSlideUp {
             return
         }
-        guard let keyboardSize = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else {
-            return
-        }
-        
-        let keyboardFrame = keyboardSize.cgRectValue
         
         if hasListeners {
             self.sendEvent(withName: SOFT_INPUT_HIDDEN, body: [SOFT_INPUT_HEIGHT_KEY: 0])
@@ -100,22 +104,27 @@ class AvoidSoftinput: RCTEventEmitter {
             return
         }
 
-        guard let viewController = RCTPresentedViewController(), let focusedInput = focusedInput else {
+        guard let viewController = RCTPresentedViewController(), let focusedInput = focusedInput, let rootView = viewController.view else {
+            return
+        }
+        
+        if checkIfNestedInAvoidSoftInputView(view: focusedInput) {
             return
         }
         
         UIView.animate(withDuration: 0.22) {
-            if let scrollView = self.findScrollViewForFirstResponder(view: focusedInput) {
+            if let scrollView = findScrollViewForFirstResponder(view: focusedInput, rootView: rootView) {
                 scrollView.contentInset = self.scrollContentInset
                 scrollView.scrollIndicatorInsets = self.scrollIndicatorInsets
                 self.scrollContentInset = UIEdgeInsets.zero
                 self.scrollIndicatorInsets = UIEdgeInsets.zero
             } else {
-                viewController.view.frame.origin.y += keyboardFrame.height
+                rootView.frame.origin.y += self.bottomOffset
             }
         } completion: { isCompleted in
             self.rootViewOriginY = nil
             self.focusedInput = nil
+            self.isRootViewSlideUp = false
         }
     }
     
@@ -135,33 +144,5 @@ class AvoidSoftinput: RCTEventEmitter {
     
     override func stopObserving() {
         hasListeners = false
-    }
-    
-    func findFirstResponder(view: UIView) -> UIView? {
-        if view.isFirstResponder {
-            return view
-        }
-
-        if view.subviews.count > 0 {
-            for subview in view.subviews {
-                if let v = findFirstResponder(view: subview) {
-                    return v
-                }
-            }
-        }
-
-        return nil
-    }
-    
-    func findScrollViewForFirstResponder(view: UIView) -> UIScrollView? {
-        guard let superview = view.superview else {
-            return nil
-        }
-        switch superview {
-        case is UIScrollView:
-            return superview as? UIScrollView
-        default:
-            return findScrollViewForFirstResponder(view: superview)
-        }
     }
 }

@@ -1,7 +1,7 @@
 import { useFocusEffect } from '@react-navigation/native';
 import React, { useCallback, useMemo } from 'react';
 import { Platform, ScrollView, StyleSheet, Text, View } from 'react-native';
-import * as AvoidSoftinput from 'react-native-avoid-softinput';
+import { AvoidSoftInput } from 'react-native-avoid-softinput';
 import {
   SafeAreaView,
   useSafeAreaFrame,
@@ -31,14 +31,15 @@ const BottomScrollView: React.FC = () => {
     return headerHeight + insets.top;
   }, [ isLandscape, insets.top ]);
   const onFocusEffect = useCallback(() => {
-    AvoidSoftinput.setEnabled(true);
+    AvoidSoftInput.setAdjustNothing();
+    AvoidSoftInput.setEnabled(true);
 
-    const unsubscribeShown = AvoidSoftinput.onSoftInputShown(
+    const unsubscribeShown = AvoidSoftInput.onSoftInputShown(
       ({ softInputHeight }) => {
         console.log('softInputShown', softInputHeight);
       }
     );
-    const unsubscribeHidden = AvoidSoftinput.onSoftInputHidden(
+    const unsubscribeHidden = AvoidSoftInput.onSoftInputHidden(
       ({ softInputHeight }) => {
         console.log('softInputHidden', softInputHeight);
       }
@@ -47,7 +48,7 @@ const BottomScrollView: React.FC = () => {
     return () => {
       unsubscribeShown.remove();
       unsubscribeHidden.remove();
-      AvoidSoftinput.setEnabled(true);
+      AvoidSoftInput.setEnabled(false);
     };
   }, []);
 
@@ -80,7 +81,6 @@ const BottomScrollView: React.FC = () => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'yellow',
     flex: 1,
     flexDirection: 'column-reverse',
   },
