@@ -10,7 +10,7 @@ import com.facebook.react.ReactInstanceManager;
 import com.facebook.soloader.SoLoader;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
-import com.reactnativeavoidsoftinput.AvoidSoftinputPackage;
+import com.reactnativeavoidsoftinput.AvoidSoftInputPackage;
 
 public class MainApplication extends Application implements ReactApplication {
 
@@ -27,7 +27,7 @@ public class MainApplication extends Application implements ReactApplication {
           List<ReactPackage> packages = new PackageList(this).getPackages();
           // Packages that cannot be autolinked yet can be added manually here, for AvoidSoftinputExample:
           // packages.add(new MyReactNativePackage());
-          packages.add(new AvoidSoftinputPackage());
+          packages.add(new AvoidSoftInputPackage());
           return packages;
         }
 

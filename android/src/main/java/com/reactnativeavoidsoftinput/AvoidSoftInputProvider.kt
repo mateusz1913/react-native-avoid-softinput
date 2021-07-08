@@ -5,22 +5,33 @@ import android.graphics.Rect
 import android.graphics.drawable.ColorDrawable
 import android.view.*
 import android.widget.PopupWindow
-import com.facebook.react.bridge.ReactApplicationContext
+import com.facebook.react.bridge.ReactContext
 import com.facebook.react.uimanager.DisplayMetricsHolder
 import com.facebook.react.uimanager.PixelUtil
+import java.util.Timer
+import kotlin.concurrent.schedule
 
-class AvoidSoftinputProvider(): PopupWindow(), ViewTreeObserver.OnGlobalLayoutListener {
+class AvoidSoftInputProvider(): PopupWindow(), ViewTreeObserver.OnGlobalLayoutListener {
   private lateinit var mRootView: View
+  private var mParent: View? = null
   private var mRect = Rect()
   private var mSoftInputHeight = 0
   private val mMinSoftInputHeightToDetect = PixelUtil.toPixelFromDIP(60f).toInt()
   private var mListener: SoftInputListener? = null
-  private lateinit var mReactContext: ReactApplicationContext
+  private lateinit var mReactContext: ReactContext
+  private lateinit var mShowTimer: Timer
+  private lateinit var mHideTimer: Timer
 
-  constructor(reactContext: ReactApplicationContext) : this() {
+  constructor(reactContext: ReactContext) : this(reactContext, null)
+
+  constructor(reactContext: ReactContext, rootView: ViewGroup?): this() {
     mReactContext = reactContext
     mRootView = View(mReactContext.currentActivity)
+    mParent = rootView
     contentView = mRootView
+
+    mShowTimer = Timer("showTimer", true)
+    mHideTimer = Timer("hideTimer", true)
 
     mRootView.viewTreeObserver.addOnGlobalLayoutListener(this)
     setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
@@ -32,9 +43,14 @@ class AvoidSoftinputProvider(): PopupWindow(), ViewTreeObserver.OnGlobalLayoutLi
     inputMethodMode = INPUT_METHOD_NEEDED
   }
 
-  fun initializeProvider(): AvoidSoftinputProvider {
+  fun initializeProvider(): AvoidSoftInputProvider {
     val activity = mReactContext.currentActivity ?: return this
     if (!isShowing) {
+      if (mParent != null) {
+        mParent?.post {
+          showAtLocation(mParent, Gravity.NO_GRAVITY, 0, 0)
+        }
+      }
       val decorView = activity.window.decorView
 
       decorView.post {
@@ -51,7 +67,7 @@ class AvoidSoftinputProvider(): PopupWindow(), ViewTreeObserver.OnGlobalLayoutLi
 
   override fun onGlobalLayout() {
     mRootView.getWindowVisibleDisplayFrame(mRect)
-    val heightDiff = DisplayMetricsHolder.getScreenDisplayMetrics().heightPixels - mRect.bottom - getNavigationBarHeight()
+    val heightDiff = DisplayMetricsHolder.getScreenDisplayMetrics().heightPixels - mRect.bottom - getNavigationBarHeight(mReactContext)
     val isSoftInputPotentiallyShown = mSoftInputHeight != heightDiff && heightDiff > mMinSoftInputHeightToDetect
 
     if (!isSoftInputPotentiallyShown) {
@@ -70,22 +86,22 @@ class AvoidSoftinputProvider(): PopupWindow(), ViewTreeObserver.OnGlobalLayoutLi
     onSoftInputShown(previousSoftInputHeight, mSoftInputHeight)
   }
 
-  private fun getNavigationBarHeight(): Int {
-    var navigationBarHeight = 0
-    val resourceId: Int = mReactContext.resources.getIdentifier("navigation_bar_height", "dimen", "android")
-    if (resourceId > 0) {
-      navigationBarHeight = mReactContext.resources.getDimensionPixelSize(resourceId)
-    }
-
-    return navigationBarHeight
-  }
-
   private fun onSoftInputShown(from: Int, to: Int) {
-    mListener?.onSoftInputShown(from, to)
+    mShowTimer.cancel()
+    mShowTimer = Timer("showTimer", true)
+    mShowTimer.schedule(100) {
+      mListener?.onSoftInputShown(from, to)
+      mShowTimer.cancel()
+    }
   }
 
   private fun onSoftInputHidden(from: Int, to: Int) {
-    mListener?.onSoftInputHidden(from, to)
+    mHideTimer.cancel()
+    mHideTimer = Timer("hideTimer", true)
+    mHideTimer.schedule(100) {
+      mListener?.onSoftInputHidden(from, to)
+      mHideTimer.cancel()
+    }
   }
 
   interface SoftInputListener {

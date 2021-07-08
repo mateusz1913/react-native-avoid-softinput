@@ -9,7 +9,7 @@ import {
   Text,
   View,
 } from 'react-native';
-import * as AvoidSoftInput from 'react-native-avoid-softinput';
+import { AvoidSoftInput } from 'react-native-avoid-softinput';
 
 import { EXAMPLES } from './Examples';
 

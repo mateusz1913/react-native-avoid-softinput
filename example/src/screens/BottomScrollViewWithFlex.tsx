@@ -1,21 +1,22 @@
 import { useFocusEffect } from '@react-navigation/native';
 import React, { useCallback } from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
-import * as AvoidSoftinput from 'react-native-avoid-softinput';
+import { AvoidSoftInput } from 'react-native-avoid-softinput';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import MultipleInputs from '../components/MultipleInputs';
 
 const BottomScrollViewWithFlex: React.FC = () => {
   const onFocusEffect = useCallback(() => {
-    AvoidSoftinput.setEnabled(true);
+    AvoidSoftInput.setAdjustNothing();
+    AvoidSoftInput.setEnabled(true);
 
-    const unsubscribeShown = AvoidSoftinput.onSoftInputShown(
+    const unsubscribeShown = AvoidSoftInput.onSoftInputShown(
       ({ softInputHeight }) => {
         console.log('softInputShown', softInputHeight);
       }
     );
-    const unsubscribeHidden = AvoidSoftinput.onSoftInputHidden(
+    const unsubscribeHidden = AvoidSoftInput.onSoftInputHidden(
       ({ softInputHeight }) => {
         console.log('softInputHidden', softInputHeight);
       }
@@ -24,7 +25,7 @@ const BottomScrollViewWithFlex: React.FC = () => {
     return () => {
       unsubscribeShown.remove();
       unsubscribeHidden.remove();
-      AvoidSoftinput.setEnabled(true);
+      AvoidSoftInput.setEnabled(false);
     };
   }, []);
 
@@ -49,7 +50,6 @@ const BottomScrollViewWithFlex: React.FC = () => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'yellow',
     flex: 1,
     flexDirection: 'column-reverse',
   },

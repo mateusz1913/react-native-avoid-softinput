@@ -6,10 +6,11 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import SingleInput from '../components/SingleInput';
 
-const FullScreenView: React.FC = () => {
+const FullScreenViewWithOffset: React.FC = () => {
   const onFocusEffect = useCallback(() => {
     AvoidSoftInput.setAdjustNothing();
     AvoidSoftInput.setEnabled(true);
+    AvoidSoftInput.setAvoidOffset(50);
 
     const unsubscribeShown = AvoidSoftInput.onSoftInputShown(
       ({ softInputHeight }) => {
@@ -25,6 +26,7 @@ const FullScreenView: React.FC = () => {
     return () => {
       unsubscribeShown.remove();
       unsubscribeHidden.remove();
+      AvoidSoftInput.setAvoidOffset(0);
       AvoidSoftInput.setEnabled(false);
     };
   }, []);
@@ -66,4 +68,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default FullScreenView;
+export default FullScreenViewWithOffset;
