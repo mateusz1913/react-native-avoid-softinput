@@ -1,7 +1,7 @@
 import { useFocusEffect } from '@react-navigation/native';
 import React, { useCallback } from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
-import { AvoidSoftInput } from 'react-native-avoid-softinput';
+import { AvoidSoftInput, useSoftInputHidden, useSoftInputShown } from 'react-native-avoid-softinput';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import MultipleInputs from '../components/MultipleInputs';
@@ -11,25 +11,19 @@ const BottomScrollViewWithFlex: React.FC = () => {
     AvoidSoftInput.setAdjustNothing();
     AvoidSoftInput.setEnabled(true);
 
-    const unsubscribeShown = AvoidSoftInput.onSoftInputShown(
-      ({ softInputHeight }) => {
-        console.log('softInputShown', softInputHeight);
-      }
-    );
-    const unsubscribeHidden = AvoidSoftInput.onSoftInputHidden(
-      ({ softInputHeight }) => {
-        console.log('softInputHidden', softInputHeight);
-      }
-    );
-
     return () => {
-      unsubscribeShown.remove();
-      unsubscribeHidden.remove();
       AvoidSoftInput.setEnabled(false);
     };
   }, []);
 
   useFocusEffect(onFocusEffect);
+
+  useSoftInputHidden(({ softInputHeight }) => {
+    console.log('softInputShown', softInputHeight);
+  });
+  useSoftInputShown(({ softInputHeight }) => {
+    console.log('softInputHidden', softInputHeight);
+  });
 
   return (
     <SafeAreaView edges={[ 'left', 'bottom', 'right' ]} style={styles.container}>

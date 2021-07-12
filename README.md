@@ -10,6 +10,7 @@ Native solution for common React Native problem of focused views being covered b
    - [Android](#usage-android)
    - [Additional offset](#additional-offset)
    - [Listening to events](#listening-events)
+   - [Custom hooks](#custom-hooks)
    - [AvoidSoftInputView](#AvoidSoftInputView)
    - [`android:windowSoftInputMode` attribute (Android only)](#android-window-soft-input-mode)
 3. [Contributing](#Contributing)
@@ -110,7 +111,54 @@ React.useEffect(() => {
 //...
 ```
 
-## AvoidSoftInputView
+### Custom hooks <a name="custom-hooks"></a>
+
+Library provides custom hooks:
+
+#### `useSoftInputHidden`
+
+A shortcut for using `AvoidSoftInput.onSoftInputHidden` method inside `useEffect`
+
+```ts
+import React from "react";
+import { useSoftInputHidden } from "react-native-avoid-softinput";
+
+//...
+useSoftInputHidden(() => {
+  console.log("soft input hidden"); // Soft input is hidden
+});
+//...
+```
+
+#### `useSoftInputShown`
+
+A shortcut for using `AvoidSoftInput.onSoftInputShown` method inside `useEffect`
+
+```ts
+import React from "react";
+import { useSoftInputShown } from "react-native-avoid-softinput";
+
+//...
+useSoftInputShown(({ softInputHeight }) => {
+  console.log("soft input shown", softInputHeight); // Soft input is shown with height
+});
+//...
+```
+
+#### `useSoftInputState`
+
+It returns object with properties determining whether soft input is shown and how much screen it covers
+
+```ts
+import React from "react";
+import { useSoftInputState } from "react-native-avoid-softinput";
+
+//...
+const { isSoftInputShown, softInputHeight } = useSoftInputState();
+//...
+```
+
+### `AvoidSoftInputView`
 
 If your form is rendered inside modal, wrap your modal content inside AvoidSoftInputView. It will manage whether form's content should be pushed above soft input frame. It accepts regular view props with addition of `avoidOffset` prop and `onSoftInputShown` and `onSoftInputHidden` callbacks
 
