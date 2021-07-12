@@ -3,6 +3,7 @@ package com.reactnativeavoidsoftinput
 import android.content.Context
 import android.view.View
 import android.widget.ScrollView
+import com.facebook.react.uimanager.PixelUtil
 
 fun getRelativeY(view: View, rootView: View): Int {
   if (view.parent == null || view.parent !is View) {
@@ -92,4 +93,8 @@ fun getNavigationBarHeight(context: Context): Int {
   }
 
   return navigationBarHeight
+}
+
+fun convertFromPixelToDIP(to: Int): Int {
+  return PixelUtil.toDIPFromPixel(to.toFloat()).toInt()
 }

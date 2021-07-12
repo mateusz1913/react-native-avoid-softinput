@@ -65,7 +65,7 @@ class AvoidSoftInputView(private val reactContext: ThemedReactContext) : ReactVi
 
   override fun onSoftInputShown(from: Int, to: Int) {
     sendEvent(ON_SOFT_INPUT_SHOWN, Arguments.createMap().apply {
-      putInt(SOFT_INPUT_HEIGHT_KEY, to)
+      putInt(SOFT_INPUT_HEIGHT_KEY, convertFromPixelToDIP(to))
     })
 
     val activity = reactContext.currentActivity ?: return
