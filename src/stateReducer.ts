@@ -22,7 +22,7 @@ export function createShownAction(height: number): Action {
   };
 }
 
-interface State {
+export interface State {
   isSoftInputShown: boolean;
   softInputHeight: number;
 }
