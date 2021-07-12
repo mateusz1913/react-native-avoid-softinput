@@ -100,7 +100,7 @@ class AvoidSoftInputModule(private val reactContext: ReactApplicationContext) : 
 
   override fun onSoftInputShown(from: Int, to: Int) {
     sendEvent(SOFT_INPUT_SHOWN, Arguments.createMap().apply {
-      putInt(SOFT_INPUT_HEIGHT_KEY, to)
+      putInt(SOFT_INPUT_HEIGHT_KEY, convertFromPixelToDIP(to))
     })
 
     val activity = reactContext.currentActivity ?: return
