@@ -1,6 +1,7 @@
 import { useEffect, useReducer } from 'react';
 
 import { AvoidSoftInput } from './AvoidSoftInputModule';
+import type { State } from './stateReducer';
 import { createHiddenAction, createShownAction, initialState, reducer } from './stateReducer';
 
 export function useSoftInputHidden(callback: ({ softInputHeight }: {
@@ -27,7 +28,7 @@ export function useSoftInputShown(callback: ({ softInputHeight }: {
   }, [ callback ]);
 }
 
-export function useSoftInputState() {
+export function useSoftInputState(): State {
   const [ state, dispatch ] = useReducer(reducer, initialState);
 
   useSoftInputHidden(() => {
