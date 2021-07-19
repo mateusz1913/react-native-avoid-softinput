@@ -35,10 +35,6 @@ class AvoidSoftInput: RCTEventEmitter {
     }
     
     @objc func keyboardWillShow(notification: NSNotification) {
-        if isRootViewSlideUp {
-            return
-        }
-
         guard let userInfo = notification.userInfo, let keyboardSize = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else {
             return
         }
@@ -48,7 +44,7 @@ class AvoidSoftInput: RCTEventEmitter {
             self.sendEvent(withName: SOFT_INPUT_SHOWN, body: [SOFT_INPUT_HEIGHT_KEY: keyboardFrame.height])
         }
         
-        if isEnabled == false {
+        if isRootViewSlideUp || isEnabled == false {
             return
         }
         
@@ -69,10 +65,6 @@ class AvoidSoftInput: RCTEventEmitter {
             return
         }
         
-        if rootViewOriginY == nil {
-            rootViewOriginY = rootView.frame.origin.y
-        }
-        
         self.bottomOffset = keyboardOffset + _avoidOffset
         UIView.animate(withDuration: 0.66, delay: 0.3) {
             if let scrollView = findScrollViewForFirstResponder(view: focusedInput, rootView: rootView) {
@@ -91,16 +83,12 @@ class AvoidSoftInput: RCTEventEmitter {
         }
     }
     
-    @objc func keyboardWillHide(notification: NSNotification) {
-        if !isRootViewSlideUp {
-            return
-        }
-        
+    @objc func keyboardWillHide(notification: NSNotification) {      
         if hasListeners {
             self.sendEvent(withName: SOFT_INPUT_HIDDEN, body: [SOFT_INPUT_HEIGHT_KEY: 0])
         }
 
-        if isEnabled == false {
+        if !isRootViewSlideUp || isEnabled == false {
             return
         }
 

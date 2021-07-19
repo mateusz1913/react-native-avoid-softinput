@@ -32,14 +32,6 @@ class AvoidSoftInputView: RCTView {
     }
     
     @objc func keyboardWillShow(notification: NSNotification) {
-        if self.isViewSlideUp {
-            return
-        }
-        
-        if originY == nil {
-            originY = self.frame.origin.y
-        }
-        
         guard let userInfo = notification.userInfo, let keyboardSize = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else {
             return
         }
@@ -49,10 +41,17 @@ class AvoidSoftInputView: RCTView {
             onShow([SOFT_INPUT_HEIGHT_KEY: keyboardFrame.height])
         }
         
+        if self.isViewSlideUp {
+            return
+        }
+        
         guard let viewController = RCTPresentedViewController(), let focusedInput = findFirstResponder(view: viewController.view), let rootView = viewController.view else {
             return
         }
         
+        if originY == nil {
+            originY = self.frame.origin.y
+        }
         self.focusedInput = focusedInput
 
         guard let keyboardOffset = computeKeyboardOffset(keyboardHeight: keyboardFrame.height, firstResponder: focusedInput, containerView: self, rootView: rootView) else {
@@ -76,12 +75,12 @@ class AvoidSoftInputView: RCTView {
     }
     
     @objc func keyboardWillHide(notification: NSNotification) {
-        if !self.isViewSlideUp {
-            return
-        }
-        
         if let onHide = onSoftInputHidden {
             onHide([SOFT_INPUT_HEIGHT_KEY: 0])
+        }
+        
+        if !self.isViewSlideUp {
+            return
         }
         
         guard let focusedInput = focusedInput else {

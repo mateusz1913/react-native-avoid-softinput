@@ -203,7 +203,7 @@ PODS:
     - React-jsi (= 0.64.2)
     - React-perflogger (= 0.64.2)
   - React-jsinspector (0.64.2)
-  - react-native-avoid-softinput (1.1.1):
+  - react-native-avoid-softinput (2.1.0):
     - React-Core
   - react-native-safe-area-context (3.2.0):
     - React-Core
@@ -396,7 +396,7 @@ SPEC CHECKSUMS:
   React-jsi: 67747b9722f6dab2ffe15b011bcf6b3f2c3f1427
   React-jsiexecutor: 80c46bd381fd06e418e0d4f53672dc1d1945c4c3
   React-jsinspector: cc614ec18a9ca96fd275100c16d74d62ee11f0ae
-  react-native-avoid-softinput: 51f033ae5c8e981db0371487413d1ebcf03c8673
+  react-native-avoid-softinput: 6137f9b778ab131b1d3792e43137a1112e665b99
   react-native-safe-area-context: f0906bf8bc9835ac9a9d3f97e8bde2a997d8da79
   React-perflogger: 25373e382fed75ce768a443822f07098a15ab737
   React-RCTActionSheet: af7796ba49ffe4ca92e7277a5d992d37203f7da5
