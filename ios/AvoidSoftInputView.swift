@@ -4,6 +4,8 @@ class AvoidSoftInputView: RCTView {
     var focusedInput: UIView? = nil
     var originY: CGFloat? = nil
     var isViewSlideUp: Bool = false
+    var isViewSlidingDown: Bool = false
+    var isViewSlidingUp: Bool = false
     var scrollContentInset: UIEdgeInsets = UIEdgeInsets.zero
     var scrollIndicatorInsets: UIEdgeInsets = UIEdgeInsets.zero
     var bottomOffset: CGFloat = 0
@@ -41,11 +43,14 @@ class AvoidSoftInputView: RCTView {
             onShow([SOFT_INPUT_HEIGHT_KEY: keyboardFrame.height])
         }
         
-        if self.isViewSlideUp {
+        if self.isViewSlideUp || self.isViewSlidingUp {
             return
         }
         
+        self.isViewSlidingUp = true
+        
         guard let viewController = RCTPresentedViewController(), let focusedInput = findFirstResponder(view: viewController.view), let rootView = viewController.view else {
+            self.isViewSlidingUp = false
             return
         }
         
@@ -55,11 +60,12 @@ class AvoidSoftInputView: RCTView {
         self.focusedInput = focusedInput
 
         guard let keyboardOffset = computeKeyboardOffset(keyboardHeight: keyboardFrame.height, firstResponder: focusedInput, containerView: self, rootView: rootView) else {
+            self.isViewSlidingUp = false
             return
         }
                 
         self.bottomOffset = keyboardOffset + _avoidOffset
-        UIView.animate(withDuration: 0.66, delay: 0.3) {
+        UIView.animate(withDuration: 0.66, delay: 0.3, options: [.beginFromCurrentState]) {
             if let scrollView = findScrollViewForFirstResponder(view: focusedInput, rootView: self) {
                 let contentInsets = UIEdgeInsets.init(top: 0.0, left: 0.0, bottom: self.bottomOffset, right: 0.0)
                 self.scrollContentInset = scrollView.contentInset
@@ -70,6 +76,7 @@ class AvoidSoftInputView: RCTView {
                 self.frame.origin.y = originY - self.bottomOffset
             }
         } completion: { isCompleted in
+            self.isViewSlidingUp = false
             self.isViewSlideUp = true
         }
     }
@@ -79,15 +86,18 @@ class AvoidSoftInputView: RCTView {
             onHide([SOFT_INPUT_HEIGHT_KEY: 0])
         }
         
-        if !self.isViewSlideUp {
+        if (!self.isViewSlideUp && !self.isViewSlidingUp) || self.isViewSlidingDown {
             return
         }
+        
+        self.isViewSlidingDown = true
         
         guard let focusedInput = focusedInput else {
+            self.isViewSlidingDown = false
             return
         }
         
-        UIView.animate(withDuration: 0.22) {
+        UIView.animate(withDuration: 0.22, delay: 0, options: [.beginFromCurrentState]) {
             if let scrollView = findScrollViewForFirstResponder(view: focusedInput, rootView: self) {
                 scrollView.contentInset = self.scrollContentInset
                 scrollView.scrollIndicatorInsets = self.scrollIndicatorInsets
@@ -101,6 +111,7 @@ class AvoidSoftInputView: RCTView {
             self.focusedInput = nil
             self.bottomOffset = 0
             self.isViewSlideUp = false
+            self.isViewSlidingDown = false
         }
     }
 }
