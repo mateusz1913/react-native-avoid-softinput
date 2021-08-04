@@ -21,9 +21,14 @@ class AvoidSoftInputView(private val reactContext: ThemedReactContext) : ReactVi
   private var mPreviousFocusedView: View? = null
   private var mScrollViewParent: ScrollView? = null
   private var mIsViewSlideUp = false
+  private var mIsViewSlidingDown = false
+  private var mIsViewSlidingUp = false
   private var mCurrentBottomPadding: Int = 0
   private var mBottomOffset: Float = 0F
   private var mAvoidOffset: Float = 0F
+  private var mScrollY: Int = 0
+  private var mHideValueAnimator: ValueAnimator? = null
+  private var mShowValueAnimator: ValueAnimator? = null
 
   private val mOnGlobalFocusChangeListener = ViewTreeObserver.OnGlobalFocusChangeListener { oldView, newView ->
     mCurrentFocusedView = newView
@@ -72,7 +77,19 @@ class AvoidSoftInputView(private val reactContext: ThemedReactContext) : ReactVi
     val rootView = activity.window.decorView.rootView
     val currentFocusedView = mCurrentFocusedView ?: mPreviousFocusedView
 
-    val keyboardOffset = computeKeyboardOffset(to, currentFocusedView, this, rootView) ?: return
+    if (mIsViewSlideUp || mIsViewSlidingUp || currentFocusedView == null) {
+      return
+    }
+
+    mIsViewSlidingUp = true
+
+    val keyboardOffset = computeKeyboardOffset(to, currentFocusedView, this, rootView)
+
+    if (keyboardOffset == null) {
+      mIsViewSlidingUp = false
+      return
+    }
+
     mScrollViewParent = getScrollViewParent(currentFocusedView, this)
 
     mBottomOffset = keyboardOffset + mAvoidOffset
@@ -80,15 +97,19 @@ class AvoidSoftInputView(private val reactContext: ThemedReactContext) : ReactVi
     mCurrentBottomPadding = scrollViewParent?.paddingBottom ?: 0
 
     UiThreadUtil.runOnUiThread {
-      ValueAnimator.ofFloat(0F, mBottomOffset).apply {
+      mHideValueAnimator?.end()
+      mShowValueAnimator = ValueAnimator.ofFloat(0F, mBottomOffset).apply {
         duration = AvoidSoftInputModule.INCREASE_PADDING_DURATION_IN_MS
         addListener(object: AnimatorListenerAdapter() {
           override fun onAnimationEnd(animation: Animator?) {
             super.onAnimationEnd(animation)
-            if (currentFocusedView != null && scrollViewParent != null) {
-              val positionInScrollView = getPositionYRelativeToScrollViewParent(currentFocusedView, this@AvoidSoftInputView)
-              scrollViewParent.smoothScrollTo(0, positionInScrollView)
+            if (scrollViewParent != null) {
+              mScrollY = scrollViewParent.scrollY
+              scrollViewParent.smoothScrollTo(0, (scrollViewParent.scrollY + mBottomOffset).toInt())
             }
+            mIsViewSlidingUp = false
+            mIsViewSlideUp = true
+            mShowValueAnimator = null
           }
         })
         addUpdateListener {
@@ -106,7 +127,6 @@ class AvoidSoftInputView(private val reactContext: ThemedReactContext) : ReactVi
         start()
       }
     }
-    mIsViewSlideUp = true
   }
 
   override fun onSoftInputHidden(from: Int, to: Int) {
@@ -114,26 +134,28 @@ class AvoidSoftInputView(private val reactContext: ThemedReactContext) : ReactVi
       putInt(SOFT_INPUT_HEIGHT_KEY, 0)
     })
 
-    if (!mIsViewSlideUp) {
+    if ((!mIsViewSlideUp && !mIsViewSlidingUp) || mIsViewSlidingDown) {
       return
     }
 
-    mIsViewSlideUp = false
     val scrollViewParent = mScrollViewParent
-    val currentFocusedView = mCurrentFocusedView ?: mPreviousFocusedView
 
     UiThreadUtil.runOnUiThread {
-      ValueAnimator.ofFloat(mBottomOffset, 0F).apply {
+      mShowValueAnimator?.end()
+      mHideValueAnimator = ValueAnimator.ofFloat(mBottomOffset, 0F).apply {
         duration = AvoidSoftInputModule.DECREASE_PADDING_DURATION_IN_MS
         addListener(object: AnimatorListenerAdapter() {
           override fun onAnimationEnd(animation: Animator?) {
             super.onAnimationEnd(animation)
-            if (currentFocusedView != null && scrollViewParent != null) {
-              val positionInScrollView = getPositionYRelativeToScrollViewParent(currentFocusedView, this@AvoidSoftInputView)
-              scrollViewParent.smoothScrollTo(0, positionInScrollView)
+            if (scrollViewParent != null) {
+              scrollViewParent.smoothScrollTo(0, mScrollY)
+              mScrollY = 0
             }
             mScrollViewParent = null
             mCurrentBottomPadding = 0
+            mIsViewSlidingDown = false
+            mIsViewSlideUp = false
+            mHideValueAnimator = null
           }
         })
         addUpdateListener {
