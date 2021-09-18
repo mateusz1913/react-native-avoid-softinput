@@ -21,8 +21,10 @@ class AvoidSoftInputView: RCTView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        #if os(iOS)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+        #endif
     }
     
     required init?(coder: NSCoder) {
@@ -30,9 +32,12 @@ class AvoidSoftInputView: RCTView {
     }
     
     deinit {
+        #if os(iOS)
         NotificationCenter.default.removeObserver(self)
+        #endif
     }
     
+    #if os(iOS)
     @objc func keyboardWillShow(notification: NSNotification) {
         guard let userInfo = notification.userInfo, let keyboardSize = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else {
             return
@@ -114,4 +119,5 @@ class AvoidSoftInputView: RCTView {
             self.isViewSlidingDown = false
         }
     }
+    #endif
 }

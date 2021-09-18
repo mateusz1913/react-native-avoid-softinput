@@ -47,7 +47,7 @@ func computeKeyboardOffset(keyboardHeight: CGFloat, firstResponder: UIView, cont
     }
     
     var topSafeInset: CGFloat = 0
-    if #available(iOS 11.0, *) {
+    if #available(iOS 11.0, tvOS 11.0, *) {
         topSafeInset = rootView.safeAreaInsets.top
     }
     let keyboardOffset = keyboardHeight - (rootView.frame.height - containerView.frame.height - containerView.frame.origin.y)

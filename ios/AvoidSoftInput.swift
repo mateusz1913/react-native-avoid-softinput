@@ -36,6 +36,7 @@ class AvoidSoftInput: RCTEventEmitter {
         _avoidOffset = CGFloat(offset.floatValue)
     }
     
+    #if os(iOS)
     @objc func keyboardWillShow(notification: NSNotification) {
         guard let userInfo = notification.userInfo, let keyboardSize = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else {
             return
@@ -128,15 +129,20 @@ class AvoidSoftInput: RCTEventEmitter {
             self.isRootViewSlideUp = false
         }
     }
+    #endif
     
     override init() {
         super.init()
+        #if os(iOS)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+        #endif
     }
     
     deinit {
+        #if os(iOS)
         NotificationCenter.default.removeObserver(self)
+        #endif
     }
     
     override func startObserving() {
