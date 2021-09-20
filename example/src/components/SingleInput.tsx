@@ -9,6 +9,7 @@ const SingleInput: React.FC<TextInputProps> = (props) => {
 const styles = StyleSheet.create({
   input: {
     alignSelf: 'stretch',
+    backgroundColor: 'white',
     borderColor: 'black',
     borderRadius: 10,
     borderWidth: 1,

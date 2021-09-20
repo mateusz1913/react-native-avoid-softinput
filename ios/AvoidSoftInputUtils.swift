@@ -41,7 +41,7 @@ func checkIfNestedInAvoidSoftInputView(view: UIView) -> Bool {
     return checkIfNestedInAvoidSoftInputView(view: superview)
 }
 
-func computeKeyboardOffset(keyboardHeight: CGFloat, firstResponder: UIView, containerView: UIView, rootView: UIView) -> CGFloat? {
+func computeSoftInputOffset(softInputHeight: CGFloat, firstResponder: UIView, containerView: UIView, rootView: UIView) -> CGFloat? {
     guard let inputPosition = firstResponder.superview?.convert(firstResponder.frame, to: containerView) else {
         return nil
     }
@@ -50,12 +50,42 @@ func computeKeyboardOffset(keyboardHeight: CGFloat, firstResponder: UIView, cont
     if #available(iOS 11.0, tvOS 11.0, *) {
         topSafeInset = rootView.safeAreaInsets.top
     }
-    let keyboardOffset = keyboardHeight - (rootView.frame.height - containerView.frame.height - containerView.frame.origin.y)
-    let shouldAvoidSoftInput = (inputPosition.origin.y + inputPosition.height + topSafeInset) >= (containerView.frame.height + containerView.frame.origin.y) - keyboardOffset
+    let softInputOffset = softInputHeight - (rootView.frame.height - containerView.frame.height - containerView.frame.origin.y)
+    let shouldAvoidSoftInput = (inputPosition.origin.y + inputPosition.height + topSafeInset) >= (containerView.frame.height + containerView.frame.origin.y) - softInputOffset
     
     if !shouldAvoidSoftInput {
         return nil
     }
     
-    return keyboardOffset
+    return softInputOffset
+}
+
+func applyOffset(focusedInput: UIView, rootView: UIView, bottomOffset: CGFloat) -> MaybeScrollInsets {
+    if let scrollView = findScrollViewForFirstResponder(view: focusedInput, rootView: rootView) {
+        let contentInsets = UIEdgeInsets.init(top: 0.0, left: 0.0, bottom: bottomOffset, right: 0.0)
+        let scrollContentInset = scrollView.contentInset
+        let scrollIndicatorInsets = scrollView.scrollIndicatorInsets
+        scrollView.contentInset = contentInsets
+        scrollView.scrollIndicatorInsets = contentInsets
+        return MaybeScrollInsets(scrollContentInset: scrollContentInset, scrollIndicatorInsets: scrollIndicatorInsets)
+    }
+
+    rootView.frame.origin.y -= bottomOffset
+    return MaybeScrollInsets()
+}
+
+func removeOffset(focusedInput: UIView, rootView: UIView, bottomOffset: CGFloat, scrollContentInset: UIEdgeInsets, scrollIndicatorInsets: UIEdgeInsets) -> MaybeScrollInsets {
+    if let scrollView = findScrollViewForFirstResponder(view: focusedInput, rootView: rootView) {
+        scrollView.contentInset = scrollContentInset
+        scrollView.scrollIndicatorInsets = scrollIndicatorInsets
+        return MaybeScrollInsets(scrollContentInset: UIEdgeInsets.zero, scrollIndicatorInsets: UIEdgeInsets.zero)
+    }
+    
+    rootView.frame.origin.y += bottomOffset
+    return MaybeScrollInsets()
+}
+
+struct MaybeScrollInsets {
+    var scrollContentInset: UIEdgeInsets?
+    var scrollIndicatorInsets: UIEdgeInsets?
 }

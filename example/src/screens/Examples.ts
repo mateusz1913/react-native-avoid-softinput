@@ -1,8 +1,10 @@
 import type React from 'react';
 
+import AppliedOffsetEvents from './AppliedOffsetEvents';
 import BottomScrollView from './BottomScrollView';
 import BottomScrollViewWithFlex from './BottomScrollViewWithFlex';
 import FullScreenScrollView from './FullScreenScrollView';
+import FullScreenScrollViewWithSingleInput from './FullScreenScrollViewWithSingleInput';
 import FullScreenView from './FullScreenView';
 import FullScreenViewWithOffset from './FullScreenViewWithOffset';
 import ModalScrollView from './ModalScrollView';
@@ -53,5 +55,17 @@ export const EXAMPLES: Array<Example> = [
     description:
       'Full screen not scrollable view with input in bottom part of the screen, with additional offset applied',
     component: FullScreenViewWithOffset,
+  },
+  {
+    name: 'FullScreenScrollViewWithSingleInput',
+    description:
+      'Full screen scrollable view with input in bottom part of the screen',
+    component: FullScreenScrollViewWithSingleInput,
+  },
+  {
+    name: 'AppliedOffsetEvents',
+    description:
+      'Screen content with animation that depends on soft input applied offset value',
+    component: AppliedOffsetEvents,
   },
 ];

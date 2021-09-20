@@ -1,7 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import {
-  Button,
   FlatList,
   Platform,
   StatusBar,
@@ -10,6 +9,9 @@ import {
   View,
 } from 'react-native';
 import { AvoidSoftInput } from 'react-native-avoid-softinput';
+import { SafeAreaView } from 'react-native-safe-area-context';
+
+import Button from '../components/Button';
 
 import { EXAMPLES } from './Examples';
 
@@ -17,7 +19,7 @@ const HomeScreen: React.FC = () => {
   const navigation = useNavigation();
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView edges={[ 'left', 'right', 'bottom' ]} style={styles.container}>
       <FlatList
         ItemSeparatorComponent={() => <View style={styles.separator} />}
         contentContainerStyle={styles.scrolContainer}
@@ -71,7 +73,7 @@ const HomeScreen: React.FC = () => {
         barStyle={'dark-content'}
         translucent={true}
       />
-    </View>
+    </SafeAreaView>
   );
 };
 

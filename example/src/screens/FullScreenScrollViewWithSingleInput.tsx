@@ -1,16 +1,15 @@
 import { useFocusEffect } from '@react-navigation/native';
 import React, { useCallback } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { ScrollView, StyleSheet } from 'react-native';
 import { AvoidSoftInput } from 'react-native-avoid-softinput';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import SingleInput from '../components/SingleInput';
 
-const FullScreenViewWithOffset: React.FC = () => {
+const FullScreenScrollViewWithSingleInput: React.FC = () => {
   const onFocusEffect = useCallback(() => {
     AvoidSoftInput.setAdjustNothing();
     AvoidSoftInput.setEnabled(true);
-    AvoidSoftInput.setAvoidOffset(50);
 
     const unsubscribeShown = AvoidSoftInput.onSoftInputShown(
       ({ softInputHeight }) => {
@@ -26,7 +25,6 @@ const FullScreenViewWithOffset: React.FC = () => {
     return () => {
       unsubscribeShown.remove();
       unsubscribeHidden.remove();
-      AvoidSoftInput.setAvoidOffset(0);
       AvoidSoftInput.setEnabled(false);
       AvoidSoftInput.setDefaultAppSoftInputMode();
     };
@@ -36,37 +34,27 @@ const FullScreenViewWithOffset: React.FC = () => {
 
   return (
     <SafeAreaView edges={[ 'left', 'bottom', 'right' ]} style={styles.container}>
-      <View style={styles.contentContainer}>
-        <SingleInput placeholder="1" />
-        <View style={styles.spacer}>
-          <Text style={styles.label}>SPACER</Text>
-        </View>
-      </View>
+      <ScrollView
+        contentContainerStyle={styles.scrollContainer}
+        contentInsetAdjustmentBehavior="always"
+      >
+        <SingleInput />
+      </ScrollView>
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    alignSelf: 'stretch',
+    backgroundColor: 'white',
     flex: 1,
   },
-  contentContainer: {
-    alignSelf: 'stretch',
-    flexGrow: 1,
-    flexDirection: 'column-reverse',
-  },
-  label: {
-    color: 'blue',
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  spacer: {
+  scrollContainer: {
     alignItems: 'center',
-    backgroundColor: 'pink',
-    flex: 1,
-    justifyContent: 'center',
+    backgroundColor: 'yellow',
+    flexDirection: 'column-reverse',
+    flexGrow: 1,
   },
 });
 
-export default FullScreenViewWithOffset;
+export default FullScreenScrollViewWithSingleInput;
