@@ -15,6 +15,9 @@ import com.facebook.react.views.view.ReactClippingViewManager
 import com.facebook.react.views.view.ReactDrawableHelper
 import com.facebook.react.views.view.ReactViewGroup
 import com.facebook.yoga.YogaConstants
+import com.reactnativeavoidsoftinput.events.AvoidSoftInputAppliedOffsetChangedEvent
+import com.reactnativeavoidsoftinput.events.AvoidSoftInputHiddenEvent
+import com.reactnativeavoidsoftinput.events.AvoidSoftInputShownEvent
 
 class AvoidSoftInputViewManager: ReactClippingViewManager<AvoidSoftInputView>() {
   override fun getName(): String {
@@ -30,17 +33,14 @@ class AvoidSoftInputViewManager: ReactClippingViewManager<AvoidSoftInputView>() 
     view.setAvoidOffset(avoidOffset)
   }
 
-  override fun getExportedCustomBubblingEventTypeConstants(): MutableMap<String, Any> {
+  override fun getExportedCustomDirectEventTypeConstants(): MutableMap<String, Any> {
     return MapBuilder.of(
-      AvoidSoftInputView.ON_SOFT_INPUT_SHOWN,
-      MapBuilder.of(
-        "phasedRegistrationNames",
-        MapBuilder.of("bubbled", AvoidSoftInputView.ON_SOFT_INPUT_SHOWN)
-      ),
-      AvoidSoftInputView.ON_SOFT_INPUT_HIDDEN,
-      MapBuilder.of("phasedRegistrationNames",
-        MapBuilder.of("bubbled", AvoidSoftInputView.ON_SOFT_INPUT_HIDDEN)
-      )
+      AvoidSoftInputAppliedOffsetChangedEvent.NAME,
+      MapBuilder.of("registrationName", AvoidSoftInputView.ON_SOFT_INPUT_APPLIED_OFFSET_CHANGED),
+      AvoidSoftInputHiddenEvent.NAME,
+      MapBuilder.of("registrationName", AvoidSoftInputView.ON_SOFT_INPUT_HIDDEN),
+      AvoidSoftInputShownEvent.NAME,
+      MapBuilder.of("registrationName", AvoidSoftInputView.ON_SOFT_INPUT_SHOWN)
     )
   }
 

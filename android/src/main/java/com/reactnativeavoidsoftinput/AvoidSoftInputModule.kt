@@ -104,9 +104,7 @@ class AvoidSoftInputModule(private val reactContext: ReactApplicationContext) : 
   }
 
   override fun onSoftInputShown(from: Int, to: Int) {
-    sendEvent(SOFT_INPUT_SHOWN, Arguments.createMap().apply {
-      putInt(SOFT_INPUT_HEIGHT_KEY, convertFromPixelToDIP(to))
-    })
+    sendShownEvent(convertFromPixelToDIP(to))
 
     val activity = reactContext.currentActivity ?: return
     val rootView = activity.window.decorView.rootView
@@ -124,16 +122,16 @@ class AvoidSoftInputModule(private val reactContext: ReactApplicationContext) : 
 
     mIsRootViewSlidingUp = true
 
-    val keyboardOffset = computeKeyboardOffset(to, currentFocusedView, rootView, rootView)
+    val softInputOffset = computeSoftInputOffset(to, currentFocusedView, rootView, rootView)
 
-    if (keyboardOffset == null) {
+    if (softInputOffset == null) {
       mIsRootViewSlidingUp = false
       return
     }
 
     mScrollViewParent = getScrollViewParent(currentFocusedView, rootView)
 
-    mBottomOffset = keyboardOffset + mAvoidOffset
+    mBottomOffset = softInputOffset + mAvoidOffset
     val scrollViewParent = mScrollViewParent
     mCurrentBottomPadding = scrollViewParent?.paddingBottom ?: 0
 
@@ -142,8 +140,13 @@ class AvoidSoftInputModule(private val reactContext: ReactApplicationContext) : 
       mShowValueAnimator = ValueAnimator.ofFloat(0F, mBottomOffset).apply {
         duration = INCREASE_PADDING_DURATION_IN_MS
         addListener(object: AnimatorListenerAdapter() {
+          override fun onAnimationStart(animation: Animator?) {
+            super.onAnimationStart(animation)
+            sendAppliedOffsetChangedEvent(convertFromPixelToDIP(0))
+          }
           override fun onAnimationEnd(animation: Animator?) {
             super.onAnimationEnd(animation)
+            sendAppliedOffsetChangedEvent(convertFromPixelToDIP(mBottomOffset.toInt()))
             if (scrollViewParent != null) {
               mScrollY = scrollViewParent.scrollY
               scrollViewParent.smoothScrollTo(0, (scrollViewParent.scrollY + mBottomOffset).toInt())
@@ -154,6 +157,7 @@ class AvoidSoftInputModule(private val reactContext: ReactApplicationContext) : 
           }
         })
         addUpdateListener {
+          sendAppliedOffsetChangedEvent(convertFromPixelToDIP((it.animatedValue as Float).toInt()))
           if (scrollViewParent != null) {
             scrollViewParent.setPadding(
               scrollViewParent.paddingLeft,
@@ -171,9 +175,7 @@ class AvoidSoftInputModule(private val reactContext: ReactApplicationContext) : 
   }
 
   override fun onSoftInputHidden(from: Int, to: Int) {
-    sendEvent(SOFT_INPUT_HIDDEN, Arguments.createMap().apply {
-      putInt(SOFT_INPUT_HEIGHT_KEY, 0)
-    })
+    sendHiddenEvent(convertFromPixelToDIP(0))
 
     val activity = reactContext.currentActivity ?: return
     val rootView = activity.window.decorView.rootView
@@ -198,8 +200,13 @@ class AvoidSoftInputModule(private val reactContext: ReactApplicationContext) : 
       mHideValueAnimator = ValueAnimator.ofFloat(mBottomOffset, 0F).apply {
         duration = DECREASE_PADDING_DURATION_IN_MS
         addListener(object: AnimatorListenerAdapter() {
+          override fun onAnimationStart(animation: Animator?) {
+            super.onAnimationStart(animation)
+            sendAppliedOffsetChangedEvent(convertFromPixelToDIP(mBottomOffset.toInt()))
+          }
           override fun onAnimationEnd(animation: Animator?) {
             super.onAnimationEnd(animation)
+            sendAppliedOffsetChangedEvent(convertFromPixelToDIP(0))
             if (scrollViewParent != null) {
               scrollViewParent.smoothScrollTo(0, mScrollY)
               mScrollY = 0
@@ -212,6 +219,7 @@ class AvoidSoftInputModule(private val reactContext: ReactApplicationContext) : 
           }
         })
         addUpdateListener {
+          sendAppliedOffsetChangedEvent(convertFromPixelToDIP((it.animatedValue as Float).toInt()))
           if (scrollViewParent != null) {
             scrollViewParent.setPadding(
               scrollViewParent.paddingLeft,
@@ -234,13 +242,33 @@ class AvoidSoftInputModule(private val reactContext: ReactApplicationContext) : 
       .emit(eventName, params)
   }
 
+  private fun sendAppliedOffsetChangedEvent(height: Int) {
+    sendEvent(SOFT_INPUT_APPLIED_OFFSET_CHANGED, Arguments.createMap().apply {
+      putInt(SOFT_INPUT_APPLIED_OFFSET_KEY, height)
+    })
+  }
+
+  private fun sendHiddenEvent(height: Int) {
+    sendEvent(SOFT_INPUT_HIDDEN, Arguments.createMap().apply {
+      putInt(SOFT_INPUT_HEIGHT_KEY, height)
+    })
+  }
+
+  private fun sendShownEvent(height: Int) {
+    sendEvent(SOFT_INPUT_SHOWN, Arguments.createMap().apply {
+      putInt(SOFT_INPUT_HEIGHT_KEY, height)
+    })
+  }
+
   companion object {
     const val NAME = "AvoidSoftInput"
     const val INCREASE_PADDING_DURATION_IN_MS: Long = 660
     const val DECREASE_PADDING_DURATION_IN_MS: Long = 220
+    const val SOFT_INPUT_APPLIED_OFFSET_KEY = "appliedOffset"
     const val SOFT_INPUT_HEIGHT_KEY = "softInputHeight"
-    const val SOFT_INPUT_SHOWN = "softInputShown"
+    const val SOFT_INPUT_APPLIED_OFFSET_CHANGED = "softInputAppliedOffsetChanged"
     const val SOFT_INPUT_HIDDEN = "softInputHidden"
+    const val SOFT_INPUT_SHOWN = "softInputShown"
   }
 
   override fun onHostResume() {

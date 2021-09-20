@@ -29,6 +29,7 @@ const ModalScrollView: React.FC = () => {
       unsubscribeShown.remove();
       unsubscribeHidden.remove();
       AvoidSoftInput.setEnabled(false);
+      AvoidSoftInput.setDefaultAppSoftInputMode();
     };
   }, []);
 

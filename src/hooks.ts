@@ -3,10 +3,21 @@ import { useEffect, useReducer } from 'react';
 import { AvoidSoftInput } from './AvoidSoftInputModule';
 import type { State } from './stateReducer';
 import { createHiddenAction, createShownAction, initialState, reducer } from './stateReducer';
+import type { SoftInputAppliedOffsetEventData, SoftInputEventData } from './types';
 
-export function useSoftInputHidden(callback: ({ softInputHeight }: {
-  softInputHeight: number;
-}) => void) {
+export function useSoftInputAppliedOffsetChanged(
+  callback: ({ appliedOffset }: SoftInputAppliedOffsetEventData) => void
+) {
+  useEffect(() => {
+    const unsubscribeHeightChanged = AvoidSoftInput.onSoftInputAppliedOffsetChange(callback);
+
+    return () => {
+      unsubscribeHeightChanged.remove();
+    };
+  }, [ callback ]);
+}
+
+export function useSoftInputHidden(callback: ({ softInputHeight }: SoftInputEventData) => void) {
   useEffect(() => {
     const unsubscribeHidden = AvoidSoftInput.onSoftInputHidden(callback);
 
@@ -16,9 +27,7 @@ export function useSoftInputHidden(callback: ({ softInputHeight }: {
   }, [ callback ]);
 }
 
-export function useSoftInputShown(callback: ({ softInputHeight }: {
-  softInputHeight: number;
-}) => void) {
+export function useSoftInputShown(callback: ({ softInputHeight }: SoftInputEventData) => void) {
   useEffect(() => {
     const unsubscribeShown = AvoidSoftInput.onSoftInputShown(callback);
 

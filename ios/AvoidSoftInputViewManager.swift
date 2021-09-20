@@ -5,6 +5,6 @@ class AvoidSoftInputViewManager: RCTViewManager {
     }
     
     override func view() -> RCTView {
-        return AvoidSoftInputView()
+        return AvoidSoftInputView(frame: CGRect.zero, eventDispatcher: self.bridge.eventDispatcher())
     }
 }

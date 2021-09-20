@@ -21,11 +21,18 @@ const FullScreenScrollView: React.FC = () => {
         console.log('softInputHidden', softInputHeight);
       }
     );
+    const unsubscribeHeightChanged = AvoidSoftInput.onSoftInputAppliedOffsetChange(
+      ({ appliedOffset }) => {
+        console.log('softInputAppliedOffsetChanged', appliedOffset);
+      }
+    );
 
     return () => {
       unsubscribeShown.remove();
       unsubscribeHidden.remove();
+      unsubscribeHeightChanged.remove();
       AvoidSoftInput.setEnabled(false);
+      AvoidSoftInput.setDefaultAppSoftInputMode();
     };
   }, []);
 

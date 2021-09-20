@@ -48,12 +48,12 @@ fun checkIfNestedInAvoidSoftInputView(view: View, rootView: View): Boolean {
   return checkIfNestedInAvoidSoftInputView(view.parent as View, rootView)
 }
 
-fun computeKeyboardOffset(keyboardHeight: Int, currentFocusedView: View?, containerView: View, rootView: View): Int? {
+fun computeSoftInputOffset(softInputHeight: Int, currentFocusedView: View?, containerView: View, rootView: View): Int? {
   if (currentFocusedView == null) {
     return null
   }
 
-  val keyboardOffset = keyboardHeight - (rootView.height - containerView.height - containerView.top)
+  val softInputOffset = softInputHeight - (rootView.height - containerView.height - containerView.top)
   val scrollView = getScrollViewParent(currentFocusedView, rootView)
   val statusBarHeight = getStatusBarHeight(rootView.context)
 
@@ -67,12 +67,12 @@ fun computeKeyboardOffset(keyboardHeight: Int, currentFocusedView: View?, contai
     else -> getRelativeY(currentFocusedView, containerView) + currentFocusedView.height + statusBarHeight
   }
 
-  val shouldAvoidSoftInput = viewPositionY > (containerView.height + containerView.top - keyboardOffset)
+  val shouldAvoidSoftInput = viewPositionY > (containerView.height + containerView.top - softInputOffset)
 
   if (!shouldAvoidSoftInput) {
     return null
   }
-  return keyboardOffset
+  return softInputOffset
 }
 
 fun getStatusBarHeight(context: Context): Int {

@@ -1,6 +1,8 @@
 import type { EmitterSubscription } from 'react-native';
 import { NativeEventEmitter, NativeModules, Platform } from 'react-native';
 
+import type { SoftInputAppliedOffsetEventData, SoftInputEventData } from './types';
+
 const eventEmitter = new NativeEventEmitter(NativeModules.AvoidSoftInput);
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -10,7 +12,7 @@ const NOOP = () => {};
  * Fires event with current soft input height, when soft input is shown
  */
 function onSoftInputShown(
-  listener: ({ softInputHeight }: { softInputHeight: number }) => void
+  listener: ({ softInputHeight }: SoftInputEventData) => void
 ): EmitterSubscription {
   if (![ 'android', 'ios' ].includes(Platform.OS)) {
     return { remove: NOOP } as EmitterSubscription;
@@ -23,13 +25,26 @@ function onSoftInputShown(
  * Fires event when soft input is hidden
  */
 function onSoftInputHidden(
-  listener: ({ softInputHeight }: { softInputHeight: number }) => void
+  listener: ({ softInputHeight }: SoftInputEventData) => void
 ) {
   if (![ 'android', 'ios' ].includes(Platform.OS)) {
     return { remove: NOOP } as EmitterSubscription;
   }
 
   return eventEmitter.addListener('softInputHidden', listener);
+}
+
+/**
+ * Fires event when soft input height changed
+ */
+function onSoftInputAppliedOffsetChange(
+  listener: ({ appliedOffset }: SoftInputAppliedOffsetEventData) => void
+) {
+  if (![ 'android', 'ios' ].includes(Platform.OS)) {
+    return { remove: NOOP } as EmitterSubscription;
+  }
+
+  return eventEmitter.addListener('softInputAppliedOffsetChanged', listener);
 }
 
 /**
@@ -122,6 +137,7 @@ function setDefaultAppSoftInputMode() {
 }
 
 export const AvoidSoftInput = {
+  onSoftInputAppliedOffsetChange,
   onSoftInputHidden,
   onSoftInputShown,
   setAdjustNothing,

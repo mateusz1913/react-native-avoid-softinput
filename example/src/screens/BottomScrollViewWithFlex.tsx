@@ -13,16 +13,17 @@ const BottomScrollViewWithFlex: React.FC = () => {
 
     return () => {
       AvoidSoftInput.setEnabled(false);
+      AvoidSoftInput.setDefaultAppSoftInputMode();
     };
   }, []);
 
   useFocusEffect(onFocusEffect);
 
   useSoftInputHidden(({ softInputHeight }) => {
-    console.log('softInputShown', softInputHeight);
+    console.log('softInputHidden', softInputHeight);
   });
   useSoftInputShown(({ softInputHeight }) => {
-    console.log('softInputHidden', softInputHeight);
+    console.log('softInputShown', softInputHeight);
   });
 
   return (

@@ -6,13 +6,14 @@ import android.animation.ValueAnimator
 import android.view.View
 import android.view.ViewTreeObserver
 import android.widget.ScrollView
-import com.facebook.react.bridge.Arguments
 import com.facebook.react.bridge.UiThreadUtil
-import com.facebook.react.bridge.WritableMap
 import com.facebook.react.uimanager.PixelUtil
 import com.facebook.react.uimanager.ThemedReactContext
-import com.facebook.react.uimanager.events.RCTEventEmitter
+import com.facebook.react.uimanager.UIManagerModule
 import com.facebook.react.views.view.ReactViewGroup
+import com.reactnativeavoidsoftinput.events.AvoidSoftInputAppliedOffsetChangedEvent
+import com.reactnativeavoidsoftinput.events.AvoidSoftInputHiddenEvent
+import com.reactnativeavoidsoftinput.events.AvoidSoftInputShownEvent
 
 class AvoidSoftInputView(private val reactContext: ThemedReactContext) : ReactViewGroup(reactContext), AvoidSoftInputProvider.SoftInputListener {
   private var mIsInitialized = false
@@ -34,6 +35,8 @@ class AvoidSoftInputView(private val reactContext: ThemedReactContext) : ReactVi
     mCurrentFocusedView = newView
     mPreviousFocusedView = oldView
   }
+
+  private fun getEventDispatcher() = reactContext.getNativeModule(UIManagerModule::class.java)?.eventDispatcher
 
   override fun onAttachedToWindow() {
     super.onAttachedToWindow()
@@ -69,9 +72,7 @@ class AvoidSoftInputView(private val reactContext: ThemedReactContext) : ReactVi
   }
 
   override fun onSoftInputShown(from: Int, to: Int) {
-    sendEvent(ON_SOFT_INPUT_SHOWN, Arguments.createMap().apply {
-      putInt(SOFT_INPUT_HEIGHT_KEY, convertFromPixelToDIP(to))
-    })
+    sendShownEvent(convertFromPixelToDIP(to))
 
     val activity = reactContext.currentActivity ?: return
     val rootView = activity.window.decorView.rootView
@@ -83,16 +84,15 @@ class AvoidSoftInputView(private val reactContext: ThemedReactContext) : ReactVi
 
     mIsViewSlidingUp = true
 
-    val keyboardOffset = computeKeyboardOffset(to, currentFocusedView, this, rootView)
-
-    if (keyboardOffset == null) {
+    val softInputOffset = computeSoftInputOffset(to, currentFocusedView, this, rootView)
+    if (softInputOffset == null) {
       mIsViewSlidingUp = false
       return
     }
 
     mScrollViewParent = getScrollViewParent(currentFocusedView, this)
 
-    mBottomOffset = keyboardOffset + mAvoidOffset
+    mBottomOffset = softInputOffset + mAvoidOffset
     val scrollViewParent = mScrollViewParent
     mCurrentBottomPadding = scrollViewParent?.paddingBottom ?: 0
 
@@ -101,8 +101,14 @@ class AvoidSoftInputView(private val reactContext: ThemedReactContext) : ReactVi
       mShowValueAnimator = ValueAnimator.ofFloat(0F, mBottomOffset).apply {
         duration = AvoidSoftInputModule.INCREASE_PADDING_DURATION_IN_MS
         addListener(object: AnimatorListenerAdapter() {
+          override fun onAnimationStart(animation: Animator?) {
+            super.onAnimationStart(animation)
+            sendAppliedOffsetChangedEvent(convertFromPixelToDIP(0))
+          }
           override fun onAnimationEnd(animation: Animator?) {
             super.onAnimationEnd(animation)
+            sendAppliedOffsetChangedEvent(convertFromPixelToDIP(mBottomOffset.toInt()))
+
             if (scrollViewParent != null) {
               mScrollY = scrollViewParent.scrollY
               scrollViewParent.smoothScrollTo(0, (scrollViewParent.scrollY + mBottomOffset).toInt())
@@ -113,6 +119,8 @@ class AvoidSoftInputView(private val reactContext: ThemedReactContext) : ReactVi
           }
         })
         addUpdateListener {
+          sendAppliedOffsetChangedEvent(convertFromPixelToDIP((it.animatedValue as Float).toInt()))
+
           if (scrollViewParent != null) {
             scrollViewParent.setPadding(
               scrollViewParent.paddingLeft,
@@ -130,9 +138,7 @@ class AvoidSoftInputView(private val reactContext: ThemedReactContext) : ReactVi
   }
 
   override fun onSoftInputHidden(from: Int, to: Int) {
-    sendEvent(ON_SOFT_INPUT_HIDDEN, Arguments.createMap().apply {
-      putInt(SOFT_INPUT_HEIGHT_KEY, 0)
-    })
+    sendHiddenEvent(convertFromPixelToDIP(0))
 
     if ((!mIsViewSlideUp && !mIsViewSlidingUp) || mIsViewSlidingDown) {
       return
@@ -145,8 +151,13 @@ class AvoidSoftInputView(private val reactContext: ThemedReactContext) : ReactVi
       mHideValueAnimator = ValueAnimator.ofFloat(mBottomOffset, 0F).apply {
         duration = AvoidSoftInputModule.DECREASE_PADDING_DURATION_IN_MS
         addListener(object: AnimatorListenerAdapter() {
+          override fun onAnimationStart(animation: Animator?) {
+            super.onAnimationStart(animation)
+            sendAppliedOffsetChangedEvent(convertFromPixelToDIP(mBottomOffset.toInt()))
+          }
           override fun onAnimationEnd(animation: Animator?) {
             super.onAnimationEnd(animation)
+            sendAppliedOffsetChangedEvent(0)
             if (scrollViewParent != null) {
               scrollViewParent.smoothScrollTo(0, mScrollY)
               mScrollY = 0
@@ -159,6 +170,7 @@ class AvoidSoftInputView(private val reactContext: ThemedReactContext) : ReactVi
           }
         })
         addUpdateListener {
+          sendAppliedOffsetChangedEvent(convertFromPixelToDIP((it.animatedValue as Float).toInt()))
           if (scrollViewParent != null) {
             scrollViewParent.setPadding(
               scrollViewParent.paddingLeft,
@@ -175,14 +187,22 @@ class AvoidSoftInputView(private val reactContext: ThemedReactContext) : ReactVi
     }
   }
 
-  private fun sendEvent(eventName: String, params: WritableMap?) {
-    reactContext.getJSModule(RCTEventEmitter::class.java).receiveEvent(this.id, eventName, params)
+  private fun sendAppliedOffsetChangedEvent(height: Int) {
+    getEventDispatcher()?.dispatchEvent(AvoidSoftInputAppliedOffsetChangedEvent(this.id, height))
+  }
+
+  private fun sendHiddenEvent(height: Int) {
+    getEventDispatcher()?.dispatchEvent(AvoidSoftInputHiddenEvent(this.id, height))
+  }
+
+  private fun sendShownEvent(height: Int) {
+    getEventDispatcher()?.dispatchEvent(AvoidSoftInputShownEvent(this.id, height))
   }
 
   companion object {
     const val NAME = "AvoidSoftInputView"
-    const val SOFT_INPUT_HEIGHT_KEY = "softInputHeight"
-    const val ON_SOFT_INPUT_SHOWN = "onSoftInputShown"
+    const val ON_SOFT_INPUT_APPLIED_OFFSET_CHANGED = "onSoftInputAppliedOffsetChange"
     const val ON_SOFT_INPUT_HIDDEN = "onSoftInputHidden"
+    const val ON_SOFT_INPUT_SHOWN = "onSoftInputShown"
   }
 }

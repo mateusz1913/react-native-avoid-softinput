@@ -12,6 +12,7 @@ const FullScreenView: React.FC = () => {
     AvoidSoftInput.setEnabled(true);
     return () => {
       AvoidSoftInput.setEnabled(false);
+      AvoidSoftInput.setDefaultAppSoftInputMode();
     };
   }, []);
   

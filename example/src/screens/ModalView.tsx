@@ -29,6 +29,7 @@ const ModalView: React.FC = () => {
       unsubscribeShown.remove();
       unsubscribeHidden.remove();
       AvoidSoftInput.setEnabled(false);
+      AvoidSoftInput.setDefaultAppSoftInputMode();
     };
   }, []);
 
@@ -42,13 +43,13 @@ const ModalView: React.FC = () => {
       />
       <Modal
         animationType="slide"
+        onDismiss={() => setIsModalVisible(false)}
         onRequestClose={() => setIsModalVisible(false)}
         statusBarTranslucent={true}
         transparent={true}
         visible={isModalVisible}>
         <SafeAreaView edges={[ 'left', 'bottom', 'right' ]} style={styles.modal}>
           <AvoidSoftInputView
-            avoidOffset={20}
             onSoftInputHidden={(e) => {
               console.log('VIEW', { softInputHeight: e.nativeEvent.softInputHeight });
             }}
