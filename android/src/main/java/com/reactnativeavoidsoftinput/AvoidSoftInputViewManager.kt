@@ -38,6 +38,26 @@ class AvoidSoftInputViewManager: ReactClippingViewManager<AvoidSoftInputView>() 
     view.setEasing(easing)
   }
 
+  @ReactProp(name = "hideAnimationDelay")
+  fun setHideAnimationDelay(view: AvoidSoftInputView, delay: Int?) {
+    view.setHideAnimationDelay(delay)
+  }
+
+  @ReactProp(name = "hideAnimationDuration")
+  fun setHideAnimationDuration(view: AvoidSoftInputView, duration: Int?) {
+    view.setHideAnimationDuration(duration)
+  }
+
+  @ReactProp(name = "showAnimationDelay")
+  fun setShowAnimationDelay(view: AvoidSoftInputView, delay: Int?) {
+    view.setShowAnimationDelay(delay)
+  }
+
+  @ReactProp(name = "showAnimationDuration")
+  fun setShowAnimationDuration(view: AvoidSoftInputView, duration: Int?) {
+    view.setShowAnimationDuration(duration)
+  }
+
   override fun getExportedCustomDirectEventTypeConstants(): MutableMap<String, Any> {
     return MapBuilder.of(
       AvoidSoftInputAppliedOffsetChangedEvent.NAME,

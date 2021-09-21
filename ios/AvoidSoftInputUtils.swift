@@ -42,21 +42,29 @@ func checkIfNestedInAvoidSoftInputView(view: UIView) -> Bool {
 }
 
 func computeSoftInputOffset(softInputHeight: CGFloat, firstResponder: UIView, containerView: UIView, rootView: UIView) -> CGFloat? {
-    guard let inputPosition = firstResponder.superview?.convert(firstResponder.frame, to: containerView) else {
+    guard let inputPosition = firstResponder.superview?.convert(firstResponder.frame, to: rootView) else {
         return nil
     }
     
+    var containerPosition = containerView.frame
+    if containerView != rootView {
+        if let position = containerView.superview?.convert(containerView.frame, to: rootView) {
+            containerPosition = position
+        }
+    }
+
     var topSafeInset: CGFloat = 0
     if #available(iOS 11.0, tvOS 11.0, *) {
         topSafeInset = rootView.safeAreaInsets.top
     }
-    let softInputOffset = softInputHeight - (rootView.frame.height - containerView.frame.height - containerView.frame.origin.y)
-    let shouldAvoidSoftInput = (inputPosition.origin.y + inputPosition.height + topSafeInset) >= (containerView.frame.height + containerView.frame.origin.y) - softInputOffset
-    
+
+    let softInputOffset = softInputHeight - (rootView.frame.height - containerPosition.height - containerPosition.origin.y)
+    let shouldAvoidSoftInput = (inputPosition.origin.y + inputPosition.height + topSafeInset) >= (containerPosition.height + containerPosition.origin.y) - softInputOffset
+
     if !shouldAvoidSoftInput {
         return nil
     }
-    
+
     return softInputOffset
 }
 

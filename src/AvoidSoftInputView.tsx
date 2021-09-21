@@ -5,8 +5,30 @@ import { requireNativeComponent } from 'react-native';
 import type { SoftInputAppliedOffsetEventData, SoftInputEasing, SoftInputEventData } from './types';
 
 export interface AvoidSoftInputViewProps extends Omit<ViewProps, 'pointerEvents'> {
+  /**
+   * @default 0
+   */
   avoidOffset?: number;
+  /**
+   * @default 'linear'
+   */
   easing?: SoftInputEasing;
+  /**
+   * @default 0 ms
+   */
+  hideAnimationDelay?: number;
+  /**
+   * @default 220 ms
+   */
+  hideAnimationDuration?: number;
+  /**
+   * @default (300/0) ms (iOS/Android)
+   */
+  showAnimationDelay?: number;
+  /**
+   * @default 660 ms
+   */
+  showAnimationDuration?: number;
   onSoftInputAppliedOffsetChange?: (e: NativeSyntheticEvent<SoftInputAppliedOffsetEventData>) => void;
   onSoftInputHidden?: (e: NativeSyntheticEvent<SoftInputEventData>) => void;
   onSoftInputShown?: (e: NativeSyntheticEvent<SoftInputEventData>) => void;

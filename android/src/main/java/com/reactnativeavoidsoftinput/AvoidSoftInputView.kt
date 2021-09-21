@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewTreeObserver
 import android.widget.ScrollView
 import com.facebook.react.bridge.UiThreadUtil
-import com.facebook.react.uimanager.PixelUtil
 import com.facebook.react.uimanager.ThemedReactContext
 import com.facebook.react.uimanager.UIManagerModule
 import com.facebook.react.views.view.ReactViewGroup
@@ -15,24 +14,30 @@ import com.reactnativeavoidsoftinput.events.AvoidSoftInputAppliedOffsetChangedEv
 import com.reactnativeavoidsoftinput.events.AvoidSoftInputHiddenEvent
 import com.reactnativeavoidsoftinput.events.AvoidSoftInputShownEvent
 
-class AvoidSoftInputView(private val reactContext: ThemedReactContext) : ReactViewGroup(reactContext), AvoidSoftInputProvider.SoftInputListener {
-  private var mIsInitialized = false
-  private var mAvoidSoftInputProvider: AvoidSoftInputProvider? = null
-  private var mCurrentFocusedView: View? = null
-  private var mPreviousFocusedView: View? = null
-  private var mScrollViewParent: ScrollView? = null
-  private var mIsViewSlideUp = false
-  private var mIsViewSlidingDown = false
-  private var mIsViewSlidingUp = false
-  private var mCurrentBottomPadding: Int = 0
-  private var mBottomOffset: Float = 0F
-  private var mAvoidOffset: Float = 0F
-  private var mScrollY: Int = 0
-  private var mHideValueAnimator: ValueAnimator? = null
-  private var mShowValueAnimator: ValueAnimator? = null
-  private var animationInterpolator = AvoidSoftInputInterpolator()
+class AvoidSoftInputView(
+  private val reactContext: ThemedReactContext
+) : ReactViewGroup(reactContext), AvoidSoftInputProvider.SoftInputListener, AvoidSoftInput {
+  override var mAnimationInterpolator = AvoidSoftInputInterpolator()
+  override var mAvoidOffset: Float = 0F
+  override var mAvoidSoftInputProvider: AvoidSoftInputProvider? = null
+  override var mBottomOffset: Float = 0F
+  override var mCurrentBottomPadding: Int = 0
+  override var mCurrentFocusedView: View? = null
+  override var mHideValueAnimator: ValueAnimator? = null
+  override var mHideAnimationDelay: Long = 0
+  override var mHideAnimationDuration = AvoidSoftInputModule.DECREASE_PADDING_DURATION_IN_MS
+  override var mIsInitialized = false
+  override var mIsViewSlideUp = false
+  override var mIsViewSlidingDown = false
+  override var mIsViewSlidingUp = false
+  override var mPreviousFocusedView: View? = null
+  override var mScrollViewParent: ScrollView? = null
+  override var mScrollY: Int = 0
+  override var mShowAnimationDelay: Long = 0
+  override var mShowAnimationDuration = AvoidSoftInputModule.INCREASE_PADDING_DURATION_IN_MS
+  override var mShowValueAnimator: ValueAnimator? = null
 
-  private val mOnGlobalFocusChangeListener = ViewTreeObserver.OnGlobalFocusChangeListener { oldView, newView ->
+  override val mOnGlobalFocusChangeListener = ViewTreeObserver.OnGlobalFocusChangeListener { oldView, newView ->
     mCurrentFocusedView = newView
     mPreviousFocusedView = oldView
   }
@@ -41,44 +46,12 @@ class AvoidSoftInputView(private val reactContext: ThemedReactContext) : ReactVi
 
   override fun onAttachedToWindow() {
     super.onAttachedToWindow()
-    initializeHandlers()
+    initializeHandlers(reactContext, this, this)
   }
 
   override fun onDetachedFromWindow() {
     super.onDetachedFromWindow()
-    cleanupHandlers()
-  }
-
-  private fun initializeHandlers() {
-    if (!mIsInitialized) {
-      mAvoidSoftInputProvider = AvoidSoftInputProvider(reactContext, this).initializeProvider()
-      mAvoidSoftInputProvider?.setSoftInputListener(this)
-      this.viewTreeObserver?.addOnGlobalFocusChangeListener(mOnGlobalFocusChangeListener)
-      mIsInitialized = true
-    }
-  }
-
-  private fun cleanupHandlers() {
-    if (mIsInitialized) {
-      mAvoidSoftInputProvider?.dismiss()
-      mAvoidSoftInputProvider?.setSoftInputListener(null)
-      mAvoidSoftInputProvider = null
-      this.viewTreeObserver?.removeOnGlobalFocusChangeListener(mOnGlobalFocusChangeListener)
-      mIsInitialized = false
-    }
-  }
-
-  fun setAvoidOffset(avoidOffset: Float) {
-    mAvoidOffset = PixelUtil.toPixelFromDIP(avoidOffset)
-  }
-
-  fun setEasing(easing: String) {
-    animationInterpolator.mode = when (easing) {
-      "easeIn" -> AvoidSoftInputInterpolator.Companion.MODE.EASE_IN
-      "easeInOut" -> AvoidSoftInputInterpolator.Companion.MODE.EASE_IN_OUT
-      "easeOut" -> AvoidSoftInputInterpolator.Companion.MODE.EASE_OUT
-      else -> AvoidSoftInputInterpolator.Companion.MODE.LINEAR
-    }
+    cleanupHandlers(this)
   }
 
   override fun onSoftInputShown(from: Int, to: Int) {
@@ -94,7 +67,7 @@ class AvoidSoftInputView(private val reactContext: ThemedReactContext) : ReactVi
 
     mIsViewSlidingUp = true
 
-    val softInputOffset = computeSoftInputOffset(to, currentFocusedView, this, rootView)
+    val softInputOffset = computeSoftInputOffset(to, currentFocusedView, rootView)
     if (softInputOffset == null) {
       mIsViewSlidingUp = false
       return
@@ -109,8 +82,9 @@ class AvoidSoftInputView(private val reactContext: ThemedReactContext) : ReactVi
     UiThreadUtil.runOnUiThread {
       mHideValueAnimator?.end()
       mShowValueAnimator = ValueAnimator.ofFloat(0F, mBottomOffset).apply {
-        duration = AvoidSoftInputModule.INCREASE_PADDING_DURATION_IN_MS
-        interpolator = animationInterpolator
+        duration = mShowAnimationDuration
+        startDelay = mShowAnimationDelay
+        interpolator = mAnimationInterpolator
         addListener(object: AnimatorListenerAdapter() {
           override fun onAnimationStart(animation: Animator?) {
             super.onAnimationStart(animation)
@@ -160,8 +134,9 @@ class AvoidSoftInputView(private val reactContext: ThemedReactContext) : ReactVi
     UiThreadUtil.runOnUiThread {
       mShowValueAnimator?.end()
       mHideValueAnimator = ValueAnimator.ofFloat(mBottomOffset, 0F).apply {
-        duration = AvoidSoftInputModule.DECREASE_PADDING_DURATION_IN_MS
-        interpolator = animationInterpolator
+        duration = mHideAnimationDuration
+        startDelay = mHideAnimationDelay
+        interpolator = mAnimationInterpolator
         addListener(object: AnimatorListenerAdapter() {
           override fun onAnimationStart(animation: Animator?) {
             super.onAnimationStart(animation)
@@ -199,15 +174,15 @@ class AvoidSoftInputView(private val reactContext: ThemedReactContext) : ReactVi
     }
   }
 
-  private fun sendAppliedOffsetChangedEvent(height: Int) {
-    getEventDispatcher()?.dispatchEvent(AvoidSoftInputAppliedOffsetChangedEvent(this.id, height))
+  override fun sendAppliedOffsetChangedEvent(offset: Int) {
+    getEventDispatcher()?.dispatchEvent(AvoidSoftInputAppliedOffsetChangedEvent(this.id, offset))
   }
 
-  private fun sendHiddenEvent(height: Int) {
+  override fun sendHiddenEvent(height: Int) {
     getEventDispatcher()?.dispatchEvent(AvoidSoftInputHiddenEvent(this.id, height))
   }
 
-  private fun sendShownEvent(height: Int) {
+  override fun sendShownEvent(height: Int) {
     getEventDispatcher()?.dispatchEvent(AvoidSoftInputShownEvent(this.id, height))
   }
 
