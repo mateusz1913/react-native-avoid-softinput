@@ -9,12 +9,16 @@
     var fakeShowAnimationView: UIView { get set }
     var focusedInput: UIView? { get set }
     var hideAnimationTimer: CADisplayLink { get set }
+    var hideDelay: Double { get set }
+    var hideDuration: Double { get set }
     var isViewSlidedUp: Bool { get set }
     var isViewSlidingDown: Bool { get set }
     var isViewSlidingUp: Bool { get set }
     var scrollContentInset: UIEdgeInsets { get set }
     var scrollIndicatorInsets: UIEdgeInsets { get set }
     var showAnimationTimer: CADisplayLink { get set }
+    var showDelay: Double { get set }
+    var showDuration: Double { get set }
 
     @objc optional var coalescingKey: UInt16 { get set }
 
@@ -82,3 +86,8 @@ extension AvoidSoftInputProtocol {
         isViewSlidedUp = true
     }
 }
+
+let HIDE_ANIMATION_DELAY_IN_SECONDS: Double = 0.3
+let HIDE_ANIMATION_DURATION_IN_SECONDS: Double = 0.66
+let SHOW_ANIMATION_DELAY_IN_SECONDS: Double = 0
+let SHOW_ANIMATION_DURATION_IN_SECONDS: Double = 0.22

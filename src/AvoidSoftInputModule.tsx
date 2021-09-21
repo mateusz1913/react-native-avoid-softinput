@@ -1,9 +1,26 @@
-import type { EmitterSubscription } from 'react-native';
+import type { EmitterSubscription, NativeModule } from 'react-native';
 import { NativeEventEmitter, NativeModules, Platform } from 'react-native';
 
 import type { SoftInputAppliedOffsetEventData, SoftInputEasing, SoftInputEventData } from './types';
 
-const eventEmitter = new NativeEventEmitter(NativeModules.AvoidSoftInput);
+interface Module extends NativeModule {
+  setAdjustNothing(): void;
+  setAdjustPan(): void;
+  setAdjustResize(): void;
+  setAdjustUnspecified(): void;
+  setAvoidOffset(offset: number): void;
+  setDefaultAppSoftInputMode(): void;
+  setEasing(easing: SoftInputEasing): void;
+  setEnabled(enabled: boolean): void;
+  setHideAnimationDelay(delay?: number): void;
+  setHideAnimationDuration(duration?: number): void;
+  setShowAnimationDelay(delay?: number): void;
+  setShowAnimationDuration(duration?: number): void;
+}
+
+const module: Module = NativeModules.AvoidSoftInput;
+
+const eventEmitter = new NativeEventEmitter(module);
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 const NOOP = () => {};
@@ -55,7 +72,7 @@ function setEnabled(enabled: boolean) {
     return;
   }
 
-  NativeModules.AvoidSoftInput.setEnabled(enabled);
+  module.setEnabled(enabled);
 }
 
 /**
@@ -68,7 +85,7 @@ function setAvoidOffset(offset: number) {
     return;
   }
 
-  NativeModules.AvoidSoftInput.setAvoidOffset(offset);
+  module.setAvoidOffset(offset);
 }
 
 /**
@@ -79,7 +96,54 @@ function setEasing(easing: SoftInputEasing) {
     return;
   }
 
-  NativeModules.AvoidSoftInput.setEasing(easing);
+  module.setEasing(easing);
+}
+
+/**
+ * Sets hide animation delay, takes value in milliseconds, if no value is provided, it will set default value which is `0` ms
+ */
+function setHideAnimationDelay(delay?: number) {
+  if (![ 'android', 'ios' ].includes(Platform.OS)) {
+    return;
+  }
+
+  module.setHideAnimationDelay(delay ?? 0);
+}
+
+/**
+ * Sets hide animation duration, takes value in milliseconds, if no value is provided, it will set default value which is `220` ms
+ */
+function setHideAnimationDuration(duration?: number) {
+  if (![ 'android', 'ios' ].includes(Platform.OS)) {
+    return;
+  }
+
+  module.setHideAnimationDuration(duration ?? 220);
+}
+
+/**
+ * Sets show animation delay, takes value in milliseconds, if no value is provided, it will set default value which is `300` ms on iOS and `0` ms on Android
+ */
+function setShowAnimationDelay(delay?: number) {
+  if (![ 'android', 'ios' ].includes(Platform.OS)) {
+    return;
+  }
+
+  module.setShowAnimationDelay(delay ?? Platform.select({
+    default: 0,
+    ios: 300,
+  }));
+}
+
+/**
+ * Sets show animation duration, takes value in milliseconds, if no value is provided, it will set default value which is `660` ms
+ */
+function setShowAnimationDuration(duration?: number) {
+  if (![ 'android', 'ios' ].includes(Platform.OS)) {
+    return;
+  }
+
+  module.setShowAnimationDuration(duration ?? 660);
 }
 
 /**
@@ -92,7 +156,7 @@ function setAdjustNothing() {
     return;
   }
 
-  NativeModules.AvoidSoftInput.setAdjustNothing();
+  module.setAdjustNothing();
 }
 
 /**
@@ -105,7 +169,7 @@ function setAdjustPan() {
     return;
   }
 
-  NativeModules.AvoidSoftInput.setAdjustPan();
+  module.setAdjustPan();
 }
 
 /**
@@ -118,7 +182,7 @@ function setAdjustResize() {
     return;
   }
 
-  NativeModules.AvoidSoftInput.setAdjustResize();
+  module.setAdjustResize();
 }
 
 /**
@@ -131,7 +195,7 @@ function setAdjustUnspecified() {
     return;
   }
 
-  NativeModules.AvoidSoftInput.setAdjustUnspecified();
+  module.setAdjustUnspecified();
 }
 
 /**
@@ -144,7 +208,7 @@ function setDefaultAppSoftInputMode() {
     return;
   }
 
-  NativeModules.AvoidSoftInput.setDefaultAppSoftInputMode();
+  module.setDefaultAppSoftInputMode();
 }
 
 export const AvoidSoftInput = {
@@ -159,4 +223,8 @@ export const AvoidSoftInput = {
   setDefaultAppSoftInputMode,
   setEasing,
   setEnabled,
+  setHideAnimationDelay,
+  setHideAnimationDuration,
+  setShowAnimationDelay,
+  setShowAnimationDuration,
 };

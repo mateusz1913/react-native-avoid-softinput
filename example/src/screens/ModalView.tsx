@@ -50,6 +50,9 @@ const ModalView: React.FC = () => {
         visible={isModalVisible}>
         <SafeAreaView edges={[ 'left', 'bottom', 'right' ]} style={styles.modal}>
           <AvoidSoftInputView
+            onSoftInputAppliedOffsetChange={(e) => {
+              console.log('VIEW', { appliedOffset: e.nativeEvent.appliedOffset });
+            }}
             onSoftInputHidden={(e) => {
               console.log('VIEW', { softInputHeight: e.nativeEvent.softInputHeight });
             }}

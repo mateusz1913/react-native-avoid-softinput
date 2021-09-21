@@ -9,31 +9,37 @@ import android.view.WindowManager
 import android.widget.ScrollView
 import com.facebook.react.bridge.*
 import com.facebook.react.modules.core.DeviceEventManagerModule
-import com.facebook.react.uimanager.PixelUtil
 
-class AvoidSoftInputModule(private val reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext), LifecycleEventListener, AvoidSoftInputProvider.SoftInputListener {
-  private var mIsInitialized = false
-  private var mIsEnabled = false
-  private var mAvoidSoftInputProvider: AvoidSoftInputProvider? = null
-  private var mCurrentFocusedView: View? = null
-  private var mPreviousFocusedView: View? = null
-  private var mScrollViewParent: ScrollView? = null
-  private var mIsRootViewSlideUp = false
-  private var mIsRootViewSlidingDown = false
-  private var mIsRootViewSlidingUp = false
-  private var mDefaultSoftInputMode: Int = reactContext.currentActivity?.window?.attributes?.softInputMode ?: WindowManager.LayoutParams.SOFT_INPUT_STATE_UNSPECIFIED
-  private var mCurrentBottomPadding: Int = 0
-  private var mBottomOffset: Float = 0F
-  private var mAvoidOffset: Float = 0F
-  private var mScrollY: Int = 0
-  private var mHideValueAnimator: ValueAnimator? = null
-  private var mShowValueAnimator: ValueAnimator? = null
-  private var animationInterpolator = AvoidSoftInputInterpolator()
+class AvoidSoftInputModule(
+  private val reactContext: ReactApplicationContext
+) : ReactContextBaseJavaModule(reactContext), LifecycleEventListener, AvoidSoftInputProvider.SoftInputListener, AvoidSoftInput {
+  override var mAnimationInterpolator = AvoidSoftInputInterpolator()
+  override var mAvoidOffset: Float = 0F
+  override var mAvoidSoftInputProvider: AvoidSoftInputProvider? = null
+  override var mBottomOffset: Float = 0F
+  override var mCurrentFocusedView: View? = null
+  override var mCurrentBottomPadding: Int = 0
+  override var mHideValueAnimator: ValueAnimator? = null
+  override var mHideAnimationDelay: Long = 0
+  override var mHideAnimationDuration = DECREASE_PADDING_DURATION_IN_MS
+  override var mIsInitialized = false
+  override var mIsViewSlideUp = false
+  override var mIsViewSlidingDown = false
+  override var mIsViewSlidingUp = false
+  override var mPreviousFocusedView: View? = null
+  override var mScrollViewParent: ScrollView? = null
+  override var mScrollY: Int = 0
+  override var mShowAnimationDelay: Long = 0
+  override var mShowAnimationDuration = INCREASE_PADDING_DURATION_IN_MS
+  override var mShowValueAnimator: ValueAnimator? = null
 
-  private val mOnGlobalFocusChangeListener = ViewTreeObserver.OnGlobalFocusChangeListener { oldView, newView ->
+  override val mOnGlobalFocusChangeListener = ViewTreeObserver.OnGlobalFocusChangeListener { oldView, newView ->
     mCurrentFocusedView = newView
     mPreviousFocusedView = oldView
   }
+
+  private var mDefaultSoftInputMode: Int = reactContext.currentActivity?.window?.attributes?.softInputMode ?: WindowManager.LayoutParams.SOFT_INPUT_STATE_UNSPECIFIED
+  private var mIsEnabled = false
 
   override fun getName(): String = NAME
 
@@ -42,43 +48,39 @@ class AvoidSoftInputModule(private val reactContext: ReactApplicationContext) : 
     reactContext.addLifecycleEventListener(this)
   }
 
-  private fun initializeHandlers() {
-    if (!mIsInitialized) {
-      mAvoidSoftInputProvider = AvoidSoftInputProvider(reactContext).initializeProvider()
-      mAvoidSoftInputProvider?.setSoftInputListener(this)
-      reactContext.currentActivity?.window?.decorView?.rootView?.viewTreeObserver?.addOnGlobalFocusChangeListener(mOnGlobalFocusChangeListener)
-      mIsInitialized = true
-    }
-  }
-
-  private fun cleanupHandlers() {
-    if (mIsInitialized) {
-      mAvoidSoftInputProvider?.dismiss()
-      mAvoidSoftInputProvider?.setSoftInputListener(null)
-      mAvoidSoftInputProvider = null
-      reactContext.currentActivity?.window?.decorView?.rootView?.viewTreeObserver?.removeOnGlobalFocusChangeListener(mOnGlobalFocusChangeListener)
-      mIsInitialized = false
-    }
-  }
-
   @ReactMethod
   fun setEnabled(isEnabled: Boolean) {
     mIsEnabled = isEnabled
   }
 
   @ReactMethod
-  fun setAvoidOffset(avoidOffset: Float) {
-    mAvoidOffset = PixelUtil.toPixelFromDIP(avoidOffset)
+  override fun setAvoidOffset(avoidOffset: Float) {
+    super.setAvoidOffset(avoidOffset)
   }
 
   @ReactMethod
-  fun setEasing(easing: String) {
-    animationInterpolator.mode = when (easing) {
-      "easeIn" -> AvoidSoftInputInterpolator.Companion.MODE.EASE_IN
-      "easeInOut" -> AvoidSoftInputInterpolator.Companion.MODE.EASE_IN_OUT
-      "easeOut" -> AvoidSoftInputInterpolator.Companion.MODE.EASE_OUT
-      else -> AvoidSoftInputInterpolator.Companion.MODE.LINEAR
-    }
+  override fun setEasing(easing: String) {
+    super.setEasing(easing)
+  }
+
+  @ReactMethod
+  override fun setHideAnimationDelay(delay: Int?) {
+    super.setHideAnimationDelay(delay)
+  }
+
+  @ReactMethod
+  override fun setHideAnimationDuration(duration: Int?) {
+    super.setHideAnimationDuration(duration)
+  }
+
+  @ReactMethod
+  override fun setShowAnimationDelay(delay: Int?) {
+    super.setShowAnimationDelay(delay)
+  }
+
+  @ReactMethod
+  override fun setShowAnimationDuration(duration: Int?) {
+    super.setShowAnimationDuration(duration)
   }
 
   @ReactMethod
@@ -122,8 +124,8 @@ class AvoidSoftInputModule(private val reactContext: ReactApplicationContext) : 
     val currentFocusedView = mCurrentFocusedView ?: mPreviousFocusedView
 
     if (
-      mIsRootViewSlideUp
-      || mIsRootViewSlidingUp
+      mIsViewSlideUp
+      || mIsViewSlidingUp
       || !mIsEnabled
       || currentFocusedView == null
       || checkIfNestedInAvoidSoftInputView(currentFocusedView, rootView)
@@ -131,12 +133,12 @@ class AvoidSoftInputModule(private val reactContext: ReactApplicationContext) : 
       return
     }
 
-    mIsRootViewSlidingUp = true
+    mIsViewSlidingUp = true
 
-    val softInputOffset = computeSoftInputOffset(to, currentFocusedView, rootView, rootView)
+    val softInputOffset = computeSoftInputOffset(to, currentFocusedView, rootView)
 
     if (softInputOffset == null) {
-      mIsRootViewSlidingUp = false
+      mIsViewSlidingUp = false
       return
     }
 
@@ -149,8 +151,9 @@ class AvoidSoftInputModule(private val reactContext: ReactApplicationContext) : 
     UiThreadUtil.runOnUiThread {
       mHideValueAnimator?.end()
       mShowValueAnimator = ValueAnimator.ofFloat(0F, mBottomOffset).apply {
-        duration = INCREASE_PADDING_DURATION_IN_MS
-        interpolator = animationInterpolator
+        duration = mShowAnimationDuration
+        startDelay = mShowAnimationDelay
+        interpolator = mAnimationInterpolator
         addListener(object: AnimatorListenerAdapter() {
           override fun onAnimationStart(animation: Animator?) {
             super.onAnimationStart(animation)
@@ -163,8 +166,8 @@ class AvoidSoftInputModule(private val reactContext: ReactApplicationContext) : 
               mScrollY = scrollViewParent.scrollY
               scrollViewParent.smoothScrollTo(0, (scrollViewParent.scrollY + mBottomOffset).toInt())
             }
-            mIsRootViewSlidingUp = false
-            mIsRootViewSlideUp = true
+            mIsViewSlidingUp = false
+            mIsViewSlideUp = true
             mShowValueAnimator = null
           }
         })
@@ -194,8 +197,8 @@ class AvoidSoftInputModule(private val reactContext: ReactApplicationContext) : 
     val currentFocusedView = mCurrentFocusedView ?: mPreviousFocusedView
 
     if (
-      (!mIsRootViewSlideUp && !mIsRootViewSlidingUp)
-      || mIsRootViewSlidingDown
+      (!mIsViewSlideUp && !mIsViewSlidingUp)
+      || mIsViewSlidingDown
       || !mIsEnabled
       || currentFocusedView == null
       || checkIfNestedInAvoidSoftInputView(currentFocusedView, rootView)
@@ -203,15 +206,16 @@ class AvoidSoftInputModule(private val reactContext: ReactApplicationContext) : 
       return
     }
 
-    mIsRootViewSlidingDown = true
+    mIsViewSlidingDown = true
 
     val scrollViewParent = mScrollViewParent
 
     UiThreadUtil.runOnUiThread {
       mShowValueAnimator?.end()
       mHideValueAnimator = ValueAnimator.ofFloat(mBottomOffset, 0F).apply {
-        duration = DECREASE_PADDING_DURATION_IN_MS
-        interpolator = animationInterpolator
+        duration = mHideAnimationDuration
+        startDelay = mHideAnimationDelay
+        interpolator = mAnimationInterpolator
         addListener(object: AnimatorListenerAdapter() {
           override fun onAnimationStart(animation: Animator?) {
             super.onAnimationStart(animation)
@@ -226,8 +230,8 @@ class AvoidSoftInputModule(private val reactContext: ReactApplicationContext) : 
             }
             mScrollViewParent = null
             mCurrentBottomPadding = 0
-            mIsRootViewSlideUp = false
-            mIsRootViewSlidingDown = false
+            mIsViewSlideUp = false
+            mIsViewSlidingDown = false
             mHideValueAnimator = null
           }
         })
@@ -255,19 +259,19 @@ class AvoidSoftInputModule(private val reactContext: ReactApplicationContext) : 
       .emit(eventName, params)
   }
 
-  private fun sendAppliedOffsetChangedEvent(height: Int) {
+  override fun sendAppliedOffsetChangedEvent(offset: Int) {
     sendEvent(SOFT_INPUT_APPLIED_OFFSET_CHANGED, Arguments.createMap().apply {
-      putInt(SOFT_INPUT_APPLIED_OFFSET_KEY, height)
+      putInt(SOFT_INPUT_APPLIED_OFFSET_KEY, offset)
     })
   }
 
-  private fun sendHiddenEvent(height: Int) {
+  override fun sendHiddenEvent(height: Int) {
     sendEvent(SOFT_INPUT_HIDDEN, Arguments.createMap().apply {
       putInt(SOFT_INPUT_HEIGHT_KEY, height)
     })
   }
 
-  private fun sendShownEvent(height: Int) {
+  override fun sendShownEvent(height: Int) {
     sendEvent(SOFT_INPUT_SHOWN, Arguments.createMap().apply {
       putInt(SOFT_INPUT_HEIGHT_KEY, height)
     })
@@ -285,12 +289,12 @@ class AvoidSoftInputModule(private val reactContext: ReactApplicationContext) : 
   }
 
   override fun onHostResume() {
-    initializeHandlers()
+    initializeHandlers(reactContext, this, reactContext.currentActivity?.window?.decorView?.rootView)
   }
 
   override fun onHostPause() {}
 
   override fun onHostDestroy() {
-    cleanupHandlers()
+    cleanupHandlers(reactContext.currentActivity?.window?.decorView?.rootView)
   }
 }

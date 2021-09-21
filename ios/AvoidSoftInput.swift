@@ -20,12 +20,16 @@ class AvoidSoftInput: RCTEventEmitter {
     internal lazy var fakeShowAnimationView = UIView()
     internal var focusedInput: UIView? = nil
     internal lazy var hideAnimationTimer: CADisplayLink = CADisplayLink(target: self, selector: #selector(self.updateHideAnimation))
+    internal var hideDelay: Double = HIDE_ANIMATION_DELAY_IN_SECONDS
+    internal var hideDuration: Double = HIDE_ANIMATION_DURATION_IN_SECONDS
     internal var isViewSlidedUp: Bool = false
     internal var isViewSlidingDown: Bool = false
     internal var isViewSlidingUp: Bool = false
     internal var scrollContentInset: UIEdgeInsets = UIEdgeInsets.zero
     internal var scrollIndicatorInsets: UIEdgeInsets = UIEdgeInsets.zero
     internal lazy var showAnimationTimer: CADisplayLink = CADisplayLink(target: self, selector: #selector(self.updateShowAnimation))
+    internal var showDelay: Double = SHOW_ANIMATION_DELAY_IN_SECONDS
+    internal var showDuration: Double = SHOW_ANIMATION_DURATION_IN_SECONDS
     #endif
     
     private var avoidOffset: CGFloat = 0
@@ -77,7 +81,6 @@ class AvoidSoftInput: RCTEventEmitter {
     
     @objc(setEasing:)
     func setEasing(easing: NSString) {
-        print(easing)
         if easing == "easeIn" {
             easingOption = .curveEaseIn
         } else if easing == "easeInOut" {
@@ -86,6 +89,42 @@ class AvoidSoftInput: RCTEventEmitter {
             easingOption = .curveEaseOut
         } else {
             easingOption = .curveLinear
+        }
+    }
+    
+    @objc(setHideAnimationDelay:)
+    func setHideAnimationDelay(delay: NSNumber?) {
+        if let delay = delay {
+            hideDelay = delay.doubleValue / 1000
+        } else {
+            hideDelay = HIDE_ANIMATION_DELAY_IN_SECONDS
+        }
+    }
+    
+    @objc(setHideAnimationDuration:)
+    func setHideAnimationDuration(duration: NSNumber?) {
+        if let duration = duration {
+            hideDuration = duration.doubleValue / 1000
+        } else {
+            hideDuration = HIDE_ANIMATION_DURATION_IN_SECONDS
+        }
+    }
+    
+    @objc(setShowAnimationDelay:)
+    func setShowAnimationDelay(delay: NSNumber?) {
+        if let delay = delay {
+            showDelay = delay.doubleValue / 1000
+        } else {
+            showDelay = SHOW_ANIMATION_DELAY_IN_SECONDS
+        }
+    }
+    
+    @objc(setShowAnimationDuration:)
+    func setShowAnimationDuration(duration: NSNumber?) {
+        if let duration = duration {
+            showDuration = duration.doubleValue / 1000
+        } else {
+            showDuration = SHOW_ANIMATION_DURATION_IN_SECONDS
         }
     }
 }
@@ -113,7 +152,7 @@ extension AvoidSoftInput: AvoidSoftInputProtocol {
 
         fakeHideAnimationView.alpha = 1.0
         self.sendAppliedOffsetChangedEvent(self.currentAppliedOffset)
-        UIView.animate(withDuration: 0.22, delay: 0, options: [.beginFromCurrentState, easingOption]) {
+        UIView.animate(withDuration: hideDuration, delay: hideDelay, options: [.beginFromCurrentState, easingOption]) {
             self.scheduleHideAnimation(parentView: rootView)
             self.resetShowAnimation(isInterrupted: true)
             let maybeScrollInsets = removeOffset(focusedInput: focusedInput, rootView: rootView, bottomOffset: self.bottomOffset, scrollContentInset: self.scrollContentInset, scrollIndicatorInsets: self.scrollIndicatorInsets)
@@ -179,7 +218,7 @@ extension AvoidSoftInput: AvoidSoftInputProtocol {
         bottomOffset = softInputOffset + avoidOffset
         fakeShowAnimationView.alpha = 0.0
         self.sendAppliedOffsetChangedEvent(0)
-        UIView.animate(withDuration: 0.66, delay: 0.3, options: [.beginFromCurrentState, easingOption]) {
+        UIView.animate(withDuration: showDuration, delay: showDelay, options: [.beginFromCurrentState, easingOption]) {
             self.scheduleShowAnimation(parentView: rootView)
             self.resetHideAnimation(isInterrupted: true)
             let maybeScrollInsets = applyOffset(focusedInput: focusedInput, rootView: rootView, bottomOffset: self.bottomOffset)

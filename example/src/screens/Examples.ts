@@ -3,6 +3,8 @@ import type React from 'react';
 import AppliedOffsetEvents from './AppliedOffsetEvents';
 import BottomScrollView from './BottomScrollView';
 import BottomScrollViewWithFlex from './BottomScrollViewWithFlex';
+import CustomAnimationConfigComponent from './CustomAnimationConfigWithComponent';
+import CustomAnimationConfigModule from './CustomAnimationConfigWithModule';
 import FullScreenScrollView from './FullScreenScrollView';
 import FullScreenScrollViewWithSingleInput from './FullScreenScrollViewWithSingleInput';
 import FullScreenView from './FullScreenView';
@@ -67,5 +69,17 @@ export const EXAMPLES: Array<Example> = [
     description:
       'Screen content with animation that depends on soft input applied offset value',
     component: AppliedOffsetEvents,
+  },
+  {
+    name: 'CustomAnimationConfigModule',
+    description:
+      'Example with custom animation config for module',
+    component: CustomAnimationConfigModule,
+  },
+  {
+    name: 'CustomAnimationConfigComponent',
+    description:
+      'Example with custom animation config for component',
+    component: CustomAnimationConfigComponent,
   },
 ];

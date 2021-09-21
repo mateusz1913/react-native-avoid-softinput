@@ -48,31 +48,29 @@ fun checkIfNestedInAvoidSoftInputView(view: View, rootView: View): Boolean {
   return checkIfNestedInAvoidSoftInputView(view.parent as View, rootView)
 }
 
-fun computeSoftInputOffset(softInputHeight: Int, currentFocusedView: View?, containerView: View, rootView: View): Int? {
+fun computeSoftInputOffset(softInputHeight: Int, currentFocusedView: View?, rootView: View): Int? {
   if (currentFocusedView == null) {
     return null
   }
 
-  val softInputOffset = softInputHeight - (rootView.height - containerView.height - containerView.top)
-  val scrollView = getScrollViewParent(currentFocusedView, rootView)
+  val navigationBarHeight = getNavigationBarHeight(rootView.context)
   val statusBarHeight = getStatusBarHeight(rootView.context)
 
-  val viewPositionY = when (scrollView != null) {
-    true -> {
-      getRelativeY(scrollView, rootView) + (getPositionYRelativeToScrollViewParent(
-        currentFocusedView,
-        scrollView
-      ) - scrollView.scrollY) + currentFocusedView.height + statusBarHeight
-    }
-    else -> getRelativeY(currentFocusedView, containerView) + currentFocusedView.height + statusBarHeight
-  }
+  val scrollView = getScrollViewParent(currentFocusedView, rootView)
+  val currentFocusedViewPositionY = when (scrollView != null) {
+    true -> getRelativeY(scrollView, rootView) + (getPositionYRelativeToScrollViewParent(
+      currentFocusedView,
+      scrollView
+    ) - scrollView.scrollY)
+    else -> getRelativeY(currentFocusedView, rootView)
+  } + currentFocusedView.height + statusBarHeight
 
-  val shouldAvoidSoftInput = viewPositionY > (containerView.height + containerView.top - softInputOffset)
+  val currentFocusedViewBottomDistance = (rootView.top + rootView.height - navigationBarHeight) - currentFocusedViewPositionY
 
-  if (!shouldAvoidSoftInput) {
+  if (softInputHeight - currentFocusedViewBottomDistance < 0) {
     return null
   }
-  return softInputOffset
+  return softInputHeight - currentFocusedViewBottomDistance
 }
 
 fun getStatusBarHeight(context: Context): Int {
