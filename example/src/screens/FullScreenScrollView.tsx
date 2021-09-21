@@ -10,6 +10,7 @@ const FullScreenScrollView: React.FC = () => {
   const onFocusEffect = useCallback(() => {
     AvoidSoftInput.setAdjustNothing();
     AvoidSoftInput.setEnabled(true);
+    AvoidSoftInput.setEasing('easeInOut');
 
     const unsubscribeShown = AvoidSoftInput.onSoftInputShown(
       ({ softInputHeight }) => {
@@ -31,6 +32,7 @@ const FullScreenScrollView: React.FC = () => {
       unsubscribeShown.remove();
       unsubscribeHidden.remove();
       unsubscribeHeightChanged.remove();
+      AvoidSoftInput.setEasing('linear');
       AvoidSoftInput.setEnabled(false);
       AvoidSoftInput.setDefaultAppSoftInputMode();
     };

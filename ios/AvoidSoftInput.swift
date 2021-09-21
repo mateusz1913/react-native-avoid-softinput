@@ -15,6 +15,7 @@ class AvoidSoftInput: RCTEventEmitter {
     internal var currentAppliedOffset: CGFloat = 0
     internal var currentFakeHideAnimationViewAlpha: CGFloat = 0
     internal var currentFakeShowAnimationViewAlpha: CGFloat = 0
+    internal var easingOption: UIView.AnimationOptions = .curveLinear
     internal lazy var fakeHideAnimationView = UIView()
     internal lazy var fakeShowAnimationView = UIView()
     internal var focusedInput: UIView? = nil
@@ -73,6 +74,20 @@ class AvoidSoftInput: RCTEventEmitter {
     func setAvoidOffset(offset: NSNumber) {
         avoidOffset = CGFloat(offset.floatValue)
     }
+    
+    @objc(setEasing:)
+    func setEasing(easing: NSString) {
+        print(easing)
+        if easing == "easeIn" {
+            easingOption = .curveEaseIn
+        } else if easing == "easeInOut" {
+            easingOption = .curveEaseInOut
+        } else if easing == "easeOut" {
+            easingOption = .curveEaseOut
+        } else {
+            easingOption = .curveLinear
+        }
+    }
 }
 
 #if os(iOS)
@@ -98,7 +113,7 @@ extension AvoidSoftInput: AvoidSoftInputProtocol {
 
         fakeHideAnimationView.alpha = 1.0
         self.sendAppliedOffsetChangedEvent(self.currentAppliedOffset)
-        UIView.animate(withDuration: 0.22, delay: 0, options: [.beginFromCurrentState]) {
+        UIView.animate(withDuration: 0.22, delay: 0, options: [.beginFromCurrentState, easingOption]) {
             self.scheduleHideAnimation(parentView: rootView)
             self.resetShowAnimation(isInterrupted: true)
             let maybeScrollInsets = removeOffset(focusedInput: focusedInput, rootView: rootView, bottomOffset: self.bottomOffset, scrollContentInset: self.scrollContentInset, scrollIndicatorInsets: self.scrollIndicatorInsets)
@@ -164,7 +179,7 @@ extension AvoidSoftInput: AvoidSoftInputProtocol {
         bottomOffset = softInputOffset + avoidOffset
         fakeShowAnimationView.alpha = 0.0
         self.sendAppliedOffsetChangedEvent(0)
-        UIView.animate(withDuration: 0.66, delay: 0.3, options: [.beginFromCurrentState]) {
+        UIView.animate(withDuration: 0.66, delay: 0.3, options: [.beginFromCurrentState, easingOption]) {
             self.scheduleShowAnimation(parentView: rootView)
             self.resetHideAnimation(isInterrupted: true)
             let maybeScrollInsets = applyOffset(focusedInput: focusedInput, rootView: rootView, bottomOffset: self.bottomOffset)
