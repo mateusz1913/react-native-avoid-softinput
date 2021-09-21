@@ -28,6 +28,7 @@ class AvoidSoftInputModule(private val reactContext: ReactApplicationContext) : 
   private var mScrollY: Int = 0
   private var mHideValueAnimator: ValueAnimator? = null
   private var mShowValueAnimator: ValueAnimator? = null
+  private var animationInterpolator = AvoidSoftInputInterpolator()
 
   private val mOnGlobalFocusChangeListener = ViewTreeObserver.OnGlobalFocusChangeListener { oldView, newView ->
     mCurrentFocusedView = newView
@@ -68,6 +69,16 @@ class AvoidSoftInputModule(private val reactContext: ReactApplicationContext) : 
   @ReactMethod
   fun setAvoidOffset(avoidOffset: Float) {
     mAvoidOffset = PixelUtil.toPixelFromDIP(avoidOffset)
+  }
+
+  @ReactMethod
+  fun setEasing(easing: String) {
+    animationInterpolator.mode = when (easing) {
+      "easeIn" -> AvoidSoftInputInterpolator.Companion.MODE.EASE_IN
+      "easeInOut" -> AvoidSoftInputInterpolator.Companion.MODE.EASE_IN_OUT
+      "easeOut" -> AvoidSoftInputInterpolator.Companion.MODE.EASE_OUT
+      else -> AvoidSoftInputInterpolator.Companion.MODE.LINEAR
+    }
   }
 
   @ReactMethod
@@ -139,6 +150,7 @@ class AvoidSoftInputModule(private val reactContext: ReactApplicationContext) : 
       mHideValueAnimator?.end()
       mShowValueAnimator = ValueAnimator.ofFloat(0F, mBottomOffset).apply {
         duration = INCREASE_PADDING_DURATION_IN_MS
+        interpolator = animationInterpolator
         addListener(object: AnimatorListenerAdapter() {
           override fun onAnimationStart(animation: Animator?) {
             super.onAnimationStart(animation)
@@ -199,6 +211,7 @@ class AvoidSoftInputModule(private val reactContext: ReactApplicationContext) : 
       mShowValueAnimator?.end()
       mHideValueAnimator = ValueAnimator.ofFloat(mBottomOffset, 0F).apply {
         duration = DECREASE_PADDING_DURATION_IN_MS
+        interpolator = animationInterpolator
         addListener(object: AnimatorListenerAdapter() {
           override fun onAnimationStart(animation: Animator?) {
             super.onAnimationStart(animation)

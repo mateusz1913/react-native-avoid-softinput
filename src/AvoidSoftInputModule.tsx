@@ -1,7 +1,7 @@
 import type { EmitterSubscription } from 'react-native';
 import { NativeEventEmitter, NativeModules, Platform } from 'react-native';
 
-import type { SoftInputAppliedOffsetEventData, SoftInputEventData } from './types';
+import type { SoftInputAppliedOffsetEventData, SoftInputEasing, SoftInputEventData } from './types';
 
 const eventEmitter = new NativeEventEmitter(NativeModules.AvoidSoftInput);
 
@@ -69,6 +69,17 @@ function setAvoidOffset(offset: number) {
   }
 
   NativeModules.AvoidSoftInput.setAvoidOffset(offset);
+}
+
+/**
+ * Sets easing function that will be applied to applied offset animation, default is `linear`
+ */
+function setEasing(easing: SoftInputEasing) {
+  if (![ 'android', 'ios' ].includes(Platform.OS)) {
+    return;
+  }
+
+  NativeModules.AvoidSoftInput.setEasing(easing);
 }
 
 /**
@@ -146,5 +157,6 @@ export const AvoidSoftInput = {
   setAdjustUnspecified,
   setAvoidOffset,
   setDefaultAppSoftInputMode,
+  setEasing,
   setEnabled,
 };

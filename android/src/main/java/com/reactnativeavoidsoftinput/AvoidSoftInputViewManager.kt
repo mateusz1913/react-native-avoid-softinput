@@ -33,6 +33,11 @@ class AvoidSoftInputViewManager: ReactClippingViewManager<AvoidSoftInputView>() 
     view.setAvoidOffset(avoidOffset)
   }
 
+  @ReactProp(name = "easing")
+  fun setEasing(view: AvoidSoftInputView, easing: String) {
+    view.setEasing(easing)
+  }
+
   override fun getExportedCustomDirectEventTypeConstants(): MutableMap<String, Any> {
     return MapBuilder.of(
       AvoidSoftInputAppliedOffsetChangedEvent.NAME,

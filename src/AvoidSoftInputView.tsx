@@ -2,10 +2,11 @@ import React from 'react';
 import type { NativeSyntheticEvent, ViewProps } from 'react-native';
 import { requireNativeComponent } from 'react-native';
 
-import type { SoftInputAppliedOffsetEventData, SoftInputEventData } from './types';
+import type { SoftInputAppliedOffsetEventData, SoftInputEasing, SoftInputEventData } from './types';
 
 export interface AvoidSoftInputViewProps extends Omit<ViewProps, 'pointerEvents'> {
   avoidOffset?: number;
+  easing?: SoftInputEasing;
   onSoftInputAppliedOffsetChange?: (e: NativeSyntheticEvent<SoftInputAppliedOffsetEventData>) => void;
   onSoftInputHidden?: (e: NativeSyntheticEvent<SoftInputEventData>) => void;
   onSoftInputShown?: (e: NativeSyntheticEvent<SoftInputEventData>) => void;

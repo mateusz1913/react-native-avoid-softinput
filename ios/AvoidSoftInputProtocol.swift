@@ -4,6 +4,7 @@
     var currentAppliedOffset: CGFloat { get set }
     var currentFakeHideAnimationViewAlpha: CGFloat { get set }
     var currentFakeShowAnimationViewAlpha: CGFloat { get set }
+    var easingOption: UIView.AnimationOptions { get set }
     var fakeHideAnimationView: UIView { get set }
     var fakeShowAnimationView: UIView { get set }
     var focusedInput: UIView? { get set }

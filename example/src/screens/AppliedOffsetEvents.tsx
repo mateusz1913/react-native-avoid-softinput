@@ -51,6 +51,7 @@ const AppliedOffsetEvents: React.FC = () => {
 
   return <SafeAreaView edges={[ 'left', 'right', 'bottom' ]} style={styles.container}>
     <AnimatedAvoidSoftInputView
+      easing="easeIn"
       onSoftInputAppliedOffsetChange={softInputAppliedOffsetHandler}
       onSoftInputShown={softInputHandler}
       style={styles.softInputWrapper}

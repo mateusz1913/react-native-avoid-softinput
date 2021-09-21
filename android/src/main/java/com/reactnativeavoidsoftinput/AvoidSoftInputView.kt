@@ -30,6 +30,7 @@ class AvoidSoftInputView(private val reactContext: ThemedReactContext) : ReactVi
   private var mScrollY: Int = 0
   private var mHideValueAnimator: ValueAnimator? = null
   private var mShowValueAnimator: ValueAnimator? = null
+  private var animationInterpolator = AvoidSoftInputInterpolator()
 
   private val mOnGlobalFocusChangeListener = ViewTreeObserver.OnGlobalFocusChangeListener { oldView, newView ->
     mCurrentFocusedView = newView
@@ -71,6 +72,15 @@ class AvoidSoftInputView(private val reactContext: ThemedReactContext) : ReactVi
     mAvoidOffset = PixelUtil.toPixelFromDIP(avoidOffset)
   }
 
+  fun setEasing(easing: String) {
+    animationInterpolator.mode = when (easing) {
+      "easeIn" -> AvoidSoftInputInterpolator.Companion.MODE.EASE_IN
+      "easeInOut" -> AvoidSoftInputInterpolator.Companion.MODE.EASE_IN_OUT
+      "easeOut" -> AvoidSoftInputInterpolator.Companion.MODE.EASE_OUT
+      else -> AvoidSoftInputInterpolator.Companion.MODE.LINEAR
+    }
+  }
+
   override fun onSoftInputShown(from: Int, to: Int) {
     sendShownEvent(convertFromPixelToDIP(to))
 
@@ -100,6 +110,7 @@ class AvoidSoftInputView(private val reactContext: ThemedReactContext) : ReactVi
       mHideValueAnimator?.end()
       mShowValueAnimator = ValueAnimator.ofFloat(0F, mBottomOffset).apply {
         duration = AvoidSoftInputModule.INCREASE_PADDING_DURATION_IN_MS
+        interpolator = animationInterpolator
         addListener(object: AnimatorListenerAdapter() {
           override fun onAnimationStart(animation: Animator?) {
             super.onAnimationStart(animation)
@@ -150,6 +161,7 @@ class AvoidSoftInputView(private val reactContext: ThemedReactContext) : ReactVi
       mShowValueAnimator?.end()
       mHideValueAnimator = ValueAnimator.ofFloat(mBottomOffset, 0F).apply {
         duration = AvoidSoftInputModule.DECREASE_PADDING_DURATION_IN_MS
+        interpolator = animationInterpolator
         addListener(object: AnimatorListenerAdapter() {
           override fun onAnimationStart(animation: Animator?) {
             super.onAnimationStart(animation)
