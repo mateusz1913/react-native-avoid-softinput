@@ -84,6 +84,12 @@ class AvoidSoftInputModule(
   }
 
   @ReactMethod
+  fun addListener(eventName: String) {}
+
+  @ReactMethod
+  fun removeListeners(count: Int) {}
+
+  @ReactMethod
   fun setAdjustNothing() {
     setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING)
   }
