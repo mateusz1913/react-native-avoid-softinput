@@ -12,18 +12,18 @@ import { AvoidSoftInput } from 'react-native-avoid-softinput';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import Button from '../components/Button';
-
-import { EXAMPLES } from './Examples';
+import { SCREENS } from '../navigation/screens';
+import type { RootStackNavigationProp } from '../navigation/types';
 
 const HomeScreen: React.FC = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<RootStackNavigationProp>();
 
   return (
     <SafeAreaView edges={[ 'left', 'right', 'bottom' ]} style={styles.container}>
       <FlatList
         ItemSeparatorComponent={() => <View style={styles.separator} />}
         contentContainerStyle={styles.scrolContainer}
-        data={EXAMPLES}
+        data={SCREENS}
         keyExtractor={(example) => example.name}
         renderItem={({ item }) => 
           <View style={styles.item}>
