@@ -70,11 +70,14 @@ func computeSoftInputOffset(softInputHeight: CGFloat, firstResponder: UIView, co
 
 func applyOffset(focusedInput: UIView, rootView: UIView, bottomOffset: CGFloat) -> MaybeScrollInsets {
     if let scrollView = findScrollViewForFirstResponder(view: focusedInput, rootView: rootView) {
-        let contentInsets = UIEdgeInsets.init(top: 0.0, left: 0.0, bottom: bottomOffset, right: 0.0)
+        var newContentInset = scrollView.contentInset
+        newContentInset.bottom = max(bottomOffset, scrollView.contentInset.bottom)
+        var newScrollIndicatorInsets = scrollView.scrollIndicatorInsets
+        newScrollIndicatorInsets.bottom = max(bottomOffset, scrollView.scrollIndicatorInsets.bottom)
         let scrollContentInset = scrollView.contentInset
         let scrollIndicatorInsets = scrollView.scrollIndicatorInsets
-        scrollView.contentInset = contentInsets
-        scrollView.scrollIndicatorInsets = contentInsets
+        scrollView.contentInset = newContentInset
+        scrollView.scrollIndicatorInsets = newScrollIndicatorInsets
         return MaybeScrollInsets(scrollContentInset: scrollContentInset, scrollIndicatorInsets: scrollIndicatorInsets)
     }
 
