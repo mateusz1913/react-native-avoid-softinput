@@ -63,6 +63,7 @@ module.exports = {
     'react/display-name': 'off',
     'react/prop-types': 'off',
     'react-native/no-inline-styles': 'warn',
+    'react-native/no-unused-styles': 'warn',
     'sort-imports': [
       'error',
       {
