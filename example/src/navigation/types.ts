@@ -3,7 +3,7 @@ import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import type { ROUTES } from './routes';
 
 export type RootStackParamList = {
-  [ROUTES.AppliedOffsetEvents]: undefined;
+  // [ROUTES.AppliedOffsetEvents]: undefined;
   [ROUTES.BottomScrollView]: undefined;
   [ROUTES.BottomScrollViewWithFlex]: undefined;
   [ROUTES.CustomAnimationConfigComponent]: undefined;

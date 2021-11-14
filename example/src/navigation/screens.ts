@@ -1,6 +1,6 @@
 import type React from 'react';
 
-import AppliedOffsetEvents from '../screens/AppliedOffsetEvents';
+// import AppliedOffsetEvents from '../screens/AppliedOffsetEvents';
 import BottomScrollView from '../screens/BottomScrollView';
 import BottomScrollViewWithFlex from '../screens/BottomScrollViewWithFlex';
 import CustomAnimationConfigComponent from '../screens/CustomAnimationConfigWithComponent';
@@ -66,12 +66,12 @@ export const SCREENS: Array<Example> = [
       'Full screen scrollable view with input in bottom part of the screen',
     component: FullScreenScrollViewWithSingleInput,
   },
-  {
-    name: ROUTES.AppliedOffsetEvents,
-    description:
-      'Screen content with animation that depends on soft input applied offset value',
-    component: AppliedOffsetEvents,
-  },
+  // {
+  //   name: ROUTES.AppliedOffsetEvents,
+  //   description:
+  //     'Screen content with animation that depends on soft input applied offset value',
+  //   component: AppliedOffsetEvents,
+  // },
   {
     name: ROUTES.CustomAnimationConfigModule,
     description:
