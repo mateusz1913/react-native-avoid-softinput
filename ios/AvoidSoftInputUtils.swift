@@ -29,6 +29,14 @@ func findScrollViewForFirstResponder(view: UIView, rootView: UIView) -> UIScroll
     }
 }
 
+func getReactRootView(withRootViewController viewController: UIViewController) -> UIView {
+    if viewController.view is RCTRootView {
+        return viewController.view.subviews[0] as! RCTRootContentView
+    }
+    
+    return viewController.view
+}
+
 func checkIfNestedInAvoidSoftInputView(view: UIView) -> Bool {
     guard let superview = view.superview else {
         return false
