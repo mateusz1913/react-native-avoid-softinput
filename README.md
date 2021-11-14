@@ -4,7 +4,7 @@ Native solution for common React Native problem of focused views being covered b
 
 # Table of Contents
 
-1. [Installation](#Installation)
+1. [Installation & Requirements](#installation-requirements)
 2. [Usage](#Usage)
    - [iOS](#usage-ios)
    - [Android](#usage-android)
@@ -17,7 +17,11 @@ Native solution for common React Native problem of focused views being covered b
 3. [Contributing](#Contributing)
 4. [Licence](#Licence)
 
-## Installation
+## Installation & Requirements <a name="installation-requirements"></a>
+
+Library supports react-native version 0.64+
+
+Library supports Android & iOS, for out-of-tree platforms, `View` component is used as fallback
 
 ```sh
 yarn add react-native-avoid-softinput
