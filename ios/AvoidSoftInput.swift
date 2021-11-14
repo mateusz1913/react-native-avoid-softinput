@@ -140,10 +140,12 @@ extension AvoidSoftInput: AvoidSoftInputProtocol {
         }
 
         isViewSlidingDown = true
-        guard let viewController = RCTPresentedViewController(), let focusedInput = focusedInput, let rootView = viewController.view else {
+        guard let viewController = RCTPresentedViewController(), let focusedInput = focusedInput else {
             isViewSlidingDown = false
             return
         }
+        
+        let rootView = getReactRootView(withRootViewController: viewController)
 
         if checkIfNestedInAvoidSoftInputView(view: focusedInput) {
             isViewSlidingDown = false
@@ -198,7 +200,14 @@ extension AvoidSoftInput: AvoidSoftInputProtocol {
         }
 
         isViewSlidingUp = true
-        guard let viewController = RCTPresentedViewController(), let focusedInput = findFirstResponder(view: viewController.view), let rootView = viewController.view else {
+        guard let viewController = RCTPresentedViewController() else {
+            isViewSlidingUp = false
+            return
+        }
+        
+        let rootView = getReactRootView(withRootViewController: viewController)
+        
+        guard let focusedInput = findFirstResponder(view: rootView) else {
             isViewSlidingUp = false
             return
         }

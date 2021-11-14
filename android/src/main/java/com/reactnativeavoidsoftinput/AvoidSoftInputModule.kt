@@ -125,9 +125,8 @@ class AvoidSoftInputModule(
   override fun onSoftInputShown(from: Int, to: Int) {
     sendShownEvent(convertFromPixelToDIP(to))
 
-    val activity = reactContext.currentActivity ?: return
-    val rootView = activity.window.decorView.rootView
     val currentFocusedView = mCurrentFocusedView ?: mPreviousFocusedView
+    val rootView = getReactRootView(currentFocusedView)
 
     if (
       mIsViewSlideUp
@@ -135,6 +134,7 @@ class AvoidSoftInputModule(
       || !mIsEnabled
       || currentFocusedView == null
       || checkIfNestedInAvoidSoftInputView(currentFocusedView, rootView)
+      || rootView !is View
     ) {
       return
     }
@@ -198,9 +198,8 @@ class AvoidSoftInputModule(
   override fun onSoftInputHidden(from: Int, to: Int) {
     sendHiddenEvent(convertFromPixelToDIP(0))
 
-    val activity = reactContext.currentActivity ?: return
-    val rootView = activity.window.decorView.rootView
     val currentFocusedView = mCurrentFocusedView ?: mPreviousFocusedView
+    val rootView = getReactRootView(currentFocusedView)
 
     if (
       (!mIsViewSlideUp && !mIsViewSlidingUp)
@@ -208,6 +207,7 @@ class AvoidSoftInputModule(
       || !mIsEnabled
       || currentFocusedView == null
       || checkIfNestedInAvoidSoftInputView(currentFocusedView, rootView)
+      || rootView !is View
     ) {
       return
     }
