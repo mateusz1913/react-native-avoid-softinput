@@ -8,7 +8,7 @@ export const ROUTES = {
   ModalView: 'ModalView' as const,
   FullScreenViewWithOffset: 'FullScreenViewWithOffset' as const,
   FullScreenScrollViewWithSingleInput: 'FullScreenScrollViewWithSingleInput' as const,
-  AppliedOffsetEvents: 'AppliedOffsetEvents' as const,
+  // AppliedOffsetEvents: 'AppliedOffsetEvents' as const,
   CustomAnimationConfigModule: 'CustomAnimationConfigModule' as const,
   CustomAnimationConfigComponent: 'CustomAnimationConfigComponent' as const,
 };
