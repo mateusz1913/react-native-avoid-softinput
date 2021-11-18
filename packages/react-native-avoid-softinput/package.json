@@ -1,0 +1,57 @@
+{
+  "name": "react-native-avoid-softinput",
+  "version": "2.2.0",
+  "description": "Native logic for avoiding covering  text inputs by soft input views",
+  "keywords": [
+    "react-native",
+    "soft input",
+    "keyboard",
+    "avoid soft input",
+    "avoid keyboard",
+    "ios",
+    "android"
+  ],
+  "main": "lib/commonjs/index",
+  "module": "lib/module/index",
+  "types": "lib/typescript/index.d.ts",
+  "react-native": "src/index",
+  "source": "src/index",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mateusz1913/react-native-avoid-softinput.git",
+    "directory": "packages/react-native-avoid-softinput"
+  },
+  "author": "Mateusz Mędrek <luigimario1913@gmail.com> (https://github.com/mateusz1913)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mateusz1913/react-native-avoid-softinput/issues"
+  },
+  "homepage": "https://github.com/mateusz1913/react-native-avoid-softinput#readme",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
+  "files": [
+    "src",
+    "lib",
+    "android",
+    "ios",
+    "cpp",
+    "react-native-avoid-softinput.podspec",
+    "!lib/typescript/example",
+    "!android/build",
+    "!ios/build",
+    "!**/__tests__",
+    "!**/__fixtures__",
+    "!**/__mocks__"
+  ],
+  "devDependencies": {
+    "@types/react": "17.0.35",
+    "@types/react-native": "0.66.5",
+    "react": "17.0.2",
+    "react-native": "0.66.3"
+  },
+  "peerDependencies": {
+    "react": ">=16.8.0",
+    "react-native": ">=0.59.0"
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "name": "@avoid-softinput-example/mobile",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "android": "react-native run-android",
+    "ios": "react-native run-ios",
+    "start": "react-native start",
+    "test": "jest",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "studio": "studio android",
+    "xcode": "xed ios"
+  },
+  "dependencies": {
+    "@avoid-softinput-example/app": "*",
+    "@react-navigation/native": "^6.0.6",
+    "@react-navigation/native-stack": "^6.2.5",
+    "react": "17.0.2",
+    "react-native": "0.66.3",
+    "react-native-reanimated": "2.2.4",
+    "react-native-safe-area-context": "3.3.2",
+    "react-native-screens": "^3.9.0"
+  },
+  "devDependencies": {
+    "@babel/core": "7.15.5",
+    "@babel/runtime": "7.15.4",
+    "@types/jest": "^27.0.3",
+    "@types/react-native": "0.66.5",
+    "@types/react-test-renderer": "17.0.1",
+    "babel-jest": "^27.3.1",
+    "get-yarn-workspaces": "^1.0.2",
+    "jest": "^27.3.1",
+    "metro-react-native-babel-preset": "0.66.2",
+    "react-native-monorepo-tools": "^1.1.3",
+    "react-test-renderer": "17.0.2"
+  },
+  "resolutions": {
+    "@types/react": "^17"
+  },
+  "jest": {
+    "preset": "react-native",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ]
+  }
+}
