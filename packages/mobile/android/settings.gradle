@@ -3,4 +3,4 @@ apply from: file("../node_modules/@react-native-community/cli-platform-android/n
 include ':app'
 
 include ':reactnativeavoidsoftinput'
-project(':reactnativeavoidsoftinput').projectDir = new File(rootProject.projectDir, '../../android')
+project(':reactnativeavoidsoftinput').projectDir = new File(rootProject.projectDir, '../../react-native-avoid-softinput/android')
