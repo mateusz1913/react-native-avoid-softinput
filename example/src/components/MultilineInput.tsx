@@ -2,8 +2,8 @@ import React from 'react';
 import type { TextInputProps } from 'react-native';
 import { StyleSheet, TextInput } from 'react-native';
 
-const SingleInput = React.forwardRef<TextInput, TextInputProps>((props, ref) => {
-  return <TextInput {...props} ref={ref} style={[ styles.input, props.style ]} />;
+const MultilineInput = React.forwardRef<TextInput, TextInputProps>(({ multiline = true, style, ...rest }, ref) => {
+  return <TextInput multiline={multiline} {...rest} ref={ref} style={[ styles.input, style ]} />;
 });
 
 const styles = StyleSheet.create({
@@ -15,10 +15,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     color: 'black',
     fontSize: 18,
-    height: 60,
+    height: 500,
     marginBottom: 30,
     padding: 10,
+    textAlignVertical: 'top',
   },
 });
 
-export default SingleInput;
+export default MultilineInput;

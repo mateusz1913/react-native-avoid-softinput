@@ -4,7 +4,7 @@ import { ScrollView, StyleSheet } from 'react-native';
 import { AvoidSoftInput } from 'react-native-avoid-softinput';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import MultipleInputs from '../components/MultipleInputs';
+import MultipleInputs from '../../../components/MultipleInputs';
 
 const FullScreenScrollView: React.FC = () => {
   const onFocusEffect = useCallback(() => {

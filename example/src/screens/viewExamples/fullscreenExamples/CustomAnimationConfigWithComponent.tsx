@@ -4,7 +4,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import { AvoidSoftInput, AvoidSoftInputView } from 'react-native-avoid-softinput';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import SingleInput from '../components/SingleInput';
+import SingleInput from '../../../components/SingleInput';
 
 const CustomAnimationConfigComponent: React.FC = () => {
   const onFocusEffect = useCallback(() => {
@@ -27,9 +27,9 @@ const CustomAnimationConfigComponent: React.FC = () => {
       showAnimationDuration={1200}
       style={styles.contentContainer}>
       <SingleInput placeholder="1" />
-        <View style={styles.spacer}>
-          <Text style={styles.label}>SPACER</Text>
-        </View>
+      <View style={styles.spacer}>
+        <Text style={styles.label}>SPACER</Text>
+      </View>
     </AvoidSoftInputView>
   </SafeAreaView>;
 };

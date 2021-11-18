@@ -8,9 +8,9 @@ import {
   useSafeAreaInsets,
 } from 'react-native-safe-area-context';
 
-import MultipleInputs from '../components/MultipleInputs';
+import MultipleInputs from '../../../components/MultipleInputs';
 
-const BottomScrollView: React.FC = () => {
+const TopScrollView: React.FC = () => {
   const insets = useSafeAreaInsets();
   const { height, width } = useSafeAreaFrame();
   const isLandscape = width > height;
@@ -57,13 +57,13 @@ const BottomScrollView: React.FC = () => {
 
   return (
     <SafeAreaView
-      edges={[ 'left', 'bottom', 'right', 'top' ]}
+      edges={[ 'left', 'bottom', 'right' ]}
       style={styles.container}
     >
       <View
         style={[
           styles.contentContainer,
-          { height: HALF_SCREEN - insets.bottom },
+          { height: HALF_SCREEN - HEADER_HEIGHT },
         ]}
       >
         <ScrollView
@@ -73,7 +73,7 @@ const BottomScrollView: React.FC = () => {
           <MultipleInputs />
         </ScrollView>
       </View>
-      <View style={[ styles.spacer, { height: HALF_SCREEN - HEADER_HEIGHT }]}>
+      <View style={[ styles.spacer, { height: HALF_SCREEN - insets.bottom }]}>
         <Text style={styles.label}>SPACER</Text>
       </View>
     </SafeAreaView>
@@ -83,7 +83,6 @@ const BottomScrollView: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: 'column-reverse',
   },
   contentContainer: {
     flexGrow: 1,
@@ -103,4 +102,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default BottomScrollView;
+export default TopScrollView;

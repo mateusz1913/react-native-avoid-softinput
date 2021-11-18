@@ -1,66 +1,64 @@
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import {
-  FlatList,
   Platform,
   StatusBar,
   StyleSheet,
-  Text,
   View,
 } from 'react-native';
 import { AvoidSoftInput } from 'react-native-avoid-softinput';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import Button from '../components/Button';
-import { SCREENS } from '../navigation/screens';
+import { styles } from '../consts/styles';
+import { ROUTES } from '../navigation/routes';
 import type { RootStackNavigationProp } from '../navigation/types';
 
 const HomeScreen: React.FC = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
 
   return (
-    <SafeAreaView edges={[ 'left', 'right', 'bottom' ]} style={styles.container}>
-      <FlatList
-        ItemSeparatorComponent={() => <View style={styles.separator} />}
-        contentContainerStyle={styles.scrolContainer}
-        data={SCREENS}
-        keyExtractor={(example) => example.name}
-        renderItem={({ item }) => 
-          <View style={styles.item}>
-            <Button
-              onPress={() => navigation.navigate(item.name)}
-              title={item.name}
-            />
-            <Text style={styles.label}>{item.description}</Text>
-          </View>
-        }
-      />
-      {Platform.OS === 'android' ? <View style={styles.adjustContainer}>
-        <View style={styles.adjustItem}>
+    <SafeAreaView edges={[ 'left', 'right', 'bottom' ]} style={styles.screenContainer}>
+      <View style={styles.screenContainer}>
+        <View style={styles.item}>
+          <Button
+            onPress={() => navigation.navigate(ROUTES.ModuleExamples)}
+            title="Module Examples"
+          />
+        </View>
+        <View style={styles.item}>
+          <Button
+            onPress={() => navigation.navigate(ROUTES.ViewExamples)}
+            title="View Examples"
+          />
+        </View>
+      </View>
+      {Platform.OS === 'android' ? <View style={localStyles.adjustContainer}>
+        <View style={localStyles.adjustItem}>
           <Button
             onPress={() => AvoidSoftInput.setAdjustNothing()}
             title="Adjust Nothing"
           />
         </View>
-        <View style={styles.adjustItem}>
+        <View style={localStyles.adjustItem}>
           <Button
             onPress={() => AvoidSoftInput.setAdjustPan()}
             title="Adjust Pan"
           />
         </View>
-        <View style={styles.adjustItem}>
+        <View style={localStyles.adjustItem}>
           <Button
             onPress={() => AvoidSoftInput.setAdjustResize()}
             title="Adjust Resize"
           />
         </View>
-        <View style={styles.adjustItem}>
+        <View style={localStyles.adjustItem}>
           <Button
             onPress={() => AvoidSoftInput.setAdjustUnspecified()}
             title="Adjust Unspecified"
           />
         </View>
-        <View style={styles.adjustItem}>
+        <View style={localStyles.adjustItem}>
           <Button
             onPress={() => AvoidSoftInput.setDefaultAppSoftInputMode()}
             title="Default softinput mode"
@@ -77,39 +75,17 @@ const HomeScreen: React.FC = () => {
   );
 };
 
-const styles = StyleSheet.create({
+const localStyles = StyleSheet.create({
   adjustContainer: {
     alignItems: 'center',
+    borderTopWidth: StyleSheet.hairlineWidth,
     flexDirection: 'row',
     justifyContent: 'space-around',
     flexWrap: 'wrap',
-    marginHorizontal: 40,
+    paddingHorizontal: 40,
   },
   adjustItem: {
     marginVertical: 10,
-  },
-  container: {
-    alignItems: 'center',
-    flex: 1,
-    justifyContent: 'center',
-  },
-  item: {
-    marginHorizontal: 40,
-    marginVertical: 10,
-  },
-  label: {
-    color: 'black',
-    fontSize: 15,
-    marginVertical: 10,
-  },
-  scrolContainer: {
-    alignSelf: 'stretch',
-    flexGrow: 1,
-  },
-  separator: {
-    alignSelf: 'stretch',
-    backgroundColor: 'gray',
-    height: StyleSheet.hairlineWidth,
   },
 });
 

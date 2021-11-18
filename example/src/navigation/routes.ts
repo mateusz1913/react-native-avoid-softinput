@@ -11,4 +11,19 @@ export const ROUTES = {
   // AppliedOffsetEvents: 'AppliedOffsetEvents' as const,
   CustomAnimationConfigModule: 'CustomAnimationConfigModule' as const,
   CustomAnimationConfigComponent: 'CustomAnimationConfigComponent' as const,
+  Form: 'Form' as const,
+  MultilineForm: 'MultilineForm' as const,
+  TopScrollView: 'TopScrollView' as const,
+  TopScrollViewWithFlex: 'TopScrollViewWithFlex' as const,
+  HalfScrollView: 'HalfScrollView' as const,
+  HalfScrollViewWithFlex: 'HalfScrollViewWithFlex' as const,
+  NestedHorizontalScrollView: 'NestedHorizontalScrollView' as const,
+  //
+  ModuleExamples: 'ModuleExamples' as const,
+  ModuleFullScreenExamples: 'ModuleFullScreenExamples' as const,
+  ModuleScrollExamples: 'ModuleScrollExamples' as const,
+  //
+  ViewExamples: 'ViewExamples' as const,
+  ViewFullScreenExamples: 'ViewFullScreenExamples' as const,
+  ViewModalExamples: 'ViewModalExamples' as const,
 };

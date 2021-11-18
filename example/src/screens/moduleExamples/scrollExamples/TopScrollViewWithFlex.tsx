@@ -4,9 +4,9 @@ import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { AvoidSoftInput, useSoftInputHidden, useSoftInputShown } from 'react-native-avoid-softinput';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import MultipleInputs from '../components/MultipleInputs';
+import MultipleInputs from '../../../components/MultipleInputs';
 
-const BottomScrollViewWithFlex: React.FC = () => {
+const TopScrollViewWithFlex: React.FC = () => {
   const onFocusEffect = useCallback(() => {
     AvoidSoftInput.setAdjustNothing();
     AvoidSoftInput.setEnabled(true);
@@ -46,7 +46,6 @@ const BottomScrollViewWithFlex: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: 'column-reverse',
   },
   contentContainer: {
     flex: 0.5,
@@ -70,4 +69,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default BottomScrollViewWithFlex;
+export default TopScrollViewWithFlex;
