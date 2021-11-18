@@ -4,46 +4,38 @@ import { StyleSheet, Text, View } from 'react-native';
 import { AvoidSoftInput } from 'react-native-avoid-softinput';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import SingleInput from '../components/SingleInput';
+import SingleInput from '../../../components/SingleInput';
 
-const FullScreenViewWithOffset: React.FC = () => {
+const CustomAnimationConfigModule: React.FC = () => {
   const onFocusEffect = useCallback(() => {
     AvoidSoftInput.setAdjustNothing();
     AvoidSoftInput.setEnabled(true);
-    AvoidSoftInput.setAvoidOffset(50);
-
-    const unsubscribeShown = AvoidSoftInput.onSoftInputShown(
-      ({ softInputHeight }) => {
-        console.log('softInputShown', softInputHeight);
-      }
-    );
-    const unsubscribeHidden = AvoidSoftInput.onSoftInputHidden(
-      ({ softInputHeight }) => {
-        console.log('softInputHidden', softInputHeight);
-      }
-    );
-
+    AvoidSoftInput.setEasing('easeOut');
+    AvoidSoftInput.setHideAnimationDelay(1000);
+    AvoidSoftInput.setHideAnimationDuration(600);
+    AvoidSoftInput.setShowAnimationDelay(1000);
+    AvoidSoftInput.setShowAnimationDuration(1200);
     return () => {
-      unsubscribeShown.remove();
-      unsubscribeHidden.remove();
-      AvoidSoftInput.setAvoidOffset(0);
+      AvoidSoftInput.setEasing('linear');
+      AvoidSoftInput.setHideAnimationDelay();
+      AvoidSoftInput.setHideAnimationDuration();
+      AvoidSoftInput.setShowAnimationDelay();
+      AvoidSoftInput.setShowAnimationDuration();
       AvoidSoftInput.setEnabled(false);
       AvoidSoftInput.setDefaultAppSoftInputMode();
     };
   }, []);
-
+  
   useFocusEffect(onFocusEffect);
 
-  return (
-    <SafeAreaView edges={[ 'left', 'bottom', 'right' ]} style={styles.container}>
-      <View style={styles.contentContainer}>
-        <SingleInput placeholder="1" />
-        <View style={styles.spacer}>
-          <Text style={styles.label}>SPACER</Text>
-        </View>
+  return <SafeAreaView edges={[ 'left', 'bottom', 'right' ]} style={styles.container}>
+    <View style={styles.contentContainer}>
+      <SingleInput placeholder="1" />
+      <View style={styles.spacer}>
+        <Text style={styles.label}>SPACER</Text>
       </View>
-    </SafeAreaView>
-  );
+    </View>
+  </SafeAreaView>;
 };
 
 const styles = StyleSheet.create({
@@ -69,4 +61,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default FullScreenViewWithOffset;
+export default CustomAnimationConfigModule;

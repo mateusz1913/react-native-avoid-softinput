@@ -19,7 +19,7 @@ const Button: React.FC<Props> = ({ onPress, title }) => {
     <Pressable
       android_ripple={{
         borderless: false,
-        color: '#2196F3',
+        color: '#2155FF',
       }}
       onPress={onPress}
       style={({ pressed }) => [ styles.button, pressed && styles.pressedButton ]}>

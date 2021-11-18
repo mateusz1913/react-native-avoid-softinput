@@ -1,13 +1,13 @@
 import { useFocusEffect } from '@react-navigation/native';
 import React, { useCallback, useState } from 'react';
-import { Button, Modal, StyleSheet, Text, View } from 'react-native';
+import { Button, Modal, ScrollView, StyleSheet } from 'react-native';
 import { AvoidSoftInput, AvoidSoftInputView } from 'react-native-avoid-softinput';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import CloseButton from '../components/CloseButton';
-import SingleInput from '../components/SingleInput';
+import CloseButton from '../../../components/CloseButton';
+import MultipleInputs from '../../../components/MultipleInputs';
 
-const ModalView: React.FC = () => {
+const ModalScrollView: React.FC = () => {
   const [ isModalVisible, setIsModalVisible ] = useState(false);
 
   const onFocusEffect = useCallback(() => {
@@ -43,30 +43,19 @@ const ModalView: React.FC = () => {
       />
       <Modal
         animationType="slide"
-        onDismiss={() => setIsModalVisible(false)}
         onRequestClose={() => setIsModalVisible(false)}
         statusBarTranslucent={true}
-        transparent={true}
-        visible={isModalVisible}>
+        transparent={true} visible={isModalVisible}>
         <SafeAreaView edges={[ 'left', 'bottom', 'right' ]} style={styles.modal}>
-          <AvoidSoftInputView
-            onSoftInputAppliedOffsetChange={(e) => {
-              console.log('VIEW', { appliedOffset: e.nativeEvent.appliedOffset });
-            }}
-            onSoftInputHidden={(e) => {
-              console.log('VIEW', { softInputHeight: e.nativeEvent.softInputHeight });
-            }}
-            onSoftInputShown={(e) => {
-              console.log('VIEW', { softInputHeight: e.nativeEvent.softInputHeight });
-            }}
-            style={styles.modalContainer}>
+          <AvoidSoftInputView style={styles.modalContainer}>
             <CloseButton onPress={() => setIsModalVisible(false)} />
-            <View style={styles.contentContainer}>
-              <View style={styles.spacer}>
-                <Text style={styles.label}>SPACER</Text>
-              </View>
-              <SingleInput placeholder="1" />
-            </View>
+            <ScrollView
+              contentContainerStyle={styles.scrollContainer}
+              contentInsetAdjustmentBehavior="always"
+              style={styles.scroll}
+            >
+              <MultipleInputs />
+            </ScrollView>
           </AvoidSoftInputView>
         </SafeAreaView>
       </Modal>
@@ -80,39 +69,28 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
   },
-  contentContainer: {
-    alignSelf: 'stretch',
-    flexGrow: 1,
-    flex: 1,
-  },
-  label: {
-    color: 'blue',
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
   modalContainer: {
     backgroundColor: 'white',
     borderColor: 'black',
     borderRadius: 10,
     borderWidth: 1,
-    flexGrow: 1,
     marginBottom: 100,
     marginTop: 50,
-    paddingBottom: 50,
   },
   modal: {
     alignSelf: 'stretch',
     backgroundColor: '#00000033',
-    paddingTop: 50,
     flex: 1,
   },
-  spacer: {
+  scroll: {
+    backgroundColor: 'orange',
+  },
+  scrollContainer: {
     alignItems: 'center',
     alignSelf: 'stretch',
-    backgroundColor: 'pink',
-    flex: 1,
-    justifyContent: 'center',
+    backgroundColor: '#00FF0066',
+    flexGrow: 1,
   },
 });
 
-export default ModalView;
+export default ModalScrollView;

@@ -10,31 +10,8 @@ class AvoidSoftInput: RCTEventEmitter {
     private let SOFT_INPUT_HIDDEN = "softInputHidden"
     private let SOFT_INPUT_SHOWN = "softInputShown"
 
-    #if os(iOS)
-    internal var bottomOffset: CGFloat = 0
-    internal var currentAppliedOffset: CGFloat = 0
-    internal var currentFakeHideAnimationViewAlpha: CGFloat = 0
-    internal var currentFakeShowAnimationViewAlpha: CGFloat = 0
-    internal var easingOption: UIView.AnimationOptions = .curveLinear
-    internal lazy var fakeHideAnimationView = UIView()
-    internal lazy var fakeShowAnimationView = UIView()
-    internal var focusedInput: UIView? = nil
-    internal lazy var hideAnimationTimer: CADisplayLink = CADisplayLink(target: self, selector: #selector(self.updateHideAnimation))
-    internal var hideDelay: Double = HIDE_ANIMATION_DELAY_IN_SECONDS
-    internal var hideDuration: Double = HIDE_ANIMATION_DURATION_IN_SECONDS
-    internal var isViewSlidedUp: Bool = false
-    internal var isViewSlidingDown: Bool = false
-    internal var isViewSlidingUp: Bool = false
-    internal var scrollContentInset: UIEdgeInsets = UIEdgeInsets.zero
-    internal var scrollIndicatorInsets: UIEdgeInsets = UIEdgeInsets.zero
-    internal lazy var showAnimationTimer: CADisplayLink = CADisplayLink(target: self, selector: #selector(self.updateShowAnimation))
-    internal var showDelay: Double = SHOW_ANIMATION_DELAY_IN_SECONDS
-    internal var showDuration: Double = SHOW_ANIMATION_DURATION_IN_SECONDS
-    #endif
-    
-    private var avoidOffset: CGFloat = 0
     private var hasListeners = false
-    private var isEnabled: Bool = false
+    private var manager = AvoidSoftInputManager()
 
     // MARK: RCTEVENTEMITTER METHODS
     override static func requiresMainQueueSetup() -> Bool {
@@ -59,6 +36,10 @@ class AvoidSoftInput: RCTEventEmitter {
         #if os(iOS)
         NotificationCenter.default.addObserver(self, selector: #selector(softInputWillShow(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(softInputWillHide(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+        manager.setOnOffsetChanged { changedOffset in
+            self.sendAppliedOffsetChangedEvent(changedOffset)
+        }
+        manager.setShouldCheckForAvoidSoftInputView(true)
         #endif
     }
 
@@ -71,122 +52,61 @@ class AvoidSoftInput: RCTEventEmitter {
     // MARK: MODULE METHODS
     @objc(setEnabled:)
     func setEnabled(enabled: ObjCBool) {
-        isEnabled = enabled.boolValue
+        #if os(iOS)
+        manager.setIsEnabled(enabled.boolValue)
+        #endif
     }
 
     @objc(setAvoidOffset:)
     func setAvoidOffset(offset: NSNumber) {
-        avoidOffset = CGFloat(offset.floatValue)
+        #if os(iOS)
+        manager.setAvoidOffset(offset)
+        #endif
     }
     
     @objc(setEasing:)
     func setEasing(easing: NSString) {
-        if easing == "easeIn" {
-            easingOption = .curveEaseIn
-        } else if easing == "easeInOut" {
-            easingOption = .curveEaseInOut
-        } else if easing == "easeOut" {
-            easingOption = .curveEaseOut
-        } else {
-            easingOption = .curveLinear
-        }
+        #if os(iOS)
+        manager.setEasing(easing)
+        #endif
     }
     
     @objc(setHideAnimationDelay:)
     func setHideAnimationDelay(delay: NSNumber?) {
-        if let delay = delay {
-            hideDelay = delay.doubleValue / 1000
-        } else {
-            hideDelay = HIDE_ANIMATION_DELAY_IN_SECONDS
-        }
+        #if os(iOS)
+        manager.setHideAnimationDelay(delay)
+        #endif
     }
     
     @objc(setHideAnimationDuration:)
     func setHideAnimationDuration(duration: NSNumber?) {
-        if let duration = duration {
-            hideDuration = duration.doubleValue / 1000
-        } else {
-            hideDuration = HIDE_ANIMATION_DURATION_IN_SECONDS
-        }
+        #if os(iOS)
+        manager.setHideAnimationDuration(duration)
+        #endif
     }
     
     @objc(setShowAnimationDelay:)
     func setShowAnimationDelay(delay: NSNumber?) {
-        if let delay = delay {
-            showDelay = delay.doubleValue / 1000
-        } else {
-            showDelay = SHOW_ANIMATION_DELAY_IN_SECONDS
-        }
+        #if os(iOS)
+        manager.setShowAnimationDelay(delay)
+        #endif
     }
     
     @objc(setShowAnimationDuration:)
     func setShowAnimationDuration(duration: NSNumber?) {
-        if let duration = duration {
-            showDuration = duration.doubleValue / 1000
-        } else {
-            showDuration = SHOW_ANIMATION_DURATION_IN_SECONDS
-        }
-    }
-}
-
-#if os(iOS)
-extension AvoidSoftInput: AvoidSoftInputProtocol {    
-    // MARK: SOFT INPUT HIDDEN
-    @objc func softInputWillHide(notification: NSNotification) {
-        sendHiddenEvent(0)
-
-        if (!isViewSlidedUp && !isViewSlidingUp) || isViewSlidingDown || isEnabled == false {
-            return
-        }
-
-        isViewSlidingDown = true
-        guard let viewController = RCTPresentedViewController(), let focusedInput = focusedInput else {
-            isViewSlidingDown = false
-            return
-        }
-        
-        let rootView = getReactRootView(withRootViewController: viewController)
-
-        if checkIfNestedInAvoidSoftInputView(view: focusedInput) {
-            isViewSlidingDown = false
-            return
-        }
-
-        fakeHideAnimationView.alpha = 1.0
-        self.sendAppliedOffsetChangedEvent(self.currentAppliedOffset)
-        UIView.animate(withDuration: hideDuration, delay: hideDelay, options: [.beginFromCurrentState, easingOption]) {
-            self.scheduleHideAnimation(parentView: rootView)
-            self.resetShowAnimation(isInterrupted: true)
-            let maybeScrollInsets = removeOffset(focusedInput: focusedInput, rootView: rootView, bottomOffset: self.bottomOffset, scrollContentInset: self.scrollContentInset, scrollIndicatorInsets: self.scrollIndicatorInsets)
-            if let scrollContentInset = maybeScrollInsets.scrollContentInset, let scrollIndicatorInsets = maybeScrollInsets.scrollIndicatorInsets {
-                self.scrollContentInset = scrollContentInset
-                self.scrollIndicatorInsets = scrollIndicatorInsets
-            }
-        } completion: { isCompleted in
-            self.resetHideAnimation(isInterrupted: false)
-            self.hideAnimationDidComplete()
-        }
+        #if os(iOS)
+        manager.setShowAnimationDuration(duration)
+        #endif
     }
     
-    @objc func updateHideAnimation() {
-        guard let currentFakeAlpha = self.fakeHideAnimationView.layer.presentation()?.opacity else {
-            return
-        }
-
-        if currentFakeHideAnimationViewAlpha == CGFloat(currentFakeAlpha) {
-            return
-        }
-
-        currentFakeHideAnimationViewAlpha = CGFloat(currentFakeAlpha)
-        if currentFakeHideAnimationViewAlpha * self.bottomOffset > currentAppliedOffset {
-            return
-        }
-
-        currentAppliedOffset = currentFakeHideAnimationViewAlpha * self.bottomOffset
-        sendAppliedOffsetChangedEvent(currentAppliedOffset)
+    #if os(iOS)
+    @objc func softInputWillHide(notification: NSNotification) {
+        sendHiddenEvent(0)
+        
+        manager.softInputWillHide()
     }
-
-    // MARK: SOFT INPUT SHOWN
+    
+    // MARK: NOTIFICATION CALLBACKS
     @objc func softInputWillShow(notification: NSNotification) {
         guard let userInfo = notification.userInfo, let softInputSize = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else {
             return
@@ -194,88 +114,27 @@ extension AvoidSoftInput: AvoidSoftInputProtocol {
 
         let softInputDetectedHeight = softInputSize.cgRectValue.height
         sendShownEvent(softInputDetectedHeight)
-
-        if isViewSlidedUp || isViewSlidingUp || isEnabled == false {
-            return
-        }
-
-        isViewSlidingUp = true
-        guard let viewController = RCTPresentedViewController() else {
-            isViewSlidingUp = false
-            return
-        }
         
-        let rootView = getReactRootView(withRootViewController: viewController)
-        
-        guard let focusedInput = findFirstResponder(view: rootView) else {
-            isViewSlidingUp = false
-            return
-        }
-
-        if checkIfNestedInAvoidSoftInputView(view: focusedInput) {
-            isViewSlidingUp = false
-            return
-        }
-
-        self.focusedInput = focusedInput
-
-        guard let softInputOffset = computeSoftInputOffset(softInputHeight: softInputDetectedHeight, firstResponder: focusedInput, containerView: rootView, rootView: rootView) else {
-            isViewSlidingUp = false
-            return
-        }
-
-        bottomOffset = softInputOffset + avoidOffset
-        fakeShowAnimationView.alpha = 0.0
-        self.sendAppliedOffsetChangedEvent(0)
-        UIView.animate(withDuration: showDuration, delay: showDelay, options: [.beginFromCurrentState, easingOption]) {
-            self.scheduleShowAnimation(parentView: rootView)
-            self.resetHideAnimation(isInterrupted: true)
-            let maybeScrollInsets = applyOffset(focusedInput: focusedInput, rootView: rootView, bottomOffset: self.bottomOffset)
-            if let scrollContentInset = maybeScrollInsets.scrollContentInset, let scrollIndicatorInsets = maybeScrollInsets.scrollIndicatorInsets {
-                self.scrollContentInset = scrollContentInset
-                self.scrollIndicatorInsets = scrollIndicatorInsets
-            }
-        } completion: { isCompleted in
-            self.resetShowAnimation(isInterrupted: false)
-            self.showAnimationDidComplete()
-        }
+        manager.softInputWillShow(height: softInputDetectedHeight)
     }
     
-    @objc func updateShowAnimation() {
-        guard let currentFakeAlpha = self.fakeShowAnimationView.layer.presentation()?.opacity else {
-            return
-        }
-
-        if currentFakeShowAnimationViewAlpha == CGFloat(currentFakeAlpha) {
-            return
-        }
-
-        currentFakeShowAnimationViewAlpha = CGFloat(currentFakeAlpha)
-        if currentFakeShowAnimationViewAlpha * self.bottomOffset < currentAppliedOffset {
-            return
-        }
-
-        currentAppliedOffset = currentFakeShowAnimationViewAlpha * self.bottomOffset
-        sendAppliedOffsetChangedEvent(currentAppliedOffset)
-    }
-
     // MARK: EVENTS
-    func sendAppliedOffsetChangedEvent(_ offset: CGFloat) {
+    private func sendAppliedOffsetChangedEvent(_ offset: CGFloat) {
         if hasListeners {
             self.sendEvent(withName: SOFT_INPUT_APPLIED_OFFSET_CHANGED, body: [SOFT_INPUT_APPLIED_OFFSET_KEY: offset])
         }
     }
 
-    func sendHiddenEvent(_ height: CGFloat) {
+    private func sendHiddenEvent(_ height: CGFloat) {
         if hasListeners {
             self.sendEvent(withName: SOFT_INPUT_HIDDEN, body: [SOFT_INPUT_HEIGHT_KEY: height])
         }
     }
 
-    func sendShownEvent(_ height: CGFloat) {
+    private func sendShownEvent(_ height: CGFloat) {
         if hasListeners {
             self.sendEvent(withName: SOFT_INPUT_SHOWN, body: [SOFT_INPUT_HEIGHT_KEY: height])
         }
     }
+    #endif
 }
-#endif

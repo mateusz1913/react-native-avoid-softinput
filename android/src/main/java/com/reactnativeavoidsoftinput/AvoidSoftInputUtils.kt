@@ -6,26 +6,6 @@ import android.widget.ScrollView
 import com.facebook.react.uimanager.PixelUtil
 import com.facebook.react.uimanager.RootView
 
-fun getRelativeY(view: View, rootView: View): Int {
-  if (view.parent == null || view.parent !is View) {
-    return view.top
-  }
-
-  if (view.parent == rootView) {
-    return view.top + (view.parent as View).top
-  }
-
-  return view.top + getRelativeY(view.parent as View, rootView)
-}
-
-fun getPositionYRelativeToScrollViewParent(view: View, rootView: View): Int {
-  if (view.parent == null || view.parent == rootView || view.parent is ScrollView || view.parent !is View) {
-    return view.top
-  }
-
-  return view.top + getPositionYRelativeToScrollViewParent(view.parent as View, rootView)
-}
-
 fun getScrollViewParent(view: View?, rootView: View): ScrollView? {
   if (view == null || view.parent == rootView || view.parent !is View) {
     return null
@@ -47,41 +27,6 @@ fun checkIfNestedInAvoidSoftInputView(view: View, rootView: RootView?): Boolean 
     return true
   }
   return checkIfNestedInAvoidSoftInputView(view.parent as View, rootView)
-}
-
-fun computeSoftInputOffset(softInputHeight: Int, currentFocusedView: View?, rootView: View): Int? {
-  if (currentFocusedView == null) {
-    return null
-  }
-
-  val navigationBarHeight = getNavigationBarHeight(rootView.context)
-  val statusBarHeight = getStatusBarHeight(rootView.context)
-
-  val scrollView = getScrollViewParent(currentFocusedView, rootView)
-  val currentFocusedViewPositionY = when (scrollView != null) {
-    true -> getRelativeY(scrollView, rootView) + (getPositionYRelativeToScrollViewParent(
-      currentFocusedView,
-      scrollView
-    ) - scrollView.scrollY)
-    else -> getRelativeY(currentFocusedView, rootView)
-  } + currentFocusedView.height + statusBarHeight
-
-  val currentFocusedViewBottomDistance = (rootView.top + rootView.height - navigationBarHeight) - currentFocusedViewPositionY
-
-  if (softInputHeight - currentFocusedViewBottomDistance < 0) {
-    return null
-  }
-  return softInputHeight - currentFocusedViewBottomDistance
-}
-
-fun getStatusBarHeight(context: Context): Int {
-  var statusBarHeight = 0
-  val resourceId = context.resources.getIdentifier("status_bar_height", "dimen", "android")
-  if (resourceId > 0) {
-    statusBarHeight = context.resources.getDimensionPixelSize(resourceId)
-  }
-
-  return statusBarHeight
 }
 
 fun getNavigationBarHeight(context: Context): Int {
