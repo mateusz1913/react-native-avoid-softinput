@@ -21,6 +21,8 @@ class AvoidSoftInputModule(
 
   override fun initialize() {
     super.initialize()
+
+    mDefaultSoftInputMode = reactContext.currentActivity?.window?.attributes?.softInputMode ?: WindowManager.LayoutParams.SOFT_INPUT_STATE_UNSPECIFIED
     reactContext.addLifecycleEventListener(this)
   }
 
