@@ -6,7 +6,13 @@ class AvoidSoftInputView: RCTView {
     private var isInitialized = false
 
     // MARK: PROPS
-    @objc var avoidOffset: CGFloat = 0
+    @objc var avoidOffset: NSNumber = 0 {
+        didSet {
+            #if os(iOS)
+            manager.setAvoidOffset(avoidOffset)
+            #endif
+        }
+    }
     @objc var easing: NSString = "linear" {
         didSet {
             #if os(iOS)

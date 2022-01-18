@@ -2,7 +2,7 @@
 
 @interface RCT_EXTERN_MODULE(AvoidSoftInputViewManager, RCTViewManager)
 
-RCT_EXPORT_VIEW_PROPERTY(avoidOffset, CGFloat)
+RCT_EXPORT_VIEW_PROPERTY(avoidOffset, NSNumber)
 RCT_EXPORT_VIEW_PROPERTY(easing, NSString)
 RCT_EXPORT_VIEW_PROPERTY(hideAnimationDelay, NSNumber)
 RCT_EXPORT_VIEW_PROPERTY(hideAnimationDuration, NSNumber)
