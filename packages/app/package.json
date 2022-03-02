@@ -4,13 +4,13 @@
   "private": true,
   "main": "src",
   "devDependencies": {
-    "@react-navigation/native": "^6.0.6",
-    "@react-navigation/native-stack": "^6.2.5",
-    "@types/react": "17.0.35",
-    "@types/react-native": "0.66.5",
-    "react-native-reanimated": "2.2.4",
-    "react-native-safe-area-context": "3.3.2",
-    "react-native-screens": "^3.9.0"
+    "@react-navigation/native": "6.0.8",
+    "@react-navigation/native-stack": "6.5.0",
+    "@types/react": "17.0.39",
+    "@types/react-native": "0.67.1",
+    "react-native-reanimated": "2.4.1",
+    "react-native-safe-area-context": "3.4.1",
+    "react-native-screens": "3.13.0"
   },
   "peerDependencies": {
     "@react-navigation/native": "*",

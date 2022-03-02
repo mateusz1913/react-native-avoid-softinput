@@ -14,7 +14,7 @@ import MultilineForm from '../screens/moduleExamples/scrollExamples/MultilineFor
 import NestedHorizontalScrollView from '../screens/moduleExamples/scrollExamples/NestedHorizontalScrollView';
 import TopScrollView from '../screens/moduleExamples/scrollExamples/TopScrollView';
 import TopScrollViewWithFlex from '../screens/moduleExamples/scrollExamples/TopScrollViewWithFlex';
-// import AppliedOffsetEvents from '../screens/viewExamples/fullscreenExamples/AppliedOffsetEvents';
+import AppliedOffsetEvents from '../screens/viewExamples/fullscreenExamples/AppliedOffsetEvents';
 import CustomAnimationConfigComponent from '../screens/viewExamples/fullscreenExamples/CustomAnimationConfigWithComponent';
 import ModalScrollView from '../screens/viewExamples/modalExamples/ModalScrollView';
 import ModalView from '../screens/viewExamples/modalExamples/ModalView';
@@ -110,12 +110,12 @@ export const MODULE_SCROLL_EXAMPLES: Array<Example> = [
 ];
 
 export const VIEW_FULL_SCREEN_EXAMPLES: Array<Example> = [
-  // {
-  //   name: ROUTES.AppliedOffsetEvents,
-  //   description:
-  //     'Screen content with animation that depends on soft input applied offset value',
-  //   component: AppliedOffsetEvents,
-  // },
+  {
+    name: ROUTES.AppliedOffsetEvents,
+    description:
+      'Screen content with animation that depends on soft input applied offset value',
+    component: AppliedOffsetEvents,
+  },
   {
     name: ROUTES.CustomAnimationConfigComponent,
     description:
