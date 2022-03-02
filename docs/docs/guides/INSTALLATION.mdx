@@ -1,0 +1,28 @@
+---
+id: installation
+title: Getting Started
+sidebar_label: Installation
+slug: /guides
+---
+
+## Installation & Requirements
+
+Library supports react-native version 0.64+
+
+Library supports Android & iOS, for out-of-tree platforms, `View` component is used as fallback.
+
+```sh
+yarn add react-native-avoid-softinput
+```
+
+On iOS run additionally
+
+```sh
+npx pod-install
+```
+
+:::info
+
+Library on iOS uses Swift. Make sure that your project has bridging header configured (the easiest way is to create empty `.swift` file in XCode, which will offer to create bridging header).
+
+:::

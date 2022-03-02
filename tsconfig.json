@@ -29,6 +29,10 @@
     "babel.config.js",
     "metro.config.js",
     "jest.config.js",
-    ".eslintrc.js"
+    ".eslintrc.js",
+    "docs",
+    "packages/app",
+    "packages/mobile",
+    "packages/react-native-avoid-softinput/src"
   ],
 }

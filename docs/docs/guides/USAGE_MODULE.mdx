@@ -1,0 +1,46 @@
+---
+id: usage-module
+title: Usage - module
+sidebar_label: Usage - module
+---
+
+## iOS
+
+Enable module:
+
+```ts
+import React from "react";
+import { AvoidSoftInput } from "react-native-avoid-softinput";
+
+React.useEffect(() => {
+  AvoidSoftInput.setEnabled(true);
+}, []);
+```
+
+## Android
+
+Enable module:
+
+:::info
+
+**Before using module on Android, check if system support (`android:windowSoftInputMode="adjustResize"` in Android manifest for `<activity>` tag) is enough for your use case.**
+
+:::
+
+If you cannot, or don't want to use Android system support, then enable module and set `android:windowSoftInputMode` attribute to `adjustNothing` either in manifest or programmatically with `setAdjustNothing` method
+
+:::warning
+
+**Do not enable module with `adjustResize` value set, as it will result in padding being applied to already resized android window**
+
+:::
+
+```ts
+import React from "react";
+import { AvoidSoftInput } from "react-native-avoid-softinput";
+
+React.useEffect(() => {
+  AvoidSoftInput.setAdjustNothing();
+  AvoidSoftInput.setEnabled(true);
+}, []);
+```
