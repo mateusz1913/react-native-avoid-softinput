@@ -1,0 +1,90 @@
+<svg width="428" height="926" viewBox="0 0 428 926" fill="none" xmlns="http://www.w3.org/2000/svg">
+<style>
+  @keyframes hideshowlogo {
+    0% { transform: translateY(50px); }
+    33% { transform: translateY(0px); }
+    66% { transform: translateY(0px); }
+    83% { transform: translateY(50px); }
+    100% { transform: translateY(50px); }
+  }
+
+  @keyframes hideshowkeyboard {
+    0% { transform: translateY(500px); }
+    33% { transform: translateY(0px); }
+    66% { transform: translateY(0px); }
+    83% { transform: translateY(500px); }
+    100% { transform: translateY(500px); }
+  }
+
+  @keyframes hideshowinput {
+    0% { transform: translateY(150px); }
+    33% { transform: translateY(0px); }
+    66% { transform: translateY(0px); }
+    83% { transform: translateY(150px); }
+    100% { transform: translateY(150px); }
+  }
+
+  .logo {
+    animation: hideshowlogo 3s infinite
+  }
+
+  .keyboard {
+    animation: hideshowkeyboard 3s infinite
+  }
+
+  .first-input {
+    animation: hideshowinput 3s infinite
+  }
+
+  .last-input {
+    animation: hideshowinput 3s infinite
+  }
+</style>
+<rect width="428" height="926" fill="white"/>
+<g class="keyboard">
+  <path d="M0 575H428V925H0V575Z" fill="#2E8555"/>
+  <path d="M15 645H413V882H15V645Z" fill="#3CAD6E"/>
+  <path d="M97 777H136V816H97V777Z" fill="#2E8555"/>
+  <path d="M145 777H184V816H145V777Z" fill="#2E8555"/>
+  <path d="M193 777H232V816H193V777Z" fill="#2E8555"/>
+  <path d="M241 777H280V816H241V777Z" fill="#2E8555"/>
+  <path d="M289 777H328V816H289V777Z" fill="#2E8555"/>
+  <path d="M346 777H399V816H346V777Z" fill="#2E8555"/>
+  <path d="M318 831H346V870H318V831Z" fill="#2E8555"/>
+  <path d="M117 831H307V870H117V831Z" fill="#2E8555"/>
+  <path d="M357 831H399V870H357V831Z" fill="#2E8555"/>
+  <path d="M25 831H67V870H25V831Z" fill="#2E8555"/>
+  <path d="M78 831H106V870H78V831Z" fill="#2E8555"/>
+  <path d="M25 777H78V816H25V777Z" fill="#2E8555"/>
+  <path d="M25 723H64V762H25V723Z" fill="#2E8555"/>
+  <path d="M73 723H112V762H73V723Z" fill="#2E8555"/>
+  <path d="M121 723H160V762H121V723Z" fill="#2E8555"/>
+  <path d="M169 723H208V762H169V723Z" fill="#2E8555"/>
+  <path d="M217 723H256V762H217V723Z" fill="#2E8555"/>
+  <path d="M265 723H304V762H265V723Z" fill="#2E8555"/>
+  <path d="M313 723H352V762H313V723Z" fill="#2E8555"/>
+  <path d="M361 723H400V762H361V723Z" fill="#2E8555"/>
+  <path d="M25 669H64V708H25V669Z" fill="#2E8555"/>
+  <path d="M73 669H112V708H73V669Z" fill="#2E8555"/>
+  <path d="M121 669H160V708H121V669Z" fill="#2E8555"/>
+  <path d="M169 669H208V708H169V669Z" fill="#2E8555"/>
+  <path d="M217 669H256V708H217V669Z" fill="#2E8555"/>
+  <path d="M265 669H304V708H265V669Z" fill="#2E8555"/>
+  <path d="M313 669H352V708H313V669Z" fill="#2E8555"/>
+  <path d="M361 669H400V708H361V669Z" fill="#2E8555"/>
+  <path d="M15 589H413V631H15V589Z" fill="#3CAD6E"/>
+</g>
+<g class="logo">
+  <circle cx="213" cy="180" r="115" fill="#2E8555"/>
+</g>
+<g class="first-input">
+  <path d="M30 393H399V463H30V393Z" fill="#2E8555"/>
+  <path d="M41 404H388V452H41V404Z" fill="white"/>
+  <path d="M48 410H213V446H48V410Z" fill="#3CAD6E"/>
+</g>
+<g class="last-input">
+  <path d="M30 490H399V560H30V490Z" fill="#2E8555"/>
+  <path d="M41 501H388V549H41V501Z" fill="white"/>
+  <path d="M48 507H213V543H48V507Z" fill="#3CAD6E"/>
+</g>
+</svg>
