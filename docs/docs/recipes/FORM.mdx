@@ -1,0 +1,57 @@
+---
+id: recipes-form
+title: Form recipe
+sidebar_label: Form
+---
+
+To handle fullscreen form, just follow steps from [module usage](../guides/usage-module) section
+
+### Example
+
+````ts
+export const FormExample: React.FC = () => {
+  /**
+   * If you use react-navigation and want to enable module only in specific screen,
+   * you can call it in react-navigation `useFocusEffect` callback
+   *
+   * If you want to have module always enabled,
+   * just call it inside `useEffect` in your root component
+   *
+   * ```
+   * useEffect(() => {
+   *   AvoidSoftInput.setAdjustNothing(); // <---- Set windowSoftInputMode on Android to match iOS behavior
+   *   AvoidSoftInput.setEnabled(true); // <---- Enable module
+   * }, [])
+   * ```
+   */
+  const onFocusEffect = useCallback(() => {
+    AvoidSoftInput.setAdjustNothing(); // <---- Set windowSoftInputMode on Android to match iOS behavior
+    AvoidSoftInput.setEnabled(true); // <---- Enable module
+    return () => {
+      AvoidSoftInput.setEnabled(false);
+      AvoidSoftInput.setDefaultAppSoftInputMode();
+    };
+  }, []);
+
+  useFocusEffect(onFocusEffect);
+
+  /** Sample form */
+  return (
+    <SafeAreaView>
+      <ScrollView>
+        <View>
+          <Image />
+        </View>
+        <View>
+          <TextInput placeholder="Single line input" />
+          <TextInput placeholder="Multiline input" />
+          <TextInput placeholder="Large multiline input" />
+        </View>
+        <View>
+          <Button />
+        </View>
+      </ScrollView>
+    </SafeAreaView>
+  );
+};
+````

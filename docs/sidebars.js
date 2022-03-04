@@ -9,7 +9,12 @@ const sidebars = {
       'guides/usage-view',
     ],
     'Recipes': [
-      'recipes/recipes-overview',
+      'recipes/recipes-form',
+      'recipes/recipes-modal',
+      'recipes/recipes-bottom-sheet',
+      'recipes/recipes-sticky-footer',
+      'recipes/recipes-animations',
+      'recipes/recipes-custom-config',
     ],
     'API Reference': [
       {

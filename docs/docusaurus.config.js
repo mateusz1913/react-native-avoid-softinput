@@ -38,7 +38,7 @@ const config = {
         title: 'React Native Avoid SoftInput',
         logo: {
           alt: 'React Native Avoid SoftInput Logo',
-          src: 'img/logo.svg',
+          src: 'img/AppIconTransparent.png',
         },
         items: [
           {

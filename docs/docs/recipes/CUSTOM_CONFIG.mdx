@@ -1,0 +1,64 @@
+---
+id: recipes-custom-config
+title: Custom config recipe
+sidebar_label: Custom config
+---
+
+Applied offset animation can be configured both when using `AvoidSoftInput` module and `AvoidSoftInputView` component.
+
+### Example - module
+
+```ts
+export const CustomAnimationConfigModuleExample: React.FC = () => {
+  const onFocusEffect = useCallback(() => {
+    AvoidSoftInput.setAdjustNothing();
+    AvoidSoftInput.setEnabled(true);
+
+    /** Customize animation delay, duration & easing */
+    AvoidSoftInput.setEasing("easeOut");
+    AvoidSoftInput.setHideAnimationDelay(1000);
+    AvoidSoftInput.setHideAnimationDuration(600);
+    AvoidSoftInput.setShowAnimationDelay(1000);
+    AvoidSoftInput.setShowAnimationDuration(1200);
+    return () => {
+      /** Rest to default values */
+      AvoidSoftInput.setEasing("linear");
+      AvoidSoftInput.setHideAnimationDelay();
+      AvoidSoftInput.setHideAnimationDuration();
+      AvoidSoftInput.setShowAnimationDelay();
+      AvoidSoftInput.setShowAnimationDuration();
+      AvoidSoftInput.setEnabled(false);
+      AvoidSoftInput.setDefaultAppSoftInputMode();
+    };
+  }, []);
+
+  useFocusEffect(onFocusEffect);
+
+  // ...
+};
+```
+
+### Example - view
+
+```ts
+export const CustomAnimationConfigViewExample: React.FC = () => {
+  // ...
+
+  return (
+    <SafeAreaView>
+      {/** Customize animation delay, duration & easing */}
+      <AvoidSoftInputView
+        easing="easeOut"
+        hideAnimationDelay={1000}
+        hideAnimationDuration={600}
+        showAnimationDelay={1000}
+        showAnimationDuration={1200}
+      >
+        // ...
+        <TextInput />
+        // ...
+      </AvoidSoftInputView>
+    </SafeAreaView>
+  );
+};
+```

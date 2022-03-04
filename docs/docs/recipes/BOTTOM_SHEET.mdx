@@ -1,0 +1,83 @@
+---
+id: recipes-bottom-sheet
+title: Bottom sheet recipe
+sidebar_label: Bottom sheet
+---
+
+Depending on bottom sheet implementation in your project, you should use either `AvoidSoftInput` module or `AvoidSoftInputView` component.
+
+If your bottom sheet implementation uses React Native `Modal` component, you should use `AvoidSoftInputView` component ([check Modal recipe](recipes-modal)). Otherwise use `AvoidSoftInput` module ([check Form recipe](recipes-form)).
+
+### Example (bottom sheet without modal implementation)
+
+````ts
+export const BottomSheetExample: React.FC = () => {
+  /**
+   * If you use react-navigation and want to enable module only in specific screen,
+   * you can call it in react-navigation `useFocusEffect` callback
+   *
+   * If you want to have module always enabled,
+   * just call it inside `useEffect` in your root component
+   *
+   * ```
+   * useEffect(() => {
+   *   AvoidSoftInput.setAdjustNothing(); // <---- Set windowSoftInputMode on Android to match iOS behavior
+   *   AvoidSoftInput.setEnabled(true); // <---- Enable module
+   * }, [])
+   * ```
+   */
+  const onFocusEffect = useCallback(() => {
+    AvoidSoftInput.setAdjustNothing(); // <---- Set windowSoftInputMode on Android to match iOS behavior
+    AvoidSoftInput.setEnabled(true); // <---- Enable module
+    AvoidSoftInput.setAvoidOffset(50); // <---- if you have CTA button at the bottom of the screen, set additional offset to make button also visible
+
+    return () => {
+      AvoidSoftInput.setAvoidOffset(0);
+      AvoidSoftInput.setEnabled(false);
+      AvoidSoftInput.setDefaultAppSoftInputMode();
+    };
+  }, []);
+
+  useFocusEffect(onFocusEffect);
+
+  // Sample bottom sheet
+  return (
+    <SafeAreaView>
+      // ... some JSX
+      <BottomSheetComponent>
+        <SafeAreaView>
+          <Text>Header</Text>
+          <TextInput />
+          <View>
+            <Button />
+          </View>
+        </SafeAreaView>
+      </BottomSheetComponent>
+    </SafeAreaView>
+  );
+};
+````
+
+### Example (bottom sheet with modal implementation)
+
+```ts
+export const ModalBottomSheetExample: React.FC = () => {
+  // Sample modal bottom sheet
+  return (
+    // ... some JSX
+    <ModalBottomSheetComponent>
+      <SafeAreaView>
+        {/** if you have CTA button at the bottom of the screen, set additional offset to make button also visible */}
+        <AvoidSoftInputView avoidOffset={50}>
+          <Text>Header</Text>
+          <TextInput />
+          <View>
+            <Button />
+          </View>
+        </AvoidSoftInputView>
+      </SafeAreaView>
+    </ModalBottomSheetComponent>
+    // ... some JSX
+  );
+};
+```
