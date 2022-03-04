@@ -1,50 +1,29 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
 
-import HomeScreen from '../screens/HomeScreen';
-import ModuleExamples from '../screens/moduleExamples';
-import ModuleFullScreenExamples from '../screens/moduleExamples/fullscreenExamples';
-import ModuleScrollExamples from '../screens/moduleExamples/scrollExamples';
-import ViewExamples from '../screens/viewExamples';
-import ViewFullScreenExamples from '../screens/viewExamples/fullscreenExamples';
-import ViewModalExamples from '../screens/viewExamples/modalExamples';
+import { BottomSheetExample } from '../screens/BottomSheetExample';
+import { CustomAnimationConfigModuleExample } from '../screens/CustomAnimationConfigModuleExample';
+import { CustomAnimationConfigViewExample } from '../screens/CustomAnimationConfigViewExample';
+import { FormExample } from '../screens/FormExample';
+import { HomeScreen } from '../screens/HomeScreen';
+import { ModalExample } from '../screens/ModalExample';
+import { ReanimatedExample } from '../screens/ReanimatedExample';
+import { StickyFooterExample } from '../screens/StickyFooterExample';
 
 import { ROUTES } from './routes';
-import { MODULE_FULL_SCREEN_EXAMPLES, MODULE_SCROLL_EXAMPLES, VIEW_FULL_SCREEN_EXAMPLES, VIEW_MODAL_EXAMPLES } from './screens';
 import type { RootStackParamList } from './types';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
-const Navigation: React.FC = () => {
+export const Navigation: React.FC = () => {
   return <Stack.Navigator>
     <Stack.Screen name={ROUTES.Home} component={HomeScreen} />
-    <Stack.Screen name={ROUTES.ModuleExamples} component={ModuleExamples} />
-    <Stack.Screen name={ROUTES.ModuleFullScreenExamples} component={ModuleFullScreenExamples} />
-    <Stack.Screen name={ROUTES.ModuleScrollExamples} component={ModuleScrollExamples} />
-    <Stack.Screen name={ROUTES.ViewExamples} component={ViewExamples} />
-    <Stack.Screen name={ROUTES.ViewFullScreenExamples} component={ViewFullScreenExamples} />
-    <Stack.Screen name={ROUTES.ViewModalExamples} component={ViewModalExamples} />
-    {MODULE_FULL_SCREEN_EXAMPLES.map((screen) => <Stack.Screen
-      key={screen.name}
-      name={screen.name}
-      component={screen.component}
-    />)}
-    {MODULE_SCROLL_EXAMPLES.map((screen) => <Stack.Screen
-      key={screen.name}
-      name={screen.name}
-      component={screen.component}
-    />)}
-    {VIEW_FULL_SCREEN_EXAMPLES.map((screen) => <Stack.Screen
-      key={screen.name}
-      name={screen.name}
-      component={screen.component}
-    />)}
-    {VIEW_MODAL_EXAMPLES.map((screen) => <Stack.Screen
-      key={screen.name}
-      name={screen.name}
-      component={screen.component}
-    />)}
+    <Stack.Screen name={ROUTES.BottomSheet} component={BottomSheetExample} />
+    <Stack.Screen name={ROUTES.CustomAnimationConfigModule} component={CustomAnimationConfigModuleExample} />
+    <Stack.Screen name={ROUTES.CustomAnimationConfigView} component={CustomAnimationConfigViewExample} />
+    <Stack.Screen name={ROUTES.Form} component={FormExample} />
+    <Stack.Screen name={ROUTES.Modal} component={ModalExample} />
+    <Stack.Screen name={ROUTES.Reanimated} component={ReanimatedExample} />
+    <Stack.Screen name={ROUTES.StickyFooter} component={StickyFooterExample} />
   </Stack.Navigator>;
 };
-
-export default Navigation;
