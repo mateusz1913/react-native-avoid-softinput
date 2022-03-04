@@ -9,6 +9,8 @@
       "**/react-dom",
       "**/react-native",
       "**/react-native/**",
+      "**/@gorhom/bottom-sheet",
+      "**/react-native-gesture-handler",
       "**/react-native-reanimated"
     ]
   },
@@ -29,7 +31,10 @@
     "android:studio": "yarn workspace @avoid-softinput-example/mobile studio",
     "ios:metro": "yarn workspace @avoid-softinput-example/mobile start",
     "ios:start": "yarn workspace @avoid-softinput-example/mobile ios",
-    "ios:xcode": "yarn workspace @avoid-softinput-example/mobile xcode"
+    "ios:xcode": "yarn workspace @avoid-softinput-example/mobile xcode",
+    "docs:start": "yarn --cwd docs start --host 0.0.0.0",
+    "docs:build": "yarn --cwd docs build",
+    "docs:clear": "yarn --cwd docs clear"
   },
   "repository": "https://github.com/mateusz1913/react-native-avoid-softinput",
   "author": "Mateusz Mędrek <luigimario1913@gmail.com> (https://github.com/mateusz1913)",

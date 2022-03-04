@@ -45,13 +45,13 @@
     "!**/__mocks__"
   ],
   "devDependencies": {
-    "@types/react": "17.0.35",
-    "@types/react-native": "0.66.5",
+    "@types/react": "17.0.39",
+    "@types/react-native": "0.67.1",
     "react": "17.0.2",
-    "react-native": "0.66.3"
+    "react-native": "0.67.3"
   },
   "peerDependencies": {
     "react": ">=16.8.0",
-    "react-native": ">=0.59.0"
+    "react-native": ">=0.64.0"
   }
 }

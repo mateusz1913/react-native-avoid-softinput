@@ -1,0 +1,32 @@
+.features {
+  display: flex;
+  align-items: center;
+  padding: 2em 0;
+  width: 100%;
+}
+
+.featureSvg {
+  height: 231px;
+  width: 106px;
+}
+
+.keyboardAnimationContainer {
+  display: flex;
+  align-self: center;
+  border-color: #2e8555;
+  border-radius: 20px;
+  border-style: solid;
+  border-width: 1px;
+  height: 231px;
+  overflow: hidden;
+  margin: 2em;
+  position: relative;
+  width: 106px;
+}
+
+.keyboardAnimationWrapper {
+  display: flex;
+  align-items: center;
+  align-self: stretch;
+  justify-content: center;
+}

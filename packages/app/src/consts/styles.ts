@@ -25,4 +25,7 @@ export const styles = StyleSheet.create({
     backgroundColor: 'gray',
     height: StyleSheet.hairlineWidth,
   },
+  stretch: {
+    alignSelf: 'stretch',
+  },
 });

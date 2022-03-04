@@ -1,0 +1,23 @@
+---
+id: use-soft-input-applied-offset-change
+title: useSoftInputAppliedOffsetChange
+sidebar_label: useSoftInputAppliedOffsetChange
+---
+
+`useSoftInputAppliedOffsetChange` is a shortcut for using `AvoidSoftInput.onSoftInputAppliedOffsetChange` method inside `useEffect`.
+
+### Parameters
+
+| Type                                                   | Required | Description                                                                       |
+| ------------------------------------------------------ | -------- | --------------------------------------------------------------------------------- |
+| ({ appliedOffset }: { appliedOffset: number }) => void | yes      | function called during applying padding or translation with current applied value |
+
+### Example
+
+```ts
+import { useSoftInputAppliedOffsetChanged } from "react-native-avoid-softinput";
+
+useSoftInputAppliedOffsetChanged(({ appliedOffset }) => {
+  // Do sth
+});
+```

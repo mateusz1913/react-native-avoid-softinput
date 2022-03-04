@@ -1,0 +1,37 @@
+---
+id: usage-view
+title: Usage - view
+sidebar_label: Usage - view
+---
+
+```ts
+import React from "react";
+import { AvoidSoftInput } from "react-native-avoid-softinput";
+
+const MyComponent = () => {
+  function onSoftInputShown(e) {
+    // Do sth
+  }
+  function onSoftInputHidden() {
+    // Do sth
+  }
+  function onSoftInputAppliedOffsetChange(e) {
+    // Do sth
+  }
+  return (
+    <AvoidSoftInputView
+      avoidOffset={10}
+      easing="easeIn"
+      hideAnimationDelay={100}
+      hideAnimationDuration={300}
+      onSoftInputShown={onSoftInputShown}
+      onSoftInputHidden={onSoftInputHidden}
+      showAnimationDelay={100}
+      showAnimationDuration={800}
+      style={styles.avoidSoftInputView}
+    >
+      {/** Content that should be pushed above the keyboard */}
+    </AvoidSoftInputView>
+  );
+};
+```

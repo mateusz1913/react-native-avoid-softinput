@@ -2,6 +2,7 @@
 {
   "extends": "./tsconfig",
   "exclude": [
+    "docs",
     "packages/app",
     "packages/mobile"
   ]
