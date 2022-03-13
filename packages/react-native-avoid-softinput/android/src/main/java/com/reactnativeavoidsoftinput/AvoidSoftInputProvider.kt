@@ -67,7 +67,7 @@ class AvoidSoftInputProvider(): PopupWindow(), ViewTreeObserver.OnGlobalLayoutLi
 
   override fun onGlobalLayout() {
     mRootView.getWindowVisibleDisplayFrame(mRect)
-    val heightDiff = DisplayMetricsHolder.getScreenDisplayMetrics().heightPixels - mRect.bottom - getNavigationBarHeight(mReactContext)
+    val heightDiff = DisplayMetricsHolder.getScreenDisplayMetrics().heightPixels - mRect.bottom - (getRootViewBottomInset(mReactContext) ?: 0)
     val isSoftInputPotentiallyShown = mSoftInputHeight != heightDiff && heightDiff > mMinSoftInputHeightToDetect
 
     if (!isSoftInputPotentiallyShown) {
