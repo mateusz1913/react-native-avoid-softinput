@@ -3,7 +3,6 @@ package com.reactnativeavoidsoftinput
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.ValueAnimator
-import android.content.Context
 import android.os.Build
 import android.view.View
 import android.view.ViewTreeObserver
@@ -15,7 +14,7 @@ import com.facebook.react.uimanager.PixelUtil
 import kotlin.math.max
 import kotlin.math.min
 
-class AvoidSoftInputManager(private val context: Context) {
+class AvoidSoftInputManager(private val context: ReactContext) {
   private var mAnimationInterpolator = AvoidSoftInputInterpolator()
   private var mAvoidOffset: Float = 0F
   private var mAvoidSoftInputProvider: AvoidSoftInputProvider? = null
@@ -56,7 +55,7 @@ class AvoidSoftInputManager(private val context: Context) {
     setScrollListener(scrollView, mOnScrollListener)
     val currentFocusedViewLocation = IntArray(2)
     currentFocusedView.getLocationOnScreen(currentFocusedViewLocation)
-    val currentFocusedViewDistanceToBottom = DisplayMetricsHolder.getScreenDisplayMetrics().heightPixels - (currentFocusedViewLocation[1] + currentFocusedView.height) - getNavigationBarHeight(context)
+    val currentFocusedViewDistanceToBottom = DisplayMetricsHolder.getScreenDisplayMetrics().heightPixels - (currentFocusedViewLocation[1] + currentFocusedView.height) - (getRootViewBottomInset(context) ?: 0)
 
     val scrollToOffset = max(mCompleteSoftInputHeight - currentFocusedViewDistanceToBottom, 0)
 
@@ -200,7 +199,7 @@ class AvoidSoftInputManager(private val context: Context) {
   private fun applyOffsetToRootView(softInputHeight: Int, currentFocusedView: View, rootView: View) {
     val currentFocusedViewLocation = IntArray(2)
     currentFocusedView.getLocationOnScreen(currentFocusedViewLocation)
-    val currentFocusedViewDistanceToBottom = DisplayMetricsHolder.getScreenDisplayMetrics().heightPixels - (currentFocusedViewLocation[1] + currentFocusedView.height) - getNavigationBarHeight(context)
+    val currentFocusedViewDistanceToBottom = DisplayMetricsHolder.getScreenDisplayMetrics().heightPixels - (currentFocusedViewLocation[1] + currentFocusedView.height) - (getRootViewBottomInset(context) ?: 0)
 
     mBottomOffset = max(softInputHeight - currentFocusedViewDistanceToBottom, 0).toFloat() + mAvoidOffset
 
@@ -241,13 +240,13 @@ class AvoidSoftInputManager(private val context: Context) {
   private fun applyOffsetToScrollView(softInputHeight: Int, currentFocusedView: View, scrollView: ScrollView) {
     val scrollViewLocation = IntArray(2)
     scrollView.getLocationOnScreen(scrollViewLocation)
-    val scrollViewDistanceToBottom = DisplayMetricsHolder.getScreenDisplayMetrics().heightPixels - (scrollViewLocation[1] + scrollView.height) - getNavigationBarHeight(context)
+    val scrollViewDistanceToBottom = DisplayMetricsHolder.getScreenDisplayMetrics().heightPixels - (scrollViewLocation[1] + scrollView.height) - (getRootViewBottomInset(context) ?: 0)
 
     mBottomOffset = max(softInputHeight - scrollViewDistanceToBottom, 0).toFloat() + mAvoidOffset
 
     val currentFocusedViewLocation = IntArray(2)
     currentFocusedView.getLocationOnScreen(currentFocusedViewLocation)
-    val currentFocusedViewDistanceToBottom = DisplayMetricsHolder.getScreenDisplayMetrics().heightPixels - (currentFocusedViewLocation[1] + currentFocusedView.height) - getNavigationBarHeight(context)
+    val currentFocusedViewDistanceToBottom = DisplayMetricsHolder.getScreenDisplayMetrics().heightPixels - (currentFocusedViewLocation[1] + currentFocusedView.height) - (getRootViewBottomInset(context) ?: 0)
 
     val scrollToOffset = min(max(softInputHeight - currentFocusedViewDistanceToBottom, 0), (currentFocusedViewLocation[1] - scrollViewLocation[1]))
 
