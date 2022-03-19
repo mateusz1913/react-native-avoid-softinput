@@ -5,6 +5,7 @@ import com.facebook.react.uimanager.ThemedReactContext
 import com.facebook.react.uimanager.UIManagerModule
 import com.facebook.react.views.view.ReactViewGroup
 import com.reactnativeavoidsoftinput.events.AvoidSoftInputAppliedOffsetChangedEvent
+import com.reactnativeavoidsoftinput.events.AvoidSoftInputHeightChangedEvent
 import com.reactnativeavoidsoftinput.events.AvoidSoftInputHiddenEvent
 import com.reactnativeavoidsoftinput.events.AvoidSoftInputShownEvent
 
@@ -58,18 +59,24 @@ class AvoidSoftInputView(
 
   override fun onSoftInputShown(from: Int, to: Int) {
     sendShownEvent(convertFromPixelToDIP(to))
-
-    mManager.onSoftInputShown(to, this)
   }
 
   override fun onSoftInputHidden(from: Int, to: Int) {
     sendHiddenEvent(convertFromPixelToDIP(0))
+  }
 
-    mManager.onSoftInputHidden(this)
+  override fun onSoftInputHeightChange(from: Int, to: Int) {
+    sendHeightChangedEvent(to)
+
+    mManager.onSoftInputHeightChange(from, to, this)
   }
 
   private fun sendAppliedOffsetChangedEvent(offset: Int) {
     getEventDispatcher()?.dispatchEvent(AvoidSoftInputAppliedOffsetChangedEvent(this.id, offset))
+  }
+
+  private fun sendHeightChangedEvent(height: Int) {
+    getEventDispatcher()?.dispatchEvent(AvoidSoftInputHeightChangedEvent(this.id, height))
   }
 
   private fun sendHiddenEvent(height: Int) {
@@ -82,8 +89,9 @@ class AvoidSoftInputView(
 
   companion object {
     const val NAME = "AvoidSoftInputView"
-    const val ON_SOFT_INPUT_APPLIED_OFFSET_CHANGED = "onSoftInputAppliedOffsetChange"
+    const val ON_SOFT_INPUT_APPLIED_OFFSET_CHANGE = "onSoftInputAppliedOffsetChange"
     const val ON_SOFT_INPUT_HIDDEN = "onSoftInputHidden"
     const val ON_SOFT_INPUT_SHOWN = "onSoftInputShown"
+    const val ON_SOFT_INPUT_HEIGHT_CHANGE = "onSoftInputHeightChange"
   }
 }

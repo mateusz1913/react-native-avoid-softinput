@@ -16,6 +16,7 @@ import com.facebook.react.views.view.ReactDrawableHelper
 import com.facebook.react.views.view.ReactViewGroup
 import com.facebook.yoga.YogaConstants
 import com.reactnativeavoidsoftinput.events.AvoidSoftInputAppliedOffsetChangedEvent
+import com.reactnativeavoidsoftinput.events.AvoidSoftInputHeightChangedEvent
 import com.reactnativeavoidsoftinput.events.AvoidSoftInputHiddenEvent
 import com.reactnativeavoidsoftinput.events.AvoidSoftInputShownEvent
 
@@ -61,7 +62,9 @@ class AvoidSoftInputViewManager: ReactClippingViewManager<AvoidSoftInputView>() 
   override fun getExportedCustomDirectEventTypeConstants(): MutableMap<String, Any> {
     return MapBuilder.of(
       AvoidSoftInputAppliedOffsetChangedEvent.NAME,
-      MapBuilder.of("registrationName", AvoidSoftInputView.ON_SOFT_INPUT_APPLIED_OFFSET_CHANGED),
+      MapBuilder.of("registrationName", AvoidSoftInputView.ON_SOFT_INPUT_APPLIED_OFFSET_CHANGE),
+      AvoidSoftInputHeightChangedEvent.NAME,
+      MapBuilder.of("registrationName", AvoidSoftInputView.ON_SOFT_INPUT_HEIGHT_CHANGE),
       AvoidSoftInputHiddenEvent.NAME,
       MapBuilder.of("registrationName", AvoidSoftInputView.ON_SOFT_INPUT_HIDDEN),
       AvoidSoftInputShownEvent.NAME,

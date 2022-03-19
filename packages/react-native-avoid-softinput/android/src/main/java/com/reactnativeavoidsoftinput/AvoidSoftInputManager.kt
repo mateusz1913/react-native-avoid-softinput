@@ -11,6 +11,7 @@ import com.facebook.react.bridge.ReactContext
 import com.facebook.react.bridge.UiThreadUtil
 import com.facebook.react.uimanager.DisplayMetricsHolder
 import com.facebook.react.uimanager.PixelUtil
+import com.facebook.react.uimanager.RootView
 import kotlin.math.max
 import kotlin.math.min
 
@@ -27,23 +28,26 @@ class AvoidSoftInputManager(private val context: ReactContext) {
   private var mHideValueAnimator: ValueAnimator? = null
   private var mIsEnabled = true
   private var mIsInitialized: Boolean = false
-  private var mIsViewSlideUp: Boolean = false
-  private var mIsViewSlidingDown: Boolean = false
-  private var mIsViewSlidingUp: Boolean = false
+  private var mIsHideAnimationCancelled: Boolean = false
+  private var mIsHideAnimationRunning: Boolean = false
+  private var mIsShowAnimationCancelled: Boolean = false
+  private var mIsShowAnimationRunning: Boolean = false
   private var mListener: ((offset: Int) -> Unit)? = null
   private var mPreviousFocusedView: View? = null
+  private var mPreviousRootView: View? = null
   private var mScrollY: Int = 0
   private var mShouldCheckForAvoidSoftInputView = false
   private var mShowAnimationDelay: Long = 0
   private var mShowAnimationDuration: Long = INCREASE_PADDING_DURATION_IN_MS
   private var mShowValueAnimator: ValueAnimator? = null
+  private var mSoftInputVisible: Boolean = false
 
   //MARK: Listeners
   private val mOnGlobalFocusChangeListener = ViewTreeObserver.OnGlobalFocusChangeListener { oldView, newView ->
     mCurrentFocusedView = newView
     mPreviousFocusedView = oldView
 
-    if (!mIsViewSlideUp || !mIsEnabled) {
+    if (!mSoftInputVisible || !mIsEnabled) {
       return@OnGlobalFocusChangeListener
     }
     val currentFocusedView = mCurrentFocusedView
@@ -96,48 +100,25 @@ class AvoidSoftInputManager(private val context: ReactContext) {
     }
   }
 
-  fun onSoftInputShown(height: Int, customRootView: View? = null) {
-    mCompleteSoftInputHeight = height
-
+  fun onSoftInputHeightChange(from: Int, to: Int, customRootView: View? = null) {
+    mCompleteSoftInputHeight = to
     val currentFocusedView = mCurrentFocusedView ?: mPreviousFocusedView
-    val rootView = getReactRootView(currentFocusedView)
 
-    if (mIsViewSlideUp || mIsViewSlidingUp || !mIsEnabled || currentFocusedView == null) {
+    if (!mIsEnabled || currentFocusedView == null) {
       return
     }
 
-    if (customRootView == null) {
+    if (customRootView != null) {
+      setOffset(from, to, currentFocusedView, customRootView)
+    } else {
+      val rootView = getReactRootView(currentFocusedView) ?: (mPreviousRootView as RootView)
+
       if (rootView !is View || (mShouldCheckForAvoidSoftInputView && checkIfNestedInAvoidSoftInputView(currentFocusedView, rootView))) {
         return
       }
 
-      applyOffset(height, currentFocusedView, rootView)
-      return
+      setOffset(from, to, currentFocusedView, rootView)
     }
-
-    applyOffset(height, currentFocusedView, customRootView)
-  }
-
-  fun onSoftInputHidden(customRootView: View? = null) {
-    mCompleteSoftInputHeight = 0
-
-    val currentFocusedView = mCurrentFocusedView ?: mPreviousFocusedView
-    val rootView = getReactRootView(currentFocusedView)
-
-    if ((!mIsViewSlideUp && !mIsViewSlidingUp) || mIsViewSlidingDown || !mIsEnabled || currentFocusedView == null) {
-      return
-    }
-
-    if (customRootView == null) {
-      if (rootView !is View || (mShouldCheckForAvoidSoftInputView && checkIfNestedInAvoidSoftInputView(currentFocusedView, rootView))) {
-        return
-      }
-
-      removeOffset(currentFocusedView, rootView)
-      return
-    }
-
-    removeOffset(currentFocusedView, customRootView)
   }
 
   fun setIsEnabled(isEnabled: Boolean) {
@@ -183,20 +164,152 @@ class AvoidSoftInputManager(private val context: ReactContext) {
   }
 
   //MARK: Private methods
-  private fun applyOffset(softInputHeight: Int, currentFocusedView: View, rootView: View) {
-    mIsViewSlidingUp = true
+  private fun onOffsetChanged(offset: Int) {
+    mListener?.let { it(offset) }
+  }
 
+  private fun setOffset(from: Int, to: Int, currentFocusedView: View, rootView: View) {
     val scrollView = getScrollViewParent(currentFocusedView, rootView)
     setScrollListener(scrollView, mOnScrollListener)
 
     if (scrollView != null) {
-      applyOffsetToScrollView(softInputHeight, currentFocusedView, scrollView)
+      setOffsetInScrollView(from, to, currentFocusedView, scrollView)
     } else {
-      applyOffsetToRootView(softInputHeight, currentFocusedView, rootView)
+      setOffsetInRootView(from, to, currentFocusedView, rootView)
     }
   }
 
-  private fun applyOffsetToRootView(softInputHeight: Int, currentFocusedView: View, rootView: View) {
+  //MARK: set offset to root view
+  private fun setOffsetInRootView(from: Int, to: Int, currentFocusedView: View, rootView: View) {
+    if (to == from) {
+      return
+    }
+    if (to == 0) {
+      // HIDE
+      removeOffsetInRootView(rootView)
+    } else if (to - from > 0 && !mSoftInputVisible) {
+      // SHOW
+      addOffsetInRootView(to, rootView, currentFocusedView)
+    } else if (to - from > 0) {
+      // INCREASE
+      increaseOffsetInRootView(from, to, rootView)
+    } else if (to - from < 0) {
+      // DECREASE
+      decreaseOffsetInRootView(from, to, rootView)
+    }
+  }
+
+  private fun decreaseOffsetInRootView(from: Int, to: Int, rootView: View) {
+    mIsHideAnimationRunning = true
+
+    val addedOffset = (to - from).toFloat()
+    val newBottomOffset = if (mIsShowAnimationRunning) {
+      mBottomOffset
+    } else {
+      mBottomOffset + addedOffset
+    }
+
+    UiThreadUtil.runOnUiThread {
+      mIsShowAnimationCancelled = true
+      mIsHideAnimationCancelled = false
+      mShowValueAnimator?.cancel()
+      mHideValueAnimator = ValueAnimator.ofFloat(mBottomOffset, newBottomOffset).apply {
+        duration = mHideAnimationDuration
+        startDelay = mHideAnimationDelay
+        interpolator = mAnimationInterpolator
+        addListener(object: AnimatorListenerAdapter() {
+          override fun onAnimationEnd(animation: Animator?) {
+            super.onAnimationEnd(animation)
+            mIsHideAnimationRunning = false
+            mHideValueAnimator = null
+            if (mIsHideAnimationCancelled) {
+              return
+            }
+            onOffsetChanged(convertFromPixelToDIP(newBottomOffset.toInt()))
+            mBottomOffset = newBottomOffset
+          }
+        })
+        addUpdateListener {
+          onRootViewAnimationUpdate(rootView, it.animatedValue as Float)
+        }
+        start()
+      }
+    }
+  }
+
+  private fun increaseOffsetInRootView(from: Int, to: Int, rootView: View) {
+    mIsShowAnimationRunning = true
+
+    val addedOffset = (to - from).toFloat()
+    val newBottomOffset = if (mIsHideAnimationRunning) {
+      mBottomOffset
+    } else {
+      mBottomOffset + addedOffset
+    }
+
+    UiThreadUtil.runOnUiThread {
+      mIsHideAnimationCancelled = true
+      mIsShowAnimationCancelled = false
+      mHideValueAnimator?.cancel()
+      mShowValueAnimator = ValueAnimator.ofFloat(mBottomOffset, newBottomOffset).apply {
+        duration = mShowAnimationDuration
+        startDelay = mShowAnimationDelay
+        interpolator = mAnimationInterpolator
+        addListener(object: AnimatorListenerAdapter() {
+          override fun onAnimationEnd(animation: Animator?) {
+            super.onAnimationEnd(animation)
+            mIsShowAnimationRunning = false
+            mShowValueAnimator = null
+            if (mIsShowAnimationCancelled) {
+              return
+            }
+            onOffsetChanged(convertFromPixelToDIP(newBottomOffset.toInt()))
+            mBottomOffset = newBottomOffset
+          }
+        })
+        addUpdateListener {
+          onRootViewAnimationUpdate(rootView, it.animatedValue as Float)
+        }
+        start()
+      }
+    }
+  }
+
+  private fun removeOffsetInRootView(rootView: View) {
+    mIsHideAnimationRunning = true
+    UiThreadUtil.runOnUiThread {
+      mIsShowAnimationCancelled = true
+      mIsHideAnimationCancelled = false
+      onOffsetChanged(convertFromPixelToDIP(mBottomOffset.toInt()))
+      mShowValueAnimator?.cancel()
+      mHideValueAnimator = ValueAnimator.ofFloat(mBottomOffset, 0F).apply {
+        duration = mHideAnimationDuration
+        startDelay = mHideAnimationDelay
+        interpolator = mAnimationInterpolator
+        addListener(object: AnimatorListenerAdapter() {
+          override fun onAnimationEnd(animation: Animator?) {
+            super.onAnimationEnd(animation)
+            mIsHideAnimationRunning = false
+            mHideValueAnimator = null
+            if (mIsHideAnimationCancelled) {
+              return
+            }
+            onOffsetChanged(0)
+            mBottomOffset = 0F
+            mPreviousRootView = null
+            mSoftInputVisible = false
+          }
+        })
+        addUpdateListener {
+          onRootViewAnimationUpdate(rootView, it.animatedValue as Float)
+        }
+        start()
+      }
+    }
+  }
+
+  private fun addOffsetInRootView(softInputHeight: Int, rootView: View, currentFocusedView: View) {
+    mIsShowAnimationRunning = true
     val currentFocusedViewLocation = IntArray(2)
     currentFocusedView.getLocationOnScreen(currentFocusedViewLocation)
     val currentFocusedViewDistanceToBottom = DisplayMetricsHolder.getScreenDisplayMetrics().heightPixels - (currentFocusedViewLocation[1] + currentFocusedView.height) - (getRootViewBottomInset(context) ?: 0)
@@ -204,179 +317,245 @@ class AvoidSoftInputManager(private val context: ReactContext) {
     mBottomOffset = max(softInputHeight - currentFocusedViewDistanceToBottom, 0).toFloat() + mAvoidOffset
 
     if (mBottomOffset <= 0F) {
-      mIsViewSlidingUp = false
       return
     }
 
     UiThreadUtil.runOnUiThread {
-      mHideValueAnimator?.end()
+      mIsHideAnimationCancelled = true
+      mIsShowAnimationCancelled = false
+      onOffsetChanged(convertFromPixelToDIP(0))
+      mHideValueAnimator?.cancel()
       mShowValueAnimator = ValueAnimator.ofFloat(0F, mBottomOffset).apply {
         duration = mShowAnimationDuration
         startDelay = mShowAnimationDelay
         interpolator = mAnimationInterpolator
         addListener(object: AnimatorListenerAdapter() {
-          override fun onAnimationStart(animation: Animator?) {
-            super.onAnimationStart(animation)
-            onOffsetChanged(convertFromPixelToDIP(0))
-          }
           override fun onAnimationEnd(animation: Animator?) {
             super.onAnimationEnd(animation)
-            onOffsetChanged(convertFromPixelToDIP(mBottomOffset.toInt()))
-            mIsViewSlidingUp = false
-            mIsViewSlideUp = true
+            mIsShowAnimationRunning = false
             mShowValueAnimator = null
+            if (mIsShowAnimationCancelled) {
+              return
+            }
+            onOffsetChanged(convertFromPixelToDIP(mBottomOffset.toInt()))
+            mPreviousRootView = rootView
+            mSoftInputVisible = true
           }
         })
         addUpdateListener {
-          val animatedOffset = it.animatedValue as Float
-          onOffsetChanged(convertFromPixelToDIP(animatedOffset.toInt()))
-          rootView.translationY = -animatedOffset
+          onRootViewAnimationUpdate(rootView, it.animatedValue as Float)
         }
         start()
       }
     }
   }
 
-  private fun applyOffsetToScrollView(softInputHeight: Int, currentFocusedView: View, scrollView: ScrollView) {
+  private fun onRootViewAnimationUpdate(rootView: View, animatedOffset: Float) {
+    onOffsetChanged(convertFromPixelToDIP(animatedOffset.toInt()))
+    rootView.translationY = -animatedOffset
+  }
+
+  //MARK: set offset to scroll view
+  private fun setOffsetInScrollView(from: Int, to: Int, currentFocusedView: View, scrollView: ScrollView) {
+    if (to == from) {
+      return
+    }
+    if (to == 0) {
+      // HIDE
+      removeOffsetInScrollView(scrollView)
+    } else if (to - from > 0 && !mSoftInputVisible) {
+      // SHOW
+      addOffsetInScrollView(to, scrollView, currentFocusedView)
+    } else if (to - from > 0) {
+      // INCREASE
+      increaseOffsetInScrollView(from, to, scrollView, currentFocusedView)
+    } else if (to - from < 0) {
+      // DECREASE
+      decreaseOffsetInScrollView(from, to, scrollView, currentFocusedView)
+    }
+  }
+
+  private fun decreaseOffsetInScrollView(from: Int, to: Int, scrollView: ScrollView, currentFocusedView: View) {
+    mIsHideAnimationRunning = true
+
+    val addedOffset = (to - from).toFloat()
+    val newBottomOffset = if (mIsShowAnimationRunning) {
+      mBottomOffset
+    } else {
+      mBottomOffset + addedOffset
+    }
+    val scrollToOffset = getScrollToOffset(to, scrollView, currentFocusedView)
+
+    UiThreadUtil.runOnUiThread {
+      mIsShowAnimationCancelled = true
+      mIsHideAnimationCancelled = false
+      mShowValueAnimator?.cancel()
+      mHideValueAnimator = ValueAnimator.ofFloat(mBottomOffset, newBottomOffset).apply {
+        duration = mHideAnimationDuration
+        startDelay = mHideAnimationDelay
+        interpolator = mAnimationInterpolator
+        addListener(object: AnimatorListenerAdapter() {
+          override fun onAnimationEnd(animation: Animator?) {
+            super.onAnimationEnd(animation)
+            mIsHideAnimationRunning = false
+            mHideValueAnimator = null
+            if (mIsHideAnimationCancelled) {
+              return
+            }
+            onOffsetChanged(convertFromPixelToDIP(newBottomOffset.toInt()))
+            scrollView.smoothScrollTo(0, scrollView.scrollY + scrollToOffset)
+            mBottomOffset = newBottomOffset
+          }
+        })
+        addUpdateListener {
+          onScrollViewAnimationUpdate(scrollView, it.animatedValue as Float)
+        }
+        start()
+      }
+    }
+  }
+
+  private fun increaseOffsetInScrollView(from: Int, to: Int, scrollView: ScrollView, currentFocusedView: View) {
+    mIsShowAnimationRunning = true
+
+    val addedOffset = (to - from).toFloat()
+    val newBottomOffset = if (mIsHideAnimationRunning) {
+      mBottomOffset
+    } else {
+      mBottomOffset + addedOffset
+    }
+    val scrollToOffset = getScrollToOffset(to, scrollView, currentFocusedView)
+
+    UiThreadUtil.runOnUiThread {
+      mIsHideAnimationCancelled = true
+      mIsShowAnimationCancelled = false
+      mHideValueAnimator?.cancel()
+      mShowValueAnimator = ValueAnimator.ofFloat(mBottomOffset, newBottomOffset).apply {
+        duration = mShowAnimationDuration
+        startDelay = mShowAnimationDelay
+        interpolator = mAnimationInterpolator
+        addListener(object: AnimatorListenerAdapter() {
+          override fun onAnimationEnd(animation: Animator?) {
+            super.onAnimationEnd(animation)
+            mIsShowAnimationRunning = false
+            mShowValueAnimator = null
+            if (mIsShowAnimationCancelled) {
+              return
+            }
+            onOffsetChanged(convertFromPixelToDIP(newBottomOffset.toInt()))
+            scrollView.smoothScrollTo(0, scrollView.scrollY + scrollToOffset)
+            mBottomOffset = newBottomOffset
+          }
+        })
+        addUpdateListener {
+          onScrollViewAnimationUpdate(scrollView, it.animatedValue as Float)
+        }
+        start()
+      }
+    }
+  }
+
+  private fun removeOffsetInScrollView(scrollView: ScrollView) {
+    mIsHideAnimationRunning = true
+    UiThreadUtil.runOnUiThread {
+      mIsShowAnimationCancelled = true
+      mIsHideAnimationCancelled = false
+      onOffsetChanged(convertFromPixelToDIP(mBottomOffset.toInt()))
+      mShowValueAnimator?.cancel()
+      mHideValueAnimator = ValueAnimator.ofFloat(mBottomOffset, 0F).apply {
+        duration = mHideAnimationDuration
+        startDelay = mHideAnimationDelay
+        interpolator = mAnimationInterpolator
+        addListener(object: AnimatorListenerAdapter() {
+          override fun onAnimationEnd(animation: Animator?) {
+            super.onAnimationEnd(animation)
+            mIsHideAnimationRunning = false
+            mHideValueAnimator = null
+            if (mIsHideAnimationCancelled) {
+              return
+            }
+            onOffsetChanged(0)
+            scrollView.smoothScrollTo(0, mScrollY)
+            mScrollY = 0
+            mCurrentBottomPadding = 0
+            mBottomOffset = 0F
+            mSoftInputVisible = false
+          }
+        })
+        addUpdateListener {
+          onScrollViewAnimationUpdate(scrollView, it.animatedValue as Float)
+        }
+        start()
+      }
+    }
+  }
+
+  private fun addOffsetInScrollView(softInputHeight: Int, scrollView: ScrollView, currentFocusedView: View) {
+    mIsShowAnimationRunning = true
     val scrollViewLocation = IntArray(2)
     scrollView.getLocationOnScreen(scrollViewLocation)
     val scrollViewDistanceToBottom = DisplayMetricsHolder.getScreenDisplayMetrics().heightPixels - (scrollViewLocation[1] + scrollView.height) - (getRootViewBottomInset(context) ?: 0)
 
     mBottomOffset = max(softInputHeight - scrollViewDistanceToBottom, 0).toFloat() + mAvoidOffset
 
-    val currentFocusedViewLocation = IntArray(2)
-    currentFocusedView.getLocationOnScreen(currentFocusedViewLocation)
-    val currentFocusedViewDistanceToBottom = DisplayMetricsHolder.getScreenDisplayMetrics().heightPixels - (currentFocusedViewLocation[1] + currentFocusedView.height) - (getRootViewBottomInset(context) ?: 0)
-
-    val scrollToOffset = min(max(softInputHeight - currentFocusedViewDistanceToBottom, 0), (currentFocusedViewLocation[1] - scrollViewLocation[1]))
+    val scrollToOffset = getScrollToOffset(softInputHeight, scrollView, currentFocusedView)
 
     if (mBottomOffset <= 0F) {
-      mIsViewSlidingUp = false
       return
     }
 
     mCurrentBottomPadding = scrollView.paddingBottom
 
     UiThreadUtil.runOnUiThread {
-      mHideValueAnimator?.end()
+      mIsHideAnimationCancelled = true
+      mIsShowAnimationCancelled = false
+      onOffsetChanged(convertFromPixelToDIP(0))
+      mHideValueAnimator?.cancel()
       mShowValueAnimator = ValueAnimator.ofFloat(0F, mBottomOffset).apply {
         duration = mShowAnimationDuration
         startDelay = mShowAnimationDelay
         interpolator = mAnimationInterpolator
         addListener(object: AnimatorListenerAdapter() {
-          override fun onAnimationStart(animation: Animator?) {
-            super.onAnimationStart(animation)
-            onOffsetChanged(convertFromPixelToDIP(0))
-          }
           override fun onAnimationEnd(animation: Animator?) {
             super.onAnimationEnd(animation)
+            mIsShowAnimationRunning = false
+            mShowValueAnimator = null
+            if (mIsShowAnimationCancelled) {
+              return
+            }
             onOffsetChanged(convertFromPixelToDIP(mBottomOffset.toInt()))
             mScrollY = scrollView.scrollY
             scrollView.smoothScrollTo(0, scrollView.scrollY + scrollToOffset)
-            mIsViewSlidingUp = false
-            mIsViewSlideUp = true
-            mShowValueAnimator = null
+            mSoftInputVisible = true
           }
         })
         addUpdateListener {
-          val animatedOffset = it.animatedValue as Float
-          onOffsetChanged(convertFromPixelToDIP(animatedOffset.toInt()))
-          scrollView.setPadding(
-            scrollView.paddingLeft,
-            scrollView.paddingTop,
-            scrollView.paddingRight,
-            mCurrentBottomPadding + (it.animatedValue as Float).toInt()
-          )
+          onScrollViewAnimationUpdate(scrollView, it.animatedValue as Float)
         }
         start()
       }
     }
   }
 
-  private fun removeOffset(currentFocusedView: View, rootView: View) {
-    mIsViewSlidingDown = true
+  private fun getScrollToOffset(softInputHeight: Int, scrollView: ScrollView, currentFocusedView: View): Int {
+    val scrollViewLocation = IntArray(2)
+    scrollView.getLocationOnScreen(scrollViewLocation)
 
-    val scrollView = getScrollViewParent(currentFocusedView, rootView)
-    setScrollListener(scrollView, null)
+    val currentFocusedViewLocation = IntArray(2)
+    currentFocusedView.getLocationOnScreen(currentFocusedViewLocation)
+    val currentFocusedViewDistanceToBottom = DisplayMetricsHolder.getScreenDisplayMetrics().heightPixels - (currentFocusedViewLocation[1] + currentFocusedView.height) - (getRootViewBottomInset(context) ?: 0)
 
-    if (scrollView != null) {
-      removeOffsetFromScrollView(scrollView)
-    } else {
-      removeOffsetFromRootView(rootView)
-    }
+    return min(max(softInputHeight - currentFocusedViewDistanceToBottom, 0), (currentFocusedViewLocation[1] - scrollViewLocation[1]))
   }
 
-  private fun removeOffsetFromRootView(rootView: View) {
-    UiThreadUtil.runOnUiThread {
-      mShowValueAnimator?.end()
-      mHideValueAnimator = ValueAnimator.ofFloat(mBottomOffset, 0F).apply {
-        duration = mHideAnimationDuration
-        startDelay = mHideAnimationDelay
-        interpolator = mAnimationInterpolator
-        addListener(object: AnimatorListenerAdapter() {
-          override fun onAnimationStart(animation: Animator?) {
-            super.onAnimationStart(animation)
-            onOffsetChanged(convertFromPixelToDIP(mBottomOffset.toInt()))
-          }
-          override fun onAnimationEnd(animation: Animator?) {
-            super.onAnimationEnd(animation)
-            onOffsetChanged(0)
-            mCurrentBottomPadding = 0
-            mIsViewSlidingDown = false
-            mIsViewSlideUp = false
-            mHideValueAnimator = null
-          }
-        })
-        addUpdateListener {
-          val animatedOffset = it.animatedValue as Float
-          onOffsetChanged(convertFromPixelToDIP(animatedOffset.toInt()))
-          rootView.translationY = -animatedOffset
-        }
-        start()
-      }
-    }
-  }
-
-  private fun removeOffsetFromScrollView(scrollView: ScrollView) {
-    UiThreadUtil.runOnUiThread {
-      mShowValueAnimator?.end()
-      mHideValueAnimator = ValueAnimator.ofFloat(mBottomOffset, 0F).apply {
-        duration = mHideAnimationDuration
-        startDelay = mHideAnimationDelay
-        interpolator = mAnimationInterpolator
-        addListener(object: AnimatorListenerAdapter() {
-          override fun onAnimationStart(animation: Animator?) {
-            super.onAnimationStart(animation)
-            onOffsetChanged(convertFromPixelToDIP(mBottomOffset.toInt()))
-          }
-          override fun onAnimationEnd(animation: Animator?) {
-            super.onAnimationEnd(animation)
-            onOffsetChanged(0)
-            scrollView.smoothScrollTo(0, mScrollY)
-            mScrollY = 0
-            mCurrentBottomPadding = 0
-            mIsViewSlidingDown = false
-            mIsViewSlideUp = false
-            mHideValueAnimator = null
-          }
-        })
-        addUpdateListener {
-          val animatedOffset = it.animatedValue as Float
-          onOffsetChanged(convertFromPixelToDIP(animatedOffset.toInt()))
-          scrollView.setPadding(
-            scrollView.paddingLeft,
-            scrollView.paddingTop,
-            scrollView.paddingRight,
-            mCurrentBottomPadding + animatedOffset.toInt()
-          )
-        }
-        start()
-      }
-    }
-  }
-
-  private fun onOffsetChanged(offset: Int) {
-    mListener?.let { it(offset) }
+  private fun onScrollViewAnimationUpdate(scrollView: ScrollView, animatedOffset: Float) {
+    onOffsetChanged(convertFromPixelToDIP(animatedOffset.toInt()))
+    scrollView.setPadding(
+      scrollView.paddingLeft,
+      scrollView.paddingTop,
+      scrollView.paddingRight,
+      mCurrentBottomPadding + animatedOffset.toInt()
+    )
   }
 
   companion object {

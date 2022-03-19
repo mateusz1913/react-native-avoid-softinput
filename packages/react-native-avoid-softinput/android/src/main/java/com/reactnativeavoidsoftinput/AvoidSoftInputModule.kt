@@ -102,14 +102,16 @@ class AvoidSoftInputModule(
 
   override fun onSoftInputShown(from: Int, to: Int) {
     sendShownEvent(convertFromPixelToDIP(to))
-
-    mManager.onSoftInputShown(to)
   }
 
   override fun onSoftInputHidden(from: Int, to: Int) {
     sendHiddenEvent(convertFromPixelToDIP(0))
+  }
 
-    mManager.onSoftInputHidden()
+  override fun onSoftInputHeightChange(from: Int, to: Int) {
+    sendHeightChangedEvent(convertFromPixelToDIP(to))
+
+    mManager.onSoftInputHeightChange(from, to)
   }
 
   private fun sendEvent(eventName: String, params: WritableMap?) {
@@ -121,6 +123,12 @@ class AvoidSoftInputModule(
   private fun sendAppliedOffsetChangedEvent(offset: Int) {
     sendEvent(SOFT_INPUT_APPLIED_OFFSET_CHANGED, Arguments.createMap().apply {
       putInt(SOFT_INPUT_APPLIED_OFFSET_KEY, offset)
+    })
+  }
+
+  private fun sendHeightChangedEvent(height: Int) {
+    sendEvent(SOFT_INPUT_HEIGHT_CHANGED, Arguments.createMap().apply {
+      putInt(SOFT_INPUT_HEIGHT_KEY, height)
     })
   }
 
@@ -153,5 +161,6 @@ class AvoidSoftInputModule(
     const val SOFT_INPUT_APPLIED_OFFSET_CHANGED = "softInputAppliedOffsetChanged"
     const val SOFT_INPUT_HIDDEN = "softInputHidden"
     const val SOFT_INPUT_SHOWN = "softInputShown"
+    const val SOFT_INPUT_HEIGHT_CHANGED = "softInputHeightChanged"
   }
 }
