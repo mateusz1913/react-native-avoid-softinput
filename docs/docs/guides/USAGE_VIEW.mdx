@@ -15,6 +15,9 @@ const MyComponent = () => {
   function onSoftInputHidden() {
     // Do sth
   }
+  function onSoftInputHeightChange(e) {
+    // Do sth
+  }
   function onSoftInputAppliedOffsetChange(e) {
     // Do sth
   }
@@ -26,6 +29,7 @@ const MyComponent = () => {
       hideAnimationDuration={300}
       onSoftInputShown={onSoftInputShown}
       onSoftInputHidden={onSoftInputHidden}
+      onSoftInputHeightChange={onSoftInputHeightChange}
       showAnimationDelay={100}
       showAnimationDuration={800}
       style={styles.avoidSoftInputView}

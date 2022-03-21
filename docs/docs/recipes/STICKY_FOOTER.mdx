@@ -8,7 +8,7 @@ To handle complex layouts, where you want to make visible parts of UI inside and
 
 One use case is handling "sticky" CTA button fixed at the bottom of the screen with text fields displayed inside `ScrollView`.
 
-To handle button manually, you should use `useSoftInputShown` and `useSoftInputHidden` hooks to apply additional padding for button's container.
+To handle button manually, you can use `useSoftInputHeightChanged` or combination of `useSoftInputShown` and `useSoftInputHidden` hooks to apply additional padding for button's container.
 
 ### Example
 
@@ -39,24 +39,24 @@ export const StickyFooterExample: React.FC = () => {
 
   useFocusEffect(onFocusEffect);
 
-  useSoftInputShown(({ softInputHeight }) => {
+  useSoftInputHeightChanged(({ softInputHeight }) => {
     /**
-     * Add additional padding when soft input is visible
+     * Set/remove additional padding when soft input is visible/hidden
      *
      * You can save it in Reanimated's shared value and make smooth transition
+     * or just store it inside React's useState and add padding conditionally in render part
      *
-     * or
+     * You can also use `useSoftInputShown` & `useSoftInputHidden`
      *
-     * you can just store it inside React's useState and add padding conditionally in render part
+     * useSoftInputShown(({ softInputHeight }) => {
+     *   buttonContainerPaddingValue.value = withTiming(softInputHeight);
+     * });
+     *
+     * useSoftInputHidden(() => {
+     *   buttonContainerPaddingValue.value = withTiming(0);
+     * });
      */
     buttonContainerPaddingValue.value = withTiming(softInputHeight);
-  });
-
-  useSoftInputHidden(() => {
-    /**
-     * Remove additional padding when soft input is hidden
-     */
-    buttonContainerPaddingValue.value = withTiming(0);
   });
 
   return (

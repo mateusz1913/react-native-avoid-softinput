@@ -17,6 +17,7 @@ Extends `View` props
 | `hideAnimationDelay`             | number                                                   | 0                   |
 | `hideAnimationDuration`          | number                                                   | 220                 |
 | `onSoftInputAppliedOffsetChange` | function(e: { nativeEvent: { appliedOffset: number }})   | undefined           |
+| `onSoftInputHeightChange`        | function(e: { nativeEvent: { softInputHeight: number }}) | undefined           |
 | `onSoftInputHidden`              | function(e: { nativeEvent: { softInputHeight: number }}) | undefined           |
 | `onSoftInputShown`               | function(e: { nativeEvent: { softInputHeight: number }}) | undefined           |
 | `showAnimationDelay`             | number                                                   | 300/0 (iOS/Android) |
@@ -34,6 +35,7 @@ import { AvoidSoftInput } from "react-native-avoid-softinput";
   hideAnimationDuration={300}
   onSoftInputShown={onSoftInputShown}
   onSoftInputHidden={onSoftInputHidden}
+  onSoftInputHeightChange={onSoftInputHeightChange}
   showAnimationDelay={100}
   showAnimationDuration={800}
   style={styles.avoidSoftInputView}
