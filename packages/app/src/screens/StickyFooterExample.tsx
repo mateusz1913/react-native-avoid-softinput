@@ -1,7 +1,7 @@
 import { useFocusEffect } from '@react-navigation/native';
 import React, { useCallback } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
-import { AvoidSoftInput, useSoftInputHidden, useSoftInputShown } from 'react-native-avoid-softinput';
+import { AvoidSoftInput, useSoftInputHeightChanged } from 'react-native-avoid-softinput';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -31,12 +31,19 @@ export const StickyFooterExample: React.FC = () => {
 
   useFocusEffect(onFocusEffect);
 
-  useSoftInputShown(({ softInputHeight }) => {
+  /**
+   * You can also use `useSoftInputShown` & `useSoftInputHidden`
+   * 
+   * useSoftInputShown(({ softInputHeight }) => {
+   *   buttonContainerPaddingValue.value = withTiming(softInputHeight);
+   * });
+   * 
+   * useSoftInputHidden(() => {
+   *   buttonContainerPaddingValue.value = withTiming(0);
+   * });
+   */
+  useSoftInputHeightChanged(({ softInputHeight }) => {
     buttonContainerPaddingValue.value = withTiming(softInputHeight);
-  });
-
-  useSoftInputHidden(() => {
-    buttonContainerPaddingValue.value = withTiming(0);
   });
 
   return <SafeAreaView edges={[ 'left', 'right', 'bottom' ]} style={commonStyles.screenContainer}>

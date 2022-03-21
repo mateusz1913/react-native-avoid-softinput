@@ -36,6 +36,7 @@ export interface AvoidSoftInputViewProps extends Omit<ViewProps, 'pointerEvents'
    */
   showAnimationDuration?: number;
   onSoftInputAppliedOffsetChange?: (e: NativeSyntheticEvent<SoftInputAppliedOffsetEventData>) => void;
+  onSoftInputHeightChange?: (e: NativeSyntheticEvent<SoftInputEventData>) => void;
   onSoftInputHidden?: (e: NativeSyntheticEvent<SoftInputEventData>) => void;
   onSoftInputShown?: (e: NativeSyntheticEvent<SoftInputEventData>) => void;
 }

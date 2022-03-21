@@ -3,7 +3,7 @@ import type { TextInputProps } from 'react-native';
 import { StyleSheet, TextInput } from 'react-native';
 
 const MultilineInput = React.forwardRef<TextInput, TextInputProps>(({ multiline = true, style, ...rest }, ref) => {
-  return <TextInput multiline={multiline} {...rest} ref={ref} style={[ styles.input, style ]} />;
+  return <TextInput multiline={multiline} placeholderTextColor="#2E8555" {...rest} ref={ref} style={[ styles.input, style ]} />;
 });
 
 const styles = StyleSheet.create({

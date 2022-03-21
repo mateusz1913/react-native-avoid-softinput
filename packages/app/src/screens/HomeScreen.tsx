@@ -41,6 +41,11 @@ const DATA: Array<Example> = [
     route: ROUTES.Form,
   },
   {
+    description: 'Check how AvoidSoftInput module works with different keyboard types',
+    label: 'Keyboard type',
+    route: ROUTES.KeyboardType,
+  },
+  {
     description: 'Learn how to handle text fields rendered inside modal',
     label: 'Modal',
     route: ROUTES.Modal,

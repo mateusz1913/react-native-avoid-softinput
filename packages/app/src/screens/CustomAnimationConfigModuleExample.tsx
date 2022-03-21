@@ -1,7 +1,7 @@
 import { useFocusEffect } from '@react-navigation/native';
 import React, { useCallback } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { AvoidSoftInput } from 'react-native-avoid-softinput';
+import { AvoidSoftInput, useSoftInputState } from 'react-native-avoid-softinput';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import SingleInput from '../components/SingleInput';
@@ -28,11 +28,14 @@ export const CustomAnimationConfigModuleExample: React.FC = () => {
   
   useFocusEffect(onFocusEffect);
 
+  const softInputState = useSoftInputState();
+
   return <SafeAreaView edges={[ 'left', 'bottom', 'right' ]} style={styles.container}>
     <View style={styles.contentContainer}>
       <SingleInput placeholder="1" />
       <View style={styles.spacer}>
-        <Text style={styles.label}>SPACER</Text>
+        <Text style={styles.label}>isVisible: {JSON.stringify(softInputState.isSoftInputShown)}</Text>
+        <Text style={styles.label}>height: {softInputState.softInputHeight}</Text>
       </View>
     </View>
   </SafeAreaView>;

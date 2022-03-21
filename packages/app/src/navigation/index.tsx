@@ -6,6 +6,7 @@ import { CustomAnimationConfigModuleExample } from '../screens/CustomAnimationCo
 import { CustomAnimationConfigViewExample } from '../screens/CustomAnimationConfigViewExample';
 import { FormExample } from '../screens/FormExample';
 import { HomeScreen } from '../screens/HomeScreen';
+import { KeyboardTypeExample } from '../screens/KeyboardTypeExample';
 import { ModalExample } from '../screens/ModalExample';
 import { ReanimatedExample } from '../screens/ReanimatedExample';
 import { StickyFooterExample } from '../screens/StickyFooterExample';
@@ -22,6 +23,7 @@ export const Navigation: React.FC = () => {
     <Stack.Screen name={ROUTES.CustomAnimationConfigModule} component={CustomAnimationConfigModuleExample} />
     <Stack.Screen name={ROUTES.CustomAnimationConfigView} component={CustomAnimationConfigViewExample} />
     <Stack.Screen name={ROUTES.Form} component={FormExample} />
+    <Stack.Screen name={ROUTES.KeyboardType} component={KeyboardTypeExample} />
     <Stack.Screen name={ROUTES.Modal} component={ModalExample} />
     <Stack.Screen name={ROUTES.Reanimated} component={ReanimatedExample} />
     <Stack.Screen name={ROUTES.StickyFooter} component={StickyFooterExample} />
