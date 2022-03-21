@@ -1,5 +1,5 @@
 import React, { useState  } from 'react';
-import { Modal, ScrollView, StyleSheet, View } from 'react-native';
+import { Image, Modal, ScrollView, StyleSheet, View } from 'react-native';
 import { AvoidSoftInputView } from 'react-native-avoid-softinput';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -8,6 +8,8 @@ import CloseButton from '../components/CloseButton';
 import MultilineInput from '../components/MultilineInput';
 import SingleInput from '../components/SingleInput';
 import { styles as commonStyles } from '../consts/styles';
+
+const icon = require('../../assets/AppIconTransparent.png');
 
 export const ModalExample: React.FC = () => {
   const [ modalVisible, setModalVisible ] = useState(false);
@@ -36,7 +38,7 @@ export const ModalExample: React.FC = () => {
     >
       <SafeAreaView edges={[ 'left', 'right', 'bottom' ]} style={styles.modalContent}>
         <View style={styles.container}>
-          <View style={commonStyles.stretch}>
+          <View style={styles.closeContainer}>
             <CloseButton onPress={closeModal} />
           </View>
           <AvoidSoftInputView style={commonStyles.stretch}>
@@ -48,7 +50,13 @@ export const ModalExample: React.FC = () => {
               showsVerticalScrollIndicator={true}
               style={commonStyles.stretch}
             >
-              <View style={styles.spacer} />
+              <View style={styles.logoContainer}>
+                <Image
+                  resizeMode="contain"
+                  source={icon}
+                  style={styles.logo}
+                />
+              </View>
               <View style={styles.formContainer}>
                 <SingleInput placeholder="Single line" />
                 <MultilineInput placeholder="Multiline" />
@@ -66,6 +74,13 @@ export const ModalExample: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
+  closeContainer: {
+    backgroundColor: 'transparent',
+    position: 'absolute',
+    left: 0,
+    top: 0,
+    zIndex: 999,
+  },
   container: {
     alignItems: 'center',
     alignSelf: 'stretch',
@@ -73,9 +88,9 @@ const styles = StyleSheet.create({
     borderColor: 'black',
     borderRadius: 10,
     borderWidth: 1,
-    marginBottom: 100,
+    marginBottom: 80,
     marginHorizontal: 10,
-    marginTop: 80,
+    marginTop: 60,
     overflow: 'hidden',
   },
   formContainer: {
@@ -85,6 +100,17 @@ const styles = StyleSheet.create({
     marginBottom: 80,
     marginHorizontal: 10,
   },
+  logo: {
+    height: 200,
+    width: 200,
+  },
+  logoContainer: {
+    alignItems: 'center',
+    alignSelf: 'stretch',
+    flex: 1,
+    justifyContent: 'center',
+    paddingVertical: 100,
+  },
   modal: {
     alignSelf: 'stretch',
   },
@@ -92,8 +118,5 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch',
     backgroundColor: '#00000033',
     flex: 1,
-  },
-  spacer: {
-    height: 400,
   },
 });

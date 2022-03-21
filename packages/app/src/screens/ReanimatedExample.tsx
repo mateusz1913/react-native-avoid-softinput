@@ -27,14 +27,9 @@ export const ReanimatedExample: React.FC = () => {
     },
   });
   const softInputHandler = useSoftInputHandler({
-    onSoftInputHidden: (e) => {
+    onSoftInputHeightChange: (e) => {
       'worklet';
-      console.log({ onSoftInputHidden: e.softInputHeight });
-      scaleProgress.value = withTiming(e.softInputHeight, { duration: 300 });
-    },
-    onSoftInputShown: (e) => {
-      'worklet';
-      console.log({ onSoftInputShown: e.softInputHeight });
+      console.log({ onSoftInputHeightChange: e.softInputHeight });
       scaleProgress.value = withTiming(e.softInputHeight, { duration: 300 });
     },
   });

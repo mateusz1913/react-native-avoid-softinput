@@ -6,11 +6,11 @@ const {
 
 const monorepoMetroTools = getMetroTools();
 
-const androidAssetsResolutionFix = getMetroAndroidAssetsResolutionFix({ depth: 0 });
+const androidAssetsResolutionFix = getMetroAndroidAssetsResolutionFix();
 
 module.exports = {
-  publicPath: androidAssetsResolutionFix.publicPath,
   transformer: {
+    publicPath: androidAssetsResolutionFix.publicPath,
     getTransformOptions: async () => ({
       transform: {
         experimentalImportSupport: false,

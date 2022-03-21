@@ -9,6 +9,7 @@ RCT_EXPORT_VIEW_PROPERTY(hideAnimationDuration, NSNumber)
 RCT_EXPORT_VIEW_PROPERTY(showAnimationDelay, NSNumber)
 RCT_EXPORT_VIEW_PROPERTY(showAnimationDuration, NSNumber)
 RCT_EXPORT_VIEW_PROPERTY(onSoftInputAppliedOffsetChange, RCTDirectEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(onSoftInputHeightChange, RCTDirectEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onSoftInputHidden, RCTDirectEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onSoftInputShown, RCTDirectEventBlock)
 

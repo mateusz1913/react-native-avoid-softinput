@@ -8,6 +8,7 @@ export type RootStackParamList = {
   [ROUTES.CustomAnimationConfigView]: undefined;
   [ROUTES.Form]: undefined;
   [ROUTES.Home]: undefined;
+  [ROUTES.KeyboardType]: undefined;
   [ROUTES.Modal]: undefined;
   [ROUTES.Reanimated]: undefined;
   [ROUTES.StickyFooter]: undefined;

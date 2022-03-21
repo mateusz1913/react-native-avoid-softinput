@@ -36,6 +36,7 @@ export function useSoftInputHandler<TContext extends Record<string, unknown>>(
   handlers: {
     onSoftInputHidden?: (e: SoftInputEventData, context: TContext) => void;
     onSoftInputShown?: (e: SoftInputEventData, context: TContext) => void;
+    onSoftInputHeightChange?: (e: SoftInputEventData, context: TContext) => void;
   },
   dependencies?: ReadonlyArray<unknown>
 ) {
@@ -44,7 +45,7 @@ export function useSoftInputHandler<TContext extends Record<string, unknown>>(
   return useEvent<SoftInputEventData>(
     (event) => {
       'worklet';
-      const { onSoftInputHidden, onSoftInputShown } = handlers;
+      const { onSoftInputHidden, onSoftInputShown, onSoftInputHeightChange } = handlers;
 
       // eslint-disable-next-line no-extra-parens
       if (onSoftInputHidden && (event as CustomSoftInputEventData).eventName.endsWith('onSoftInputHidden')) {
@@ -55,8 +56,13 @@ export function useSoftInputHandler<TContext extends Record<string, unknown>>(
       if (onSoftInputShown && (event as CustomSoftInputEventData).eventName.endsWith('onSoftInputShown')) {
         onSoftInputShown(event, context);
       }
+
+      // eslint-disable-next-line no-extra-parens
+      if (onSoftInputHeightChange && (event as CustomSoftInputEventData).eventName.endsWith('onSoftInputHeightChange')) {
+        onSoftInputHeightChange(event, context);
+      }
     },
-    [ 'onSoftInputHidden', 'onSoftInputShown' ],
+    [ 'onSoftInputHidden', 'onSoftInputShown', 'onSoftInputHeightChange' ],
     doDependenciesDiffer,  
   );
 }

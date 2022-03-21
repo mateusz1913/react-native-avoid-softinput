@@ -32,6 +32,15 @@ function onSoftInputAppliedOffsetChange(
 }
 
 /**
+ * Fires event when soft input's height changes
+ */
+function onSoftInputHeightChange(
+  listener: ({ softInputHeight }: SoftInputEventData) => void
+) {
+  return eventEmitter.addListener('softInputHeightChanged', listener);
+}
+
+/**
  * Set whether module is enabled
  */
 function setEnabled(enabled: boolean) {
@@ -152,6 +161,7 @@ function setDefaultAppSoftInputMode() {
 
 export const AvoidSoftInput = {
   onSoftInputAppliedOffsetChange,
+  onSoftInputHeightChange,
   onSoftInputHidden,
   onSoftInputShown,
   setAdjustNothing,

@@ -21,6 +21,8 @@ class AvoidSoftInputProvider(): PopupWindow(), ViewTreeObserver.OnGlobalLayoutLi
   private lateinit var mReactContext: ReactContext
   private lateinit var mShowTimer: Timer
   private lateinit var mHideTimer: Timer
+  private lateinit var mHeightChangeTimer: Timer
+  private var mPersistedFrom: Int? = null
 
   constructor(reactContext: ReactContext) : this(reactContext, null)
 
@@ -32,6 +34,7 @@ class AvoidSoftInputProvider(): PopupWindow(), ViewTreeObserver.OnGlobalLayoutLi
 
     mShowTimer = Timer("showTimer", true)
     mHideTimer = Timer("hideTimer", true)
+    mHeightChangeTimer = Timer("heightChangeTimer", true)
 
     mRootView.viewTreeObserver.addOnGlobalLayoutListener(this)
     setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
@@ -68,26 +71,27 @@ class AvoidSoftInputProvider(): PopupWindow(), ViewTreeObserver.OnGlobalLayoutLi
   override fun onGlobalLayout() {
     mRootView.getWindowVisibleDisplayFrame(mRect)
     val heightDiff = DisplayMetricsHolder.getScreenDisplayMetrics().heightPixels - mRect.bottom - (getRootViewBottomInset(mReactContext) ?: 0)
+
+    onSoftInputHeightChange(mSoftInputHeight, heightDiff)
+
     val isSoftInputPotentiallyShown = mSoftInputHeight != heightDiff && heightDiff > mMinSoftInputHeightToDetect
 
     if (!isSoftInputPotentiallyShown) {
       val isSoftInputPotentiallyHidden = mSoftInputHeight != 0 && heightDiff <= mMinSoftInputHeightToDetect
 
       if (isSoftInputPotentiallyHidden) {
-        val previousSoftInputHeight = mSoftInputHeight
-        mSoftInputHeight = 0
-        onSoftInputHidden(previousSoftInputHeight, mSoftInputHeight)
+        onSoftInputHidden(mSoftInputHeight, 0)
+      } else {
+        mHideTimer.cancel()
       }
-      return
+    } else {
+      onSoftInputShown(mSoftInputHeight, heightDiff)
     }
-
-    val previousSoftInputHeight = mSoftInputHeight
-    mSoftInputHeight = heightDiff
-    onSoftInputShown(previousSoftInputHeight, mSoftInputHeight)
   }
 
   private fun onSoftInputShown(from: Int, to: Int) {
     mShowTimer.cancel()
+    mHideTimer.cancel()
     mShowTimer = Timer("showTimer", true)
     mShowTimer.schedule(100) {
       mListener?.onSoftInputShown(from, to)
@@ -97,6 +101,7 @@ class AvoidSoftInputProvider(): PopupWindow(), ViewTreeObserver.OnGlobalLayoutLi
 
   private fun onSoftInputHidden(from: Int, to: Int) {
     mHideTimer.cancel()
+    mShowTimer.cancel()
     mHideTimer = Timer("hideTimer", true)
     mHideTimer.schedule(100) {
       mListener?.onSoftInputHidden(from, to)
@@ -104,8 +109,23 @@ class AvoidSoftInputProvider(): PopupWindow(), ViewTreeObserver.OnGlobalLayoutLi
     }
   }
 
+  private fun onSoftInputHeightChange(from: Int, to: Int) {
+    if (mPersistedFrom == null) {
+      mPersistedFrom = from
+    }
+    mHeightChangeTimer.cancel()
+    mHeightChangeTimer = Timer("heightChangeTimer", true)
+    mHeightChangeTimer.schedule(100) {
+      mListener?.onSoftInputHeightChange(mPersistedFrom ?: from, to)
+      mPersistedFrom = null
+      mSoftInputHeight = to
+      mHeightChangeTimer.cancel()
+    }
+  }
+
   interface SoftInputListener {
     fun onSoftInputShown(from: Int, to: Int)
     fun onSoftInputHidden(from: Int, to: Int)
+    fun onSoftInputHeightChange(from: Int, to: Int)
   }
 }
