@@ -5,6 +5,8 @@ class AvoidSoftInputManager: NSObject {
     static let SHOW_ANIMATION_DURATION_IN_SECONDS: Double = 0.22
     
     #if os(iOS)
+    private var addedHideOffset: CGFloat = 0
+    private var addedShowOffset: CGFloat = 0
     private var avoidOffset: CGFloat = 0
     private var bottomOffset: CGFloat = 0
     private var currentAppliedOffset: CGFloat = 0
@@ -17,10 +19,13 @@ class AvoidSoftInputManager: NSObject {
     private lazy var hideAnimationTimer: CADisplayLink = CADisplayLink(target: self, selector: #selector(self.updateHideAnimation))
     private var hideDelay: Double = HIDE_ANIMATION_DELAY_IN_SECONDS
     private var hideDuration: Double = HIDE_ANIMATION_DURATION_IN_SECONDS
+    private var initialHideOffset: CGFloat = 0
+    private var initialShowOffset: CGFloat = 0
     private var isEnabled: Bool = false
-    private var isViewSlidedUp: Bool = false
-    private var isViewSlidingDown: Bool = false
-    private var isViewSlidingUp: Bool = false
+    private var isHideAnimationCancelled: Bool = false
+    private var isHideAnimationRunning: Bool = false
+    private var isShowAnimationCancelled: Bool = false
+    private var isShowAnimationRunning: Bool = false
     private var onOffsetChanged: ((CGFloat) -> Void)? = nil
     private var scrollContentInset: UIEdgeInsets = UIEdgeInsets.zero
     private var scrollIndicatorInsets: UIEdgeInsets = UIEdgeInsets.zero
@@ -28,6 +33,7 @@ class AvoidSoftInputManager: NSObject {
     private lazy var showAnimationTimer: CADisplayLink = CADisplayLink(target: self, selector: #selector(self.updateShowAnimation))
     private var showDelay: Double = SHOW_ANIMATION_DELAY_IN_SECONDS
     private var showDuration: Double = SHOW_ANIMATION_DURATION_IN_SECONDS
+    private var softInputVisible: Bool = false
     
     func setAvoidOffset(_ offset: NSNumber) {
         avoidOffset = CGFloat(offset.floatValue)
@@ -88,86 +94,115 @@ class AvoidSoftInputManager: NSObject {
             showDuration = AvoidSoftInputManager.SHOW_ANIMATION_DURATION_IN_SECONDS
         }
     }
-    
-    func softInputWillShow(height: CGFloat, customRootView: UIView? = nil) {
-        if isViewSlidedUp || isViewSlidingUp || isEnabled == false {
+       
+    func softInputHeightWillChange(from: CGFloat, to: CGFloat, isOrientationChange: Bool, customRootView: UIView? = nil) {
+        if !isEnabled {
             return
         }
         
-        isViewSlidingUp = true
         guard let viewController = RCTPresentedViewController() else {
-            isViewSlidingUp = false
             return
         }
         
         let rootView = getReactRootView(withRootViewController: viewController)
         
-        guard let firstResponder = findFirstResponder(view: rootView) else {
-            isViewSlidingUp = false
+        guard let firstResponder = findFirstResponder(view: rootView) ?? currentFocusedView else {
             return
         }
         
         currentFocusedView = firstResponder
         
         if let customRootView = customRootView {
-            applyOffset(height: height, firstResponder: firstResponder, rootView: customRootView)
-            return
-        }
-
-        if shouldCheckForAvoidSoftInputView && checkIfNestedInAvoidSoftInputView(view: firstResponder) {
-            isViewSlidingUp = false
-            return
-        }
-        
-        applyOffset(height: height, firstResponder: firstResponder, rootView: rootView)
-    }
-    
-    func softInputWillHide(customRootView: UIView? = nil) {
-        if (!isViewSlidedUp && !isViewSlidingUp) || isViewSlidingDown || isEnabled == false {
-            return
-        }
-        
-        isViewSlidingDown = true
-        guard let viewController = RCTPresentedViewController(), let firstResponder = currentFocusedView else {
-            isViewSlidingDown = false
-            return
-        }
-        
-        if let customRootView = customRootView {
-            if bottomOffset <= 0 {
-                isViewSlidingDown = false
+            setOffset(from: from, to: to, isOrientationChange: isOrientationChange, firstResponder: firstResponder, rootView: customRootView)
+        } else {
+            if shouldCheckForAvoidSoftInputView && checkIfNestedInAvoidSoftInputView(view: firstResponder) {
                 return
             }
             
-            removeOffset(firstResponder: firstResponder, rootView: customRootView)
-            return
+            setOffset(from: from, to: to, isOrientationChange: isOrientationChange, firstResponder: firstResponder, rootView: rootView)
         }
-        
-        let rootView = getReactRootView(withRootViewController: viewController)
-
-        if shouldCheckForAvoidSoftInputView && checkIfNestedInAvoidSoftInputView(view: firstResponder) {
-            isViewSlidingDown = false
-            return
-        }
-        
-        if bottomOffset <= 0 {
-            isViewSlidingDown = false
-            return
-        }
-        
-        removeOffset(firstResponder: firstResponder, rootView: rootView)
     }
     
-    private func applyOffset(height: CGFloat, firstResponder: UIView, rootView: UIView) {
+    private func setOffset(from: CGFloat, to: CGFloat, isOrientationChange: Bool, firstResponder: UIView, rootView: UIView) {
         if let scrollView = findScrollViewForFirstResponder(view: firstResponder, rootView: rootView) {
-            applyOffsetToScrollView(height: height, firstResponder: firstResponder, scrollView: scrollView, rootView: rootView)
+            setOffsetInScrollView(from: from, to: to, isOrientationChange: isOrientationChange, firstResponder: firstResponder, scrollView: scrollView, rootView: rootView)
+        } else {
+            setOffsetInRootView(from: from, to: to, isOrientationChange: isOrientationChange, firstResponder: firstResponder, rootView: rootView)
+        }
+    }
+    
+    private func setOffsetInRootView(from: CGFloat, to: CGFloat, isOrientationChange: Bool, firstResponder: UIView, rootView: UIView) {
+        if softInputVisible && isOrientationChange {
+            // RESET
+            addOffsetInRootView(to, firstResponder: firstResponder, rootView: rootView)
+            return
+        }
+        if to == from {
+            return
+        }
+        if to == 0 {
+            // HIDE
+            removeOffsetInRootView(rootView: rootView)
+        } else if to - from > 0 && (!softInputVisible || from == 0) {
+            // SHOW
+            addOffsetInRootView(to, firstResponder: firstResponder, rootView: rootView)
+        } else if to - from > 0 {
+            // INCREASE
+            increaseOffsetInRootView(from: from, to: to, rootView: rootView)
+        } else if to - from < 0 {
+            // DECREASE
+            decreaseOffsetInRootView(from: from, to: to, rootView: rootView)
+        }
+    }
+    
+    private func decreaseOffsetInRootView(from: CGFloat, to: CGFloat, rootView: UIView) {
+        let addedOffset = to - from
+        let newBottomOffset = isShowAnimationRunning ? bottomOffset : bottomOffset + addedOffset
+        
+        if newBottomOffset < 0 {
             return
         }
 
-        applyOffsetToRootView(height: height, firstResponder: firstResponder, rootView: rootView)
+        beginHideAnimation(initialOffset: bottomOffset, addedOffset: newBottomOffset - bottomOffset)
+        UIView.animate(withDuration: hideDuration, delay: hideDelay, options: [.beginFromCurrentState, easingOption]) {
+            self.setupHideAnimationTimers(rootView: rootView)
+            
+            rootView.frame.origin.y = -newBottomOffset
+        } completion: { isCompleted in
+            self.completeHideAnimation(with: newBottomOffset)
+        }
     }
     
-    private func applyOffsetToRootView(height: CGFloat, firstResponder: UIView, rootView: UIView) {
+    private func increaseOffsetInRootView(from: CGFloat, to: CGFloat, rootView: UIView) {
+        let addedOffset = to - from
+        let newBottomOffset = isHideAnimationRunning ? bottomOffset : bottomOffset + addedOffset
+        
+        if newBottomOffset < 0 {
+            return
+        }
+
+        beginShowAnimation(initialOffset: bottomOffset, addedOffset: newBottomOffset - bottomOffset)
+        UIView.animate(withDuration: showDuration, delay: showDelay, options: [.beginFromCurrentState, easingOption]) {
+            self.setupShowAnimationTimers(rootView: rootView)
+            
+            rootView.frame.origin.y = -newBottomOffset
+        } completion: { isCompleted in
+            self.completeShowAnimation(with: newBottomOffset)
+        }
+    }
+    
+    private func removeOffsetInRootView(rootView: UIView) {
+        beginHideAnimation(initialOffset: bottomOffset, addedOffset: -bottomOffset)
+        UIView.animate(withDuration: hideDuration, delay: hideDelay, options: [.beginFromCurrentState, easingOption]) {
+            self.setupHideAnimationTimers(rootView: rootView)
+            
+            rootView.frame.origin.y += self.bottomOffset // at the end, origin.y should be equal to 0
+        } completion: { isCompleted in
+            self.completeHideAnimation()
+        }
+    }
+    
+    private func addOffsetInRootView(_ offset: CGFloat, firstResponder: UIView, rootView: UIView) {
         guard let firstResponderPosition = firstResponder.superview?.convert(firstResponder.frame.origin, to: nil) else {
             return
         }
@@ -179,43 +214,157 @@ class AvoidSoftInputManager: NSObject {
         
         let firstResponderDistanceToBottom = UIScreen.main.bounds.size.height - (firstResponderPosition.y + firstResponder.frame.height) - bottomSafeInset
         
-        bottomOffset = max(height - firstResponderDistanceToBottom, 0) + avoidOffset
+        bottomOffset = max(offset - firstResponderDistanceToBottom, 0) + avoidOffset
         
         if (bottomOffset <= 0) {
-            isViewSlidingUp = false
             return
         }
         
-        fakeShowAnimationView.alpha = 0.0
-        if let onOffsetChanged = onOffsetChanged {
-            onOffsetChanged(0)
-        }
+        beginShowAnimation(initialOffset: 0, addedOffset: bottomOffset)
         UIView.animate(withDuration: showDuration, delay: showDelay, options: [.beginFromCurrentState, easingOption]) {
-            self.showAnimationTimer = CADisplayLink(target: self, selector: #selector(self.updateShowAnimation))
-            self.showAnimationTimer.add(to: .current, forMode: .default)
-            rootView.addSubview(self.fakeShowAnimationView)
-            self.fakeShowAnimationView.alpha = 1.0
+            self.setupShowAnimationTimers(rootView: rootView)
             
-            self.hideAnimationTimer.isPaused = true
-            self.hideAnimationTimer.invalidate()
-            self.currentFakeHideAnimationViewAlpha = 1.0
-            
-            rootView.frame.origin.y -= self.bottomOffset
+            rootView.frame.origin.y = -self.bottomOffset
         } completion: { isCompleted in
-            self.showAnimationTimer.isPaused = true
-            self.showAnimationTimer.invalidate()
-            self.currentFakeShowAnimationViewAlpha = 0.0
-            self.fakeShowAnimationView.alpha = 0.0
-            self.fakeShowAnimationView.removeFromSuperview()
-            
-            self.isViewSlidingUp = false
-            self.isViewSlidedUp = true
+            self.completeShowAnimation()
         }
     }
     
-    private func applyOffsetToScrollView(height: CGFloat, firstResponder: UIView, scrollView: UIScrollView, rootView: UIView) {
-        guard let firstResponderPosition = firstResponder.superview?.convert(firstResponder.frame.origin, to: nil) else {
+    private func setOffsetInScrollView(from: CGFloat, to: CGFloat, isOrientationChange: Bool, firstResponder: UIView, scrollView: UIScrollView, rootView: UIView) {
+        if softInputVisible && isOrientationChange {
+            // RESET
+            addOffsetInScrollView(to, firstResponder: firstResponder, scrollView: scrollView, rootView: rootView)
             return
+        }
+        if to == from {
+            return
+        }
+        if to == 0 {
+            // HIDE
+            removeOffsetInScrollView(scrollView: scrollView, rootView: rootView)
+        } else if to - from > 0 && (!softInputVisible || from == 0) {
+            // SHOW
+            addOffsetInScrollView(to, firstResponder: firstResponder, scrollView: scrollView, rootView: rootView)
+        } else if to - from > 0 {
+            // INCREASE
+            increaseOffsetInScrollView(from: from, to: to, firstResponder: firstResponder, scrollView: scrollView, rootView: rootView)
+        } else if to - from < 0 {
+            // DECREASE
+            decreaseOffsetInScrollView(from: from, to: to, firstResponder: firstResponder, scrollView: scrollView, rootView: rootView)
+        }
+    }
+    
+    private func decreaseOffsetInScrollView(from: CGFloat, to: CGFloat, firstResponder: UIView, scrollView: UIScrollView, rootView: UIView) {
+        let addedOffset = to - from
+        let newBottomOffset = isShowAnimationRunning ? bottomOffset : bottomOffset + addedOffset
+        let scrollToOffset = getScrollToOffset(softInputHeight: to, firstResponder: firstResponder, scrollView: scrollView, rootView: rootView)
+        
+        if newBottomOffset < 0 {
+            return
+        }
+        
+        beginHideAnimation(initialOffset: bottomOffset, addedOffset: newBottomOffset - bottomOffset)
+        UIView.animate(withDuration: hideDuration, delay: hideDelay, options: [.beginFromCurrentState, easingOption]) {
+            self.setupHideAnimationTimers(rootView: rootView)
+            
+            var newContentInset = scrollView.contentInset
+            newContentInset.bottom = newBottomOffset
+            var newScrollIndicatorInsets = scrollView.scrollIndicatorInsets
+            newScrollIndicatorInsets.bottom = newBottomOffset
+
+            scrollView.contentInset = newContentInset
+            scrollView.scrollIndicatorInsets = newScrollIndicatorInsets
+            scrollView.contentOffset = CGPoint(x: scrollView.contentOffset.x, y: scrollView.contentOffset.y + scrollToOffset)
+        } completion: { isCompleted in
+            self.completeHideAnimation(with: newBottomOffset)
+        }
+    }
+    
+    private func increaseOffsetInScrollView(from: CGFloat, to: CGFloat, firstResponder: UIView, scrollView: UIScrollView, rootView: UIView) {
+        let addedOffset = to - from
+        let newBottomOffset = isHideAnimationRunning ? bottomOffset : bottomOffset + addedOffset
+        let scrollToOffset = getScrollToOffset(softInputHeight: to, firstResponder: firstResponder, scrollView: scrollView, rootView: rootView)
+        
+        if newBottomOffset < 0 {
+            return
+        }
+        
+        beginShowAnimation(initialOffset: bottomOffset, addedOffset: newBottomOffset - bottomOffset)
+        UIView.animate(withDuration: showDuration, delay: showDelay, options: [.beginFromCurrentState, easingOption]) {
+            self.setupShowAnimationTimers(rootView: rootView)
+            
+            var newContentInset = scrollView.contentInset
+            newContentInset.bottom = newBottomOffset
+            var newScrollIndicatorInsets = scrollView.scrollIndicatorInsets
+            newScrollIndicatorInsets.bottom = newBottomOffset
+
+            scrollView.contentInset = newContentInset
+            scrollView.scrollIndicatorInsets = newScrollIndicatorInsets
+            scrollView.contentOffset = CGPoint(x: scrollView.contentOffset.x, y: scrollView.contentOffset.y + scrollToOffset)
+        } completion: { isCompleted in
+            self.completeShowAnimation(with: newBottomOffset)
+        }
+    }
+    
+    private func removeOffsetInScrollView(scrollView: UIScrollView, rootView: UIView) {
+        beginHideAnimation(initialOffset: bottomOffset, addedOffset: -bottomOffset)
+        UIView.animate(withDuration: hideDuration, delay: hideDelay, options: [.beginFromCurrentState, easingOption]) {
+            self.setupHideAnimationTimers(rootView: rootView)
+            
+            scrollView.contentInset = self.scrollContentInset
+            scrollView.scrollIndicatorInsets = self.scrollIndicatorInsets
+            self.scrollContentInset = .zero
+            self.scrollIndicatorInsets = .zero
+        } completion: { isCompleted in
+            self.completeHideAnimation()
+        }
+    }
+    
+    private func addOffsetInScrollView(_ offset: CGFloat, firstResponder: UIView, scrollView: UIScrollView, rootView: UIView) {
+        var bottomSafeInset: CGFloat = 0
+        if #available(iOS 11.0, tvOS 11.0, *) {
+            bottomSafeInset = rootView.safeAreaInsets.bottom
+        }
+        
+        guard let scrollViewPosition = scrollView.superview?.convert(scrollView.frame.origin, to: nil) else {
+            return
+        }
+        
+        let scrollViewDistanceToBottom = UIScreen.main.bounds.size.height - (scrollViewPosition.y + scrollView.frame.height) - bottomSafeInset
+        
+        let scrollToOffset = getScrollToOffset(softInputHeight: offset, firstResponder: firstResponder, scrollView: scrollView, rootView: rootView)
+        
+        bottomOffset = max(offset - scrollViewDistanceToBottom, 0) + avoidOffset
+        
+        if bottomOffset <= 0 {
+            return
+        }
+        
+        if !softInputVisible {
+            // Save original scroll insets
+            self.scrollContentInset = scrollView.contentInset
+            self.scrollIndicatorInsets = scrollView.scrollIndicatorInsets
+        }
+
+        beginShowAnimation(initialOffset: 0, addedOffset: bottomOffset)
+        UIView.animate(withDuration: showDuration, delay: showDelay, options: [.beginFromCurrentState, easingOption]) {
+            self.setupShowAnimationTimers(rootView: rootView)
+            
+            var newContentInset = scrollView.contentInset
+            newContentInset.bottom = max(self.bottomOffset, scrollView.contentInset.bottom)
+            var newScrollIndicatorInsets = scrollView.scrollIndicatorInsets
+            newScrollIndicatorInsets.bottom = max(self.bottomOffset, scrollView.scrollIndicatorInsets.bottom)
+            scrollView.contentInset = newContentInset
+            scrollView.scrollIndicatorInsets = newScrollIndicatorInsets
+            scrollView.contentOffset = CGPoint(x: scrollView.contentOffset.x, y: scrollView.contentOffset.y + scrollToOffset)
+        } completion: { isCompleted in
+            self.completeShowAnimation()
+        }
+    }
+    
+    private func getScrollToOffset(softInputHeight: CGFloat, firstResponder: UIView, scrollView: UIScrollView, rootView: UIView) -> CGFloat {
+        guard let firstResponderPosition = firstResponder.superview?.convert(firstResponder.frame.origin, to: nil) else {
+            return 0
         }
         
         var bottomSafeInset: CGFloat = 0
@@ -226,126 +375,123 @@ class AvoidSoftInputManager: NSObject {
         let firstResponderDistanceToBottom = UIScreen.main.bounds.size.height - (firstResponderPosition.y + firstResponder.frame.height) - bottomSafeInset
         
         guard let scrollViewPosition = scrollView.superview?.convert(scrollView.frame.origin, to: nil) else {
-            return
+            return 0
         }
         
-        let scrollViewDistanceToBottom = UIScreen.main.bounds.size.height - (scrollViewPosition.y + scrollView.frame.height) - bottomSafeInset
+        return min(max(softInputHeight - firstResponderDistanceToBottom, 0), (firstResponderPosition.y - scrollViewPosition.y))
+    }
+    
+    private func beginHideAnimation(initialOffset: CGFloat, addedOffset: CGFloat) {
+        isHideAnimationRunning = true
+        fakeHideAnimationView.alpha = 1.0
+        isHideAnimationCancelled = false
+        isShowAnimationCancelled = true
+        initialHideOffset = initialOffset
+        addedHideOffset = addedOffset
+        if initialOffset + addedOffset == 0 && addedOffset != 0 {
+            if let onOffsetChanged = onOffsetChanged {
+                onOffsetChanged(initialHideOffset)
+            }
+        }
+    }
+    
+    private func setupHideAnimationTimers(rootView: UIView) {
+        self.hideAnimationTimer = CADisplayLink(target: self, selector: #selector(self.updateHideAnimation))
+        self.hideAnimationTimer.add(to: .current, forMode: .default)
+        rootView.addSubview(self.fakeHideAnimationView)
+        self.fakeHideAnimationView.alpha = 0.0
         
-        let scrollToOffset = min(max(height - firstResponderDistanceToBottom, 0), (firstResponderPosition.y - scrollViewPosition.y))
-        
-        bottomOffset = max(height - scrollViewDistanceToBottom, 0) + avoidOffset
-        
-        if (bottomOffset <= 0) {
-            isViewSlidingUp = false
+        self.showAnimationTimer.isPaused = true
+        self.showAnimationTimer.invalidate()
+        self.currentFakeShowAnimationViewAlpha = 0.0
+    }
+    
+    private func completeHideAnimation(with newBottomOffset: CGFloat? = nil) {
+        self.isHideAnimationRunning = false
+        if self.isHideAnimationCancelled {
             return
         }
+        self.hideAnimationTimer.isPaused = true
+        self.hideAnimationTimer.invalidate()
+        self.currentFakeHideAnimationViewAlpha = 1.0
+        self.fakeHideAnimationView.alpha = 1.0
+        self.fakeHideAnimationView.removeFromSuperview()
+        
+        if let newBottomOffset = newBottomOffset {
+            if let onOffsetChanged = self.onOffsetChanged {
+                onOffsetChanged(newBottomOffset)
+            }
 
-        fakeShowAnimationView.alpha = 0.0
-        if let onOffsetChanged = onOffsetChanged {
-            onOffsetChanged(0)
-        }
-        UIView.animate(withDuration: showDuration, delay: showDelay, options: [.beginFromCurrentState, easingOption]) {
-            self.showAnimationTimer = CADisplayLink(target: self, selector: #selector(self.updateShowAnimation))
-            self.showAnimationTimer.add(to: .current, forMode: .default)
-            rootView.addSubview(self.fakeShowAnimationView)
-            self.fakeShowAnimationView.alpha = 1.0
+            self.bottomOffset = newBottomOffset
+            self.initialHideOffset = newBottomOffset
+            self.addedHideOffset = 0
+        } else {
+            if let onOffsetChanged = self.onOffsetChanged {
+                onOffsetChanged(0)
+            }
             
-            self.hideAnimationTimer.isPaused = true
-            self.hideAnimationTimer.invalidate()
-            self.currentFakeHideAnimationViewAlpha = 1.0
-            
-            var newContentInset = scrollView.contentInset
-            newContentInset.bottom = max(self.bottomOffset, scrollView.contentInset.bottom)
-            var newScrollIndicatorInsets = scrollView.scrollIndicatorInsets
-            newScrollIndicatorInsets.bottom = max(self.bottomOffset, scrollView.scrollIndicatorInsets.bottom)
-            self.scrollContentInset = scrollView.contentInset
-            self.scrollIndicatorInsets = scrollView.scrollIndicatorInsets
-            scrollView.contentInset = newContentInset
-            scrollView.scrollIndicatorInsets = newScrollIndicatorInsets
-            scrollView.contentOffset = CGPoint(x: scrollView.contentOffset.x, y: scrollView.contentOffset.y + scrollToOffset)
-        } completion: { isCompleted in
-            self.showAnimationTimer.isPaused = true
-            self.showAnimationTimer.invalidate()
-            self.currentFakeShowAnimationViewAlpha = 0.0
-            self.fakeShowAnimationView.alpha = 0.0
-            self.fakeShowAnimationView.removeFromSuperview()
-            
-            self.isViewSlidingUp = false
-            self.isViewSlidedUp = true
+            self.softInputVisible = false
+            self.currentFocusedView = nil
+            self.bottomOffset = 0
+            self.initialHideOffset = 0
+            self.addedHideOffset = 0
+            self.currentAppliedOffset = 0
         }
     }
     
-    private func removeOffset(firstResponder: UIView, rootView: UIView) {
-        if let scrollView = findScrollViewForFirstResponder(view: firstResponder, rootView: rootView) {
-            removeOffsetFromScrollView(scrollView: scrollView, rootView: rootView)
+    private func beginShowAnimation(initialOffset: CGFloat, addedOffset: CGFloat) {
+        isShowAnimationRunning = true
+        fakeShowAnimationView.alpha = 0.0
+        isHideAnimationCancelled = true
+        isShowAnimationCancelled = false
+        initialShowOffset = initialOffset
+        addedShowOffset = addedOffset
+        if initialOffset + addedOffset == bottomOffset && addedOffset != 0 {
+            if let onOffsetChanged = onOffsetChanged {
+                onOffsetChanged(0)
+            }
+        }
+    }
+    
+    private func setupShowAnimationTimers(rootView: UIView) {
+        self.showAnimationTimer = CADisplayLink(target: self, selector: #selector(self.updateShowAnimation))
+        self.showAnimationTimer.add(to: .current, forMode: .default)
+        rootView.addSubview(self.fakeShowAnimationView)
+        self.fakeShowAnimationView.alpha = 1.0
+        
+        self.hideAnimationTimer.isPaused = true
+        self.hideAnimationTimer.invalidate()
+        self.currentFakeHideAnimationViewAlpha = 1.0
+    }
+    
+    private func completeShowAnimation(with newBottomOffset: CGFloat? = nil) {
+        self.isShowAnimationRunning = false
+        if self.isShowAnimationCancelled {
             return
         }
+        self.showAnimationTimer.isPaused = true
+        self.showAnimationTimer.invalidate()
+        self.currentFakeShowAnimationViewAlpha = 0.0
+        self.fakeShowAnimationView.alpha = 0.0
+        self.fakeShowAnimationView.removeFromSuperview()
         
-        removeOffsetFromRootView(rootView: rootView)
-    }
-    
-    private func removeOffsetFromRootView(rootView: UIView) {
-        fakeHideAnimationView.alpha = 1.0
-        if let onOffsetChanged = onOffsetChanged {
-            onOffsetChanged(currentAppliedOffset)
-        }
-        UIView.animate(withDuration: hideDuration, delay: hideDelay, options: [.beginFromCurrentState, easingOption]) {
-            self.hideAnimationTimer = CADisplayLink(target: self, selector: #selector(self.updateHideAnimation))
-            self.hideAnimationTimer.add(to: .current, forMode: .default)
-            rootView.addSubview(self.fakeHideAnimationView)
-            self.fakeHideAnimationView.alpha = 0.0
+        self.softInputVisible = true
+        if let newBottomOffset = newBottomOffset {
+            if let onOffsetChanged = self.onOffsetChanged {
+                onOffsetChanged(newBottomOffset)
+            }
+
+            self.bottomOffset = newBottomOffset
+            self.initialShowOffset = newBottomOffset
+            self.addedShowOffset = 0
+        } else {
+            if let onOffsetChanged = self.onOffsetChanged {
+                onOffsetChanged(self.bottomOffset)
+            }
             
-            self.showAnimationTimer.isPaused = true
-            self.showAnimationTimer.invalidate()
-            self.currentFakeShowAnimationViewAlpha = 0.0
-            
-            rootView.frame.origin.y += self.bottomOffset
-        } completion: { isCompleted in
-            self.hideAnimationTimer.isPaused = true
-            self.hideAnimationTimer.invalidate()
-            self.currentFakeHideAnimationViewAlpha = 1.0
-            self.fakeHideAnimationView.alpha = 1.0
-            self.fakeHideAnimationView.removeFromSuperview()
-            
-            self.isViewSlidedUp = false
-            self.isViewSlidingDown = false
-            self.currentFocusedView = nil
-            self.bottomOffset = 0
-            self.currentAppliedOffset = 0
-        }
-    }
-    
-    private func removeOffsetFromScrollView(scrollView: UIScrollView, rootView: UIView) {
-        fakeHideAnimationView.alpha = 1.0
-        if let onOffsetChanged = onOffsetChanged {
-            onOffsetChanged(currentAppliedOffset)
-        }
-        UIView.animate(withDuration: hideDuration, delay: hideDelay, options: [.beginFromCurrentState, easingOption]) {
-            self.hideAnimationTimer = CADisplayLink(target: self, selector: #selector(self.updateHideAnimation))
-            self.hideAnimationTimer.add(to: .current, forMode: .default)
-            rootView.addSubview(self.fakeHideAnimationView)
-            self.fakeHideAnimationView.alpha = 0.0
-            
-            self.showAnimationTimer.isPaused = true
-            self.showAnimationTimer.invalidate()
-            self.currentFakeShowAnimationViewAlpha = 0.0
-            
-            scrollView.contentInset = self.scrollContentInset
-            scrollView.scrollIndicatorInsets = self.scrollIndicatorInsets
-            self.scrollContentInset = .zero
-            self.scrollIndicatorInsets = .zero
-        } completion: { isCompleted in
-            self.hideAnimationTimer.isPaused = true
-            self.hideAnimationTimer.invalidate()
-            self.currentFakeHideAnimationViewAlpha = 1.0
-            self.fakeHideAnimationView.alpha = 1.0
-            self.fakeHideAnimationView.removeFromSuperview()
-            
-            self.isViewSlidedUp = false
-            self.isViewSlidingDown = false
-            self.currentFocusedView = nil
-            self.bottomOffset = 0
-            self.currentAppliedOffset = 0
+            self.currentAppliedOffset = self.bottomOffset
+            self.initialShowOffset = self.bottomOffset
+            self.addedShowOffset = 0
         }
     }
     
@@ -359,13 +505,14 @@ class AvoidSoftInputManager: NSObject {
         }
 
         currentFakeHideAnimationViewAlpha = CGFloat(currentFakeAlpha)
-        if currentFakeHideAnimationViewAlpha * self.bottomOffset > currentAppliedOffset {
+        let newCurrentOffset = self.initialHideOffset + currentFakeHideAnimationViewAlpha * self.addedHideOffset
+        if newCurrentOffset > currentAppliedOffset {
             return
         }
 
-        currentAppliedOffset = currentFakeHideAnimationViewAlpha * self.bottomOffset
+        currentAppliedOffset = newCurrentOffset
         if let onOffsetChanged = onOffsetChanged {
-            onOffsetChanged(currentAppliedOffset)
+            onOffsetChanged(newCurrentOffset)
         }
     }
     
@@ -379,13 +526,14 @@ class AvoidSoftInputManager: NSObject {
         }
 
         currentFakeShowAnimationViewAlpha = CGFloat(currentFakeAlpha)
-        if currentFakeShowAnimationViewAlpha * self.bottomOffset < currentAppliedOffset {
+        let newCurrentOffset = self.initialShowOffset + currentFakeShowAnimationViewAlpha * self.addedShowOffset
+        if newCurrentOffset < currentAppliedOffset {
             return
         }
 
-        currentAppliedOffset = currentFakeShowAnimationViewAlpha * self.bottomOffset
+        currentAppliedOffset = newCurrentOffset
         if let onOffsetChanged = onOffsetChanged {
-            onOffsetChanged(currentAppliedOffset)
+            onOffsetChanged(newCurrentOffset)
         }
     }
     #endif

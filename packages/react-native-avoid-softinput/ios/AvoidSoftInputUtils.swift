@@ -52,3 +52,12 @@ func checkIfNestedInAvoidSoftInputView(view: UIView) -> Bool {
     
     return checkIfNestedInAvoidSoftInputView(view: superview)
 }
+
+enum ReactNativeAvoidSoftInputLogger {
+    @inlinable
+    static func log(level: RCTLogLevel, message: String, _ file: String = #file, _ lineNumber: Int = #line, _ function: String = #function) {
+        #if DEBUG
+        RCTDefaultLogFunction(level, RCTLogSource.native, file, lineNumber as NSNumber, "AvoidSoftInput.\(function): \(message)")
+        #endif
+    }
+}
