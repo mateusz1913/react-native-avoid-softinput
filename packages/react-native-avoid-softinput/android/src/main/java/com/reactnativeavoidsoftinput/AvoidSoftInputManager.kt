@@ -35,6 +35,7 @@ class AvoidSoftInputManager(private val context: ReactContext) {
   private var mListener: ((offset: Int) -> Unit)? = null
   private var mPreviousFocusedView: View? = null
   private var mPreviousRootView: View? = null
+  private var mPreviousScrollView: ScrollView? = null
   private var mScrollY: Int = 0
   private var mShouldCheckForAvoidSoftInputView = false
   private var mShowAnimationDelay: Long = 0
@@ -169,7 +170,7 @@ class AvoidSoftInputManager(private val context: ReactContext) {
   }
 
   private fun setOffset(from: Int, to: Int, currentFocusedView: View, rootView: View) {
-    val scrollView = getScrollViewParent(currentFocusedView, rootView)
+    val scrollView = getScrollViewParent(currentFocusedView, rootView) ?: mPreviousScrollView
     setScrollListener(scrollView, mOnScrollListener)
 
     if (scrollView != null) {
@@ -479,6 +480,7 @@ class AvoidSoftInputManager(private val context: ReactContext) {
             mScrollY = 0
             mCurrentBottomPadding = 0
             mBottomOffset = 0F
+            mPreviousScrollView = null
             mSoftInputVisible = false
           }
         })
@@ -526,6 +528,7 @@ class AvoidSoftInputManager(private val context: ReactContext) {
             onOffsetChanged(convertFromPixelToDIP(mBottomOffset.toInt()))
             mScrollY = scrollView.scrollY
             scrollView.smoothScrollTo(0, scrollView.scrollY + scrollToOffset)
+            mPreviousScrollView = scrollView
             mSoftInputVisible = true
           }
         })
