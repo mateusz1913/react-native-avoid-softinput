@@ -16,7 +16,8 @@
 		836FC8F326F9410B000ED360 /* BaseAvoidSoftInputEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836FC8F026F9410B000ED360 /* BaseAvoidSoftInputEvent.swift */; };
 		836FC8F426F9410B000ED360 /* AvoidSoftInputHiddenEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836FC8F126F9410B000ED360 /* AvoidSoftInputHiddenEvent.swift */; };
 		836FC8F526F9410B000ED360 /* AvoidSoftInputAppliedOffsetChangedEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836FC8F226F9410B000ED360 /* AvoidSoftInputAppliedOffsetChangedEvent.swift */; };
-		83BAFE7A26F7D9BD002A8D53 /* AvoidSoftInputProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83BAFE7926F7D9BC002A8D53 /* AvoidSoftInputProtocol.swift */; };
+		8382C4BF27F0780E00536B68 /* AvoidSoftInputHeightChangedEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8382C4BE27F0780E00536B68 /* AvoidSoftInputHeightChangedEvent.swift */; };
+		8382C4C127F0781A00536B68 /* AvoidSoftInputManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8382C4C027F0781A00536B68 /* AvoidSoftInputManager.swift */; };
 		83BF566226F7995A009C1F11 /* AvoidSoftInputShownEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83BF566026F7995A009C1F11 /* AvoidSoftInputShownEvent.swift */; };
 /* End PBXBuildFile section */
 
@@ -44,7 +45,8 @@
 		836FC8F026F9410B000ED360 /* BaseAvoidSoftInputEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BaseAvoidSoftInputEvent.swift; path = events/BaseAvoidSoftInputEvent.swift; sourceTree = "<group>"; };
 		836FC8F126F9410B000ED360 /* AvoidSoftInputHiddenEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AvoidSoftInputHiddenEvent.swift; path = events/AvoidSoftInputHiddenEvent.swift; sourceTree = "<group>"; };
 		836FC8F226F9410B000ED360 /* AvoidSoftInputAppliedOffsetChangedEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AvoidSoftInputAppliedOffsetChangedEvent.swift; path = events/AvoidSoftInputAppliedOffsetChangedEvent.swift; sourceTree = "<group>"; };
-		83BAFE7926F7D9BC002A8D53 /* AvoidSoftInputProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AvoidSoftInputProtocol.swift; sourceTree = "<group>"; };
+		8382C4BE27F0780E00536B68 /* AvoidSoftInputHeightChangedEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AvoidSoftInputHeightChangedEvent.swift; path = events/AvoidSoftInputHeightChangedEvent.swift; sourceTree = "<group>"; };
+		8382C4C027F0781A00536B68 /* AvoidSoftInputManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AvoidSoftInputManager.swift; sourceTree = "<group>"; };
 		83BF566026F7995A009C1F11 /* AvoidSoftInputShownEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AvoidSoftInputShownEvent.swift; path = events/AvoidSoftInputShownEvent.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -70,11 +72,11 @@
 		58B511D21A9E6C8500147676 = {
 			isa = PBXGroup;
 			children = (
-				83BAFE7926F7D9BC002A8D53 /* AvoidSoftInputProtocol.swift */,
 				83BF566426F7996E009C1F11 /* events */,
 				83693C9B26973C8800AF5E7E /* AvoidSoftinput-Bridging-Header.h */,
 				83693C9726973C8800AF5E7E /* AvoidSoftInput.m */,
 				83693C9826973C8800AF5E7E /* AvoidSoftInput.swift */,
+				8382C4C027F0781A00536B68 /* AvoidSoftInputManager.swift */,
 				83693C9A26973C8800AF5E7E /* AvoidSoftInputUtils.swift */,
 				83693C9926973C8800AF5E7E /* AvoidSoftInputView.swift */,
 				83693C9D26973C8800AF5E7E /* AvoidSoftInputViewManager.m */,
@@ -86,6 +88,7 @@
 		83BF566426F7996E009C1F11 /* events */ = {
 			isa = PBXGroup;
 			children = (
+				8382C4BE27F0780E00536B68 /* AvoidSoftInputHeightChangedEvent.swift */,
 				836FC8F226F9410B000ED360 /* AvoidSoftInputAppliedOffsetChangedEvent.swift */,
 				836FC8F126F9410B000ED360 /* AvoidSoftInputHiddenEvent.swift */,
 				836FC8F026F9410B000ED360 /* BaseAvoidSoftInputEvent.swift */,
@@ -151,9 +154,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8382C4C127F0781A00536B68 /* AvoidSoftInputManager.swift in Sources */,
 				836FC8F526F9410B000ED360 /* AvoidSoftInputAppliedOffsetChangedEvent.swift in Sources */,
+				8382C4BF27F0780E00536B68 /* AvoidSoftInputHeightChangedEvent.swift in Sources */,
 				83693CA126973C8800AF5E7E /* AvoidSoftInputUtils.swift in Sources */,
-				83BAFE7A26F7D9BD002A8D53 /* AvoidSoftInputProtocol.swift in Sources */,
 				83693CA326973C8800AF5E7E /* AvoidSoftInputViewManager.m in Sources */,
 				83693C9F26973C8800AF5E7E /* AvoidSoftInput.swift in Sources */,
 				83693C9E26973C8800AF5E7E /* AvoidSoftInput.m in Sources */,
