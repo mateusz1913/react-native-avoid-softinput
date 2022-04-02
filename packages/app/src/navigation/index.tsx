@@ -17,7 +17,7 @@ import type { RootStackParamList } from './types';
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export const Navigation: React.FC = () => {
-  return <Stack.Navigator>
+  return <Stack.Navigator screenOptions={{ gestureEnabled: true, fullScreenGestureEnabled: true }}>
     <Stack.Screen name={ROUTES.Home} component={HomeScreen} />
     <Stack.Screen name={ROUTES.BottomSheet} component={BottomSheetExample} />
     <Stack.Screen name={ROUTES.CustomAnimationConfigModule} component={CustomAnimationConfigModuleExample} />
