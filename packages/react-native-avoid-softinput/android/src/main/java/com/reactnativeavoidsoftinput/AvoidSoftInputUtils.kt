@@ -1,7 +1,7 @@
 package com.reactnativeavoidsoftinput
 
-import android.content.Context
 import android.os.Build
+import android.util.Log
 import android.view.View
 import android.view.WindowInsets
 import android.widget.ScrollView
@@ -91,5 +91,12 @@ fun getRootViewBottomInset(reactContext: ReactContext): Int? {
     Build.VERSION.SDK_INT >= Build.VERSION_CODES.R -> getRootWindowBottomInsetR(rootView)
     Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> getRootWindowBottomInsetM(rootView)
     else -> getRootWindowBottomInsetCompat(rootView)
+  }
+}
+
+object ReactNativeAvoidSoftInputLogger {
+  @JvmStatic
+  fun log(tag: String, message: String) {
+    Log.d(tag, message)
   }
 }
