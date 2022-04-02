@@ -106,6 +106,16 @@ class AvoidSoftInputManager(private val context: ReactContext) {
     val currentFocusedView = mCurrentFocusedView ?: mPreviousFocusedView
 
     if (!mIsEnabled || currentFocusedView == null) {
+      if (mSoftInputVisible && to == 0) {
+        // Handle case when padding was applied but focused view was unmounted,
+        // or screen was dismissed from navigation stack and internal values were not reset
+        mScrollY = 0
+        mCurrentBottomPadding = 0
+        mBottomOffset = 0F
+        mPreviousRootView = null
+        mPreviousScrollView = null
+        mSoftInputVisible = false
+      }
       return
     }
 
