@@ -6,8 +6,8 @@ This pull request resolves ???
 
 **Affected platforms**
 
-- [] Android
-- [] iOS
+- [ ] Android
+- [ ] iOS
 
 **Test plan/screenshots/videos**
 
