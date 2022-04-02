@@ -192,13 +192,20 @@ class AvoidSoftInputManager: NSObject {
     }
     
     private func removeOffsetInRootView(rootView: UIView) {
+        let initialRootViewFrameOriginY = rootView.frame.origin.y
         beginHideAnimation(initialOffset: bottomOffset, addedOffset: -bottomOffset)
         UIView.animate(withDuration: hideDuration, delay: hideDelay, options: [.beginFromCurrentState, easingOption]) {
             self.setupHideAnimationTimers(rootView: rootView)
             
             rootView.frame.origin.y += self.bottomOffset // at the end, origin.y should be equal to 0
         } completion: { isCompleted in
-            self.completeHideAnimation()
+            if initialRootViewFrameOriginY == rootView.frame.origin.y {
+                // https://github.com/mateusz1913/react-native-avoid-softinput/issues/54
+                // Handle case when user tries to swipe-to-dismiss screen, but finally aborts it
+                self.completeHideAnimation(with: self.bottomOffset)
+            } else {
+                self.completeHideAnimation()
+            }
         }
     }
     
@@ -214,11 +221,13 @@ class AvoidSoftInputManager: NSObject {
         
         let firstResponderDistanceToBottom = UIScreen.main.bounds.size.height - (firstResponderPosition.y + firstResponder.frame.height) - bottomSafeInset
         
-        bottomOffset = max(offset - firstResponderDistanceToBottom, 0) + avoidOffset
+        let newOffset = max(offset - firstResponderDistanceToBottom, 0) + avoidOffset
         
-        if (bottomOffset <= 0) {
+        if (newOffset <= 0) {
             return
         }
+        
+        bottomOffset = newOffset
         
         beginShowAnimation(initialOffset: 0, addedOffset: bottomOffset)
         UIView.animate(withDuration: showDuration, delay: showDelay, options: [.beginFromCurrentState, easingOption]) {
@@ -307,6 +316,8 @@ class AvoidSoftInputManager: NSObject {
     }
     
     private func removeOffsetInScrollView(scrollView: UIScrollView, rootView: UIView) {
+        let initialScrollViewContentInset = scrollView.contentInset
+        let initialScrollViewScrollIndicatorInsets = scrollView.scrollIndicatorInsets
         beginHideAnimation(initialOffset: bottomOffset, addedOffset: -bottomOffset)
         UIView.animate(withDuration: hideDuration, delay: hideDelay, options: [.beginFromCurrentState, easingOption]) {
             self.setupHideAnimationTimers(rootView: rootView)
@@ -316,7 +327,13 @@ class AvoidSoftInputManager: NSObject {
             self.scrollContentInset = .zero
             self.scrollIndicatorInsets = .zero
         } completion: { isCompleted in
-            self.completeHideAnimation()
+            if initialScrollViewContentInset == scrollView.contentInset && initialScrollViewScrollIndicatorInsets == scrollView.scrollIndicatorInsets {
+                // https://github.com/mateusz1913/react-native-avoid-softinput/issues/54
+                // Handle case when user tries to swipe-to-dismiss screen, but finally aborts it
+                self.completeHideAnimation(with: self.bottomOffset)
+            } else {
+                self.completeHideAnimation()
+            }
         }
     }
     
@@ -334,11 +351,13 @@ class AvoidSoftInputManager: NSObject {
         
         let scrollToOffset = getScrollToOffset(softInputHeight: offset, firstResponder: firstResponder, scrollView: scrollView, rootView: rootView)
         
-        bottomOffset = max(offset - scrollViewDistanceToBottom, 0) + avoidOffset
+        let newOffset = max(offset - scrollViewDistanceToBottom, 0) + avoidOffset
         
-        if bottomOffset <= 0 {
+        if newOffset <= 0 {
             return
         }
+        
+        bottomOffset = newOffset
         
         if !softInputVisible {
             // Save original scroll insets
