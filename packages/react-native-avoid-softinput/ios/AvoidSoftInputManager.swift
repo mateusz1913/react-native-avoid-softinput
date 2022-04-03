@@ -34,6 +34,8 @@ class AvoidSoftInputManager: NSObject {
     private var showDelay: Double = SHOW_ANIMATION_DELAY_IN_SECONDS
     private var showDuration: Double = SHOW_ANIMATION_DURATION_IN_SECONDS
     private var softInputVisible: Bool = false
+    private var wasAddOffsetInRootViewAborted = false
+    private var wasAddOffsetInScrollViewAborted = false
     
     func setAvoidOffset(_ offset: NSNumber) {
         avoidOffset = CGFloat(offset.floatValue)
@@ -157,7 +159,7 @@ class AvoidSoftInputManager: NSObject {
     
     private func decreaseOffsetInRootView(from: CGFloat, to: CGFloat, rootView: UIView) {
         let addedOffset = to - from
-        let newBottomOffset = isShowAnimationRunning ? bottomOffset : bottomOffset + addedOffset
+        let newBottomOffset = isShowAnimationRunning || wasAddOffsetInRootViewAborted ? bottomOffset : bottomOffset + addedOffset
         
         if newBottomOffset < 0 {
             return
@@ -175,7 +177,7 @@ class AvoidSoftInputManager: NSObject {
     
     private func increaseOffsetInRootView(from: CGFloat, to: CGFloat, rootView: UIView) {
         let addedOffset = to - from
-        let newBottomOffset = isHideAnimationRunning ? bottomOffset : bottomOffset + addedOffset
+        let newBottomOffset = isHideAnimationRunning || wasAddOffsetInRootViewAborted ? bottomOffset : bottomOffset + addedOffset
         
         if newBottomOffset < 0 {
             return
@@ -211,6 +213,7 @@ class AvoidSoftInputManager: NSObject {
     
     private func addOffsetInRootView(_ offset: CGFloat, firstResponder: UIView, rootView: UIView) {
         guard let firstResponderPosition = firstResponder.superview?.convert(firstResponder.frame.origin, to: nil) else {
+            wasAddOffsetInRootViewAborted = true
             return
         }
         
@@ -221,13 +224,15 @@ class AvoidSoftInputManager: NSObject {
         
         let firstResponderDistanceToBottom = UIScreen.main.bounds.size.height - (firstResponderPosition.y + firstResponder.frame.height) - bottomSafeInset
         
-        let newOffset = max(offset - firstResponderDistanceToBottom, 0) + avoidOffset
+        let newOffset = max(offset - firstResponderDistanceToBottom, 0)
         
         if (newOffset <= 0) {
+            wasAddOffsetInRootViewAborted = true
             return
         }
         
-        bottomOffset = newOffset
+        wasAddOffsetInRootViewAborted = false
+        bottomOffset = newOffset + avoidOffset
         
         beginShowAnimation(initialOffset: 0, addedOffset: bottomOffset)
         UIView.animate(withDuration: showDuration, delay: showDelay, options: [.beginFromCurrentState, easingOption]) {
@@ -265,7 +270,7 @@ class AvoidSoftInputManager: NSObject {
     
     private func decreaseOffsetInScrollView(from: CGFloat, to: CGFloat, firstResponder: UIView, scrollView: UIScrollView, rootView: UIView) {
         let addedOffset = to - from
-        let newBottomOffset = isShowAnimationRunning ? bottomOffset : bottomOffset + addedOffset
+        let newBottomOffset = isShowAnimationRunning || wasAddOffsetInScrollViewAborted ? bottomOffset : bottomOffset + addedOffset
         let scrollToOffset = getScrollToOffset(softInputHeight: to, firstResponder: firstResponder, scrollView: scrollView, rootView: rootView)
         
         if newBottomOffset < 0 {
@@ -291,7 +296,7 @@ class AvoidSoftInputManager: NSObject {
     
     private func increaseOffsetInScrollView(from: CGFloat, to: CGFloat, firstResponder: UIView, scrollView: UIScrollView, rootView: UIView) {
         let addedOffset = to - from
-        let newBottomOffset = isHideAnimationRunning ? bottomOffset : bottomOffset + addedOffset
+        let newBottomOffset = isHideAnimationRunning || wasAddOffsetInScrollViewAborted ? bottomOffset : bottomOffset + addedOffset
         let scrollToOffset = getScrollToOffset(softInputHeight: to, firstResponder: firstResponder, scrollView: scrollView, rootView: rootView)
         
         if newBottomOffset < 0 {
@@ -344,6 +349,7 @@ class AvoidSoftInputManager: NSObject {
         }
         
         guard let scrollViewPosition = scrollView.superview?.convert(scrollView.frame.origin, to: nil) else {
+            wasAddOffsetInScrollViewAborted = true
             return
         }
         
@@ -351,13 +357,15 @@ class AvoidSoftInputManager: NSObject {
         
         let scrollToOffset = getScrollToOffset(softInputHeight: offset, firstResponder: firstResponder, scrollView: scrollView, rootView: rootView)
         
-        let newOffset = max(offset - scrollViewDistanceToBottom, 0) + avoidOffset
+        let newOffset = max(offset - scrollViewDistanceToBottom, 0)
         
         if newOffset <= 0 {
+            wasAddOffsetInScrollViewAborted = true
             return
         }
         
-        bottomOffset = newOffset
+        wasAddOffsetInScrollViewAborted = false
+        bottomOffset = newOffset + avoidOffset
         
         if !softInputVisible {
             // Save original scroll insets
