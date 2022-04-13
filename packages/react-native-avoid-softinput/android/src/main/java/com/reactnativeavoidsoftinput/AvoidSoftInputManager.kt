@@ -122,7 +122,7 @@ class AvoidSoftInputManager(private val context: ReactContext) {
     if (customRootView != null) {
       setOffset(from, to, currentFocusedView, customRootView)
     } else {
-      val rootView = getReactRootView(currentFocusedView) ?: (mPreviousRootView as RootView)
+      val rootView = getReactRootView(currentFocusedView) ?: (mPreviousRootView as RootView?)
 
       if (rootView !is View || (mShouldCheckForAvoidSoftInputView && checkIfNestedInAvoidSoftInputView(currentFocusedView, rootView))) {
         return
