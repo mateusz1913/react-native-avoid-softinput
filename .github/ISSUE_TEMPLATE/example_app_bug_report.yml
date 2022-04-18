@@ -1,6 +1,6 @@
-name: React Native Avoid Softinput - Bug
-description: Report a bug with React Native Avoid Softinput
-labels: [bug]
+name: React Native Avoid Softinput - Example App Bug
+description: Report a bug inside example app
+labels: [example app bug]
 body:
   - type: textarea
     attributes:
@@ -38,13 +38,12 @@ body:
         Expected behavior
     validations:
       required: true
-  - type: input
+  - type: textarea
     attributes:
       label: Reproduction
       description: |
-        It's YOUR responsibility to provide Github link to proper reproduction repository, otherwise bug will be closed without investigation.
-        Provide repro steps to README.md inside reproduction repository
+        Add steps to reproduce bug inside example app.
       placeholder: |
-        Save and respect My time, and provide link to repro...
+        Steps to reproduce...
     validations:
       required: true
