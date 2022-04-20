@@ -9,9 +9,11 @@
       "**/react-dom",
       "**/react-native",
       "**/react-native/**",
+      "**/react-native-web",
       "**/@gorhom/bottom-sheet",
       "**/react-native-gesture-handler",
-      "**/react-native-reanimated"
+      "**/react-native-reanimated",
+      "**/react-native-redash"
     ]
   },
   "scripts": {
@@ -21,7 +23,8 @@
     "prepare": "bob build && husky install",
     "release": "yarn --cwd packages/react-native-avoid-softinput release-it",
     "example:mobile": "yarn --cwd packages/mobile",
-    "bootstrap": "yarn example:mobile && yarn && yarn pods",
+    "example:web": "yarn --cwd packages/web",
+    "bootstrap": "yarn example:mobile && yarn && yarn pods && yarn example:web && yarn",
     "pods": "cd packages/mobile && pod-install --quiet && cd ../..",
     "reset": "yarn reset:node_modules && yarn reset:pods",
     "reset:node_modules": "find . -type dir -name node_modules | xargs rm -rf && rm -rf yarn.lock",
@@ -32,6 +35,8 @@
     "ios:metro": "yarn workspace @avoid-softinput-example/mobile start",
     "ios:start": "yarn workspace @avoid-softinput-example/mobile ios",
     "ios:xcode": "yarn workspace @avoid-softinput-example/mobile xcode",
+    "web:start": "yarn workspace @avoid-softinput-example/web start",
+    "web:build": "yarn workspace @avoid-softinput-example/web build",
     "docs:start": "yarn --cwd docs start --host 0.0.0.0",
     "docs:build": "yarn --cwd docs build",
     "docs:clear": "yarn --cwd docs clear"

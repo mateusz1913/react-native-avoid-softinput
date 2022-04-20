@@ -1,7 +1,7 @@
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import { NavigationContainer } from '@react-navigation/native';
 import React from 'react';
-import { StyleSheet } from 'react-native';
+import { Platform, StyleSheet } from 'react-native';
 import RNBootSplash from 'react-native-bootsplash';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -9,7 +9,9 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Navigation } from './navigation';
 
 function onNavigationReady() {
-  RNBootSplash.hide({ fade: true });
+  if (Platform.OS !== 'web') {
+    RNBootSplash.hide({ fade: true });
+  }
 }
 
 export const App: React.FC = () => {
