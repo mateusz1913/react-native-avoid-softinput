@@ -20,7 +20,7 @@ export interface AvoidSoftInputViewProps extends Omit<ViewProps, 'pointerEvents'
    */
   easing?: SoftInputEasing;
   /**
-   * @default 0 ms
+   * @default (300/0) ms (iOS/Android)
    */
   hideAnimationDelay?: number;
   /**
@@ -28,7 +28,7 @@ export interface AvoidSoftInputViewProps extends Omit<ViewProps, 'pointerEvents'
    */
   hideAnimationDuration?: number;
   /**
-   * @default (300/0) ms (iOS/Android)
+   * @default 0 ms
    */
   showAnimationDelay?: number;
   /**
