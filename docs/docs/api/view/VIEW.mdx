@@ -14,6 +14,7 @@ Extends `View` props
 | -------------------------------- | -------------------------------------------------------- | ------------------- |
 | `avoidOffset`                    | number                                                   | 0                   |
 | `easing`                         | `easeIn` or `easeInOut` or `easeOut` or `linear`         | `linear`            |
+| `enabled`                        | boolean                                                  | true                |
 | `hideAnimationDelay`             | number                                                   | 0                   |
 | `hideAnimationDuration`          | number                                                   | 220                 |
 | `onSoftInputAppliedOffsetChange` | function(e: { nativeEvent: { appliedOffset: number }})   | undefined           |
@@ -25,12 +26,13 @@ Extends `View` props
 
 ### Example
 
-```ts
+```tsx
 import { AvoidSoftInput } from "react-native-avoid-softinput";
 
 <AvoidSoftInputView
   avoidOffset={10}
   easing="easeIn"
+  enabled={true}
   hideAnimationDelay={100}
   hideAnimationDuration={300}
   onSoftInputShown={onSoftInputShown}
