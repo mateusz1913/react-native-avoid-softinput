@@ -4,6 +4,7 @@ import React from 'react';
 import { BottomSheetExample } from '../screens/BottomSheetExample';
 import { CustomAnimationConfigModuleExample } from '../screens/CustomAnimationConfigModuleExample';
 import { CustomAnimationConfigViewExample } from '../screens/CustomAnimationConfigViewExample';
+import { EnabledViewPropExample } from '../screens/EnabledViewPropExample';
 import { FormExample } from '../screens/FormExample';
 import { HomeScreen } from '../screens/HomeScreen';
 import { KeyboardTypeExample } from '../screens/KeyboardTypeExample';
@@ -22,6 +23,7 @@ export const Navigation: React.FC = () => {
     <Stack.Screen name={ROUTES.BottomSheet} component={BottomSheetExample} />
     <Stack.Screen name={ROUTES.CustomAnimationConfigModule} component={CustomAnimationConfigModuleExample} />
     <Stack.Screen name={ROUTES.CustomAnimationConfigView} component={CustomAnimationConfigViewExample} />
+    <Stack.Screen name={ROUTES.EnabledViewProp} component={EnabledViewPropExample} />
     <Stack.Screen name={ROUTES.Form} component={FormExample} />
     <Stack.Screen name={ROUTES.KeyboardType} component={KeyboardTypeExample} />
     <Stack.Screen name={ROUTES.Modal} component={ModalExample} />

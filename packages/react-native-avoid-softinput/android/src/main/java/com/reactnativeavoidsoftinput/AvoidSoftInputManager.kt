@@ -105,7 +105,7 @@ class AvoidSoftInputManager(private val context: ReactContext) {
     mCompleteSoftInputHeight = to
     val currentFocusedView = mCurrentFocusedView ?: mPreviousFocusedView
 
-    if (!mIsEnabled || currentFocusedView == null) {
+    if (currentFocusedView == null) {
       if (mSoftInputVisible && to == 0) {
         // Handle case when padding was applied but focused view was unmounted,
         // or screen was dismissed from navigation stack and internal values were not reset
@@ -197,15 +197,25 @@ class AvoidSoftInputManager(private val context: ReactContext) {
     }
     if (to == 0) {
       // HIDE
+      // Run remove offset method no matter if manager is enabled (in case applied offset is 0, it will be no-op)
       removeOffsetInRootView(rootView)
     } else if (to - from > 0 && !mSoftInputVisible) {
       // SHOW
+      if (!mIsEnabled) {
+        return
+      }
       addOffsetInRootView(to, rootView, currentFocusedView)
     } else if (to - from > 0) {
       // INCREASE
+      if (!mIsEnabled) {
+        return
+      }
       increaseOffsetInRootView(from, to, rootView)
     } else if (to - from < 0) {
       // DECREASE
+      if (!mIsEnabled) {
+        return
+      }
       decreaseOffsetInRootView(from, to, rootView)
     }
   }
@@ -373,15 +383,25 @@ class AvoidSoftInputManager(private val context: ReactContext) {
     }
     if (to == 0) {
       // HIDE
+      // Run remove offset method no matter if manager is enabled (in case applied offset is 0, it will be no-op)
       removeOffsetInScrollView(scrollView)
     } else if (to - from > 0 && !mSoftInputVisible) {
       // SHOW
+      if (!mIsEnabled) {
+        return
+      }
       addOffsetInScrollView(to, scrollView, currentFocusedView)
     } else if (to - from > 0) {
       // INCREASE
+      if (!mIsEnabled) {
+        return
+      }
       increaseOffsetInScrollView(from, to, scrollView, currentFocusedView)
     } else if (to - from < 0) {
       // DECREASE
+      if (!mIsEnabled) {
+        return
+      }
       decreaseOffsetInScrollView(from, to, scrollView, currentFocusedView)
     }
   }

@@ -4,6 +4,7 @@
 
 RCT_EXPORT_VIEW_PROPERTY(avoidOffset, NSNumber)
 RCT_EXPORT_VIEW_PROPERTY(easing, NSString)
+RCT_EXPORT_VIEW_PROPERTY(enabled, BOOL)
 RCT_EXPORT_VIEW_PROPERTY(hideAnimationDelay, NSNumber)
 RCT_EXPORT_VIEW_PROPERTY(hideAnimationDuration, NSNumber)
 RCT_EXPORT_VIEW_PROPERTY(showAnimationDelay, NSNumber)

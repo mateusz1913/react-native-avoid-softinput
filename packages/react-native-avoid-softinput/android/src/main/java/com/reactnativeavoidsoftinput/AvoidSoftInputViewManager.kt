@@ -39,6 +39,11 @@ class AvoidSoftInputViewManager: ReactClippingViewManager<AvoidSoftInputView>() 
     view.setEasing(easing)
   }
 
+  @ReactProp(name = "enabled", defaultBoolean = true)
+  fun setIsEnabled(view: AvoidSoftInputView, enabled: Boolean) {
+    view.setIsEnabled(enabled)
+  }
+
   @ReactProp(name = "hideAnimationDelay")
   fun setHideAnimationDelay(view: AvoidSoftInputView, delay: Int?) {
     view.setHideAnimationDelay(delay)
