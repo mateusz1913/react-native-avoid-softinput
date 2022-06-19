@@ -60,6 +60,11 @@ const DATA: Array<Example> = [
     label: 'Sticky footer', 
     route: ROUTES.StickyFooter,
   },
+  {
+    description: 'Check how AvoidSoftInputView when toggling enabled prop',
+    label: 'Enabled/Disabled view',
+    route: ROUTES.EnabledViewProp,
+  },
 ];
 
 export const HomeScreen: React.FC = () => {

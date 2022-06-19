@@ -98,10 +98,6 @@ class AvoidSoftInputManager: NSObject {
     }
        
     func softInputHeightWillChange(from: CGFloat, to: CGFloat, isOrientationChange: Bool, customRootView: UIView? = nil) {
-        if !isEnabled {
-            return
-        }
-        
         guard let viewController = RCTPresentedViewController() else {
             return
         }
@@ -144,15 +140,25 @@ class AvoidSoftInputManager: NSObject {
         }
         if to == 0 {
             // HIDE
+            // Run remove offset method no matter if manager is enabled (in case applied offset is 0, it will be no-op)
             removeOffsetInRootView(rootView: rootView)
         } else if to - from > 0 && (!softInputVisible || from == 0) {
             // SHOW
+            if !isEnabled {
+                return
+            }
             addOffsetInRootView(to, firstResponder: firstResponder, rootView: rootView)
         } else if to - from > 0 {
             // INCREASE
+            if !isEnabled {
+                return
+            }
             increaseOffsetInRootView(from: from, to: to, rootView: rootView)
         } else if to - from < 0 {
             // DECREASE
+            if !isEnabled {
+                return
+            }
             decreaseOffsetInRootView(from: from, to: to, rootView: rootView)
         }
     }
@@ -255,15 +261,25 @@ class AvoidSoftInputManager: NSObject {
         }
         if to == 0 {
             // HIDE
+            // Run remove offset method no matter if manager is enabled (in case applied offset is 0, it will be no-op)
             removeOffsetInScrollView(scrollView: scrollView, rootView: rootView)
         } else if to - from > 0 && (!softInputVisible || from == 0) {
             // SHOW
+            if !isEnabled {
+                return
+            }
             addOffsetInScrollView(to, firstResponder: firstResponder, scrollView: scrollView, rootView: rootView)
         } else if to - from > 0 {
             // INCREASE
+            if !isEnabled {
+                return
+            }
             increaseOffsetInScrollView(from: from, to: to, firstResponder: firstResponder, scrollView: scrollView, rootView: rootView)
         } else if to - from < 0 {
             // DECREASE
+            if !isEnabled {
+                return
+            }
             decreaseOffsetInScrollView(from: from, to: to, firstResponder: firstResponder, scrollView: scrollView, rootView: rootView)
         }
     }

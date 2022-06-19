@@ -41,6 +41,10 @@ class AvoidSoftInputView(
     mManager.setEasing(easing)
   }
 
+  fun setIsEnabled(enabled: Boolean) {
+    mManager.setIsEnabled(enabled)
+  }
+
   fun setHideAnimationDelay(delay: Int?) {
     mManager.setHideAnimationDelay(delay)
   }

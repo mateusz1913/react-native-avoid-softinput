@@ -22,6 +22,13 @@ class AvoidSoftInputView: RCTView {
             #endif
         }
     }
+    @objc var enabled: ObjCBool = true {
+        didSet {
+            #if os(iOS)
+            manager.setIsEnabled(enabled.boolValue)
+            #endif
+        }
+    }
     @objc var hideAnimationDelay: NSNumber? {
         didSet {
             #if os(iOS)
