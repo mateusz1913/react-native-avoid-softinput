@@ -1,0 +1,35 @@
+name: Release to NPM
+
+on: workflow_dispatch
+
+jobs:
+  npm-release:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [16.x]
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/cache@v2
+        with:
+          path: "**/node_modules"
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+      - name: Install modules
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "yarn"
+          registry-url: "https://registry.npmjs.org"
+          cache-dependency-path: "**/yarn.lock"
+      - run: yarn
+      - name: Run Release
+        run: |
+          git config --global user.email "luigimario1913@gmail.com"
+          git config --global user.name "Mateusz Mędrek"
+          echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > .npmrc
+          yarn release --ci --npm.skipChecks
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
