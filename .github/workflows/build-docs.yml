@@ -3,8 +3,16 @@ name: build-docs
 on:
   pull_request:
     branches: [master]
+    paths:
+      - "docs/**"
+      - "packages/react-native-avoid-softinput/**"
+      - ".github/workflows/build-docs.yml"
   push:
     branches: [master]
+    paths:
+      - "docs/**"
+      - "packages/react-native-avoid-softinput/**"
+      - ".github/workflows/build-docs.yml"
 
 jobs:
   checks:
