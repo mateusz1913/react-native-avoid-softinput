@@ -57,7 +57,7 @@ class AvoidSoftInputManager(private val context: ReactContext) {
       return@OnGlobalFocusChangeListener
     }
     val scrollView = getScrollViewParent(currentFocusedView, rootView) ?: return@OnGlobalFocusChangeListener
-    setScrollListener(scrollView, mOnScrollListener)
+    setScrollListener(scrollView)
     val currentFocusedViewLocation = IntArray(2)
     currentFocusedView.getLocationOnScreen(currentFocusedViewLocation)
     val currentFocusedViewDistanceToBottom = DisplayMetricsHolder.getScreenDisplayMetrics().heightPixels - (currentFocusedViewLocation[1] + currentFocusedView.height) - (getRootViewBottomInset(context) ?: 0)
@@ -68,16 +68,15 @@ class AvoidSoftInputManager(private val context: ReactContext) {
     scrollView.smoothScrollTo(0, scrollView.scrollY + scrollToOffset)
   }
 
-  private val mOnScrollListener = View.OnScrollChangeListener { _, _, scrollY, _, _ ->
-    if (mCurrentFocusedView == null) {
-      return@OnScrollChangeListener
-    }
-    mScrollY = scrollY
-  }
-
-  private fun setScrollListener(scrollView: ScrollView?, listener: View.OnScrollChangeListener?) {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-      scrollView?.setOnScrollChangeListener(listener)
+  private fun setScrollListener(scrollView: ScrollView?) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && scrollView != null) {
+      val listener = View.OnScrollChangeListener { _, _, scrollY, _, _ ->
+        if (mCurrentFocusedView == null) {
+          return@OnScrollChangeListener
+        }
+        mScrollY = scrollY
+      }
+      scrollView.setOnScrollChangeListener(listener)
     }
   }
 
@@ -181,7 +180,7 @@ class AvoidSoftInputManager(private val context: ReactContext) {
 
   private fun setOffset(from: Int, to: Int, currentFocusedView: View, rootView: View) {
     val scrollView = getScrollViewParent(currentFocusedView, rootView) ?: mPreviousScrollView
-    setScrollListener(scrollView, mOnScrollListener)
+    setScrollListener(scrollView)
 
     if (scrollView != null) {
       setOffsetInScrollView(from, to, currentFocusedView, scrollView)
