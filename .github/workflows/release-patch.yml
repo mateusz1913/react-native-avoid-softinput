@@ -1,0 +1,12 @@
+name: Patch release to NPM
+
+on: 
+  workflow_dispatch:
+
+jobs:
+  npm-release-major:
+    uses: mateusz1913/react-native-avoid-softinput/.github/workflows/npm-release-template.yml@master
+    with:
+      increment: patch
+    secrets:
+      npm_token: ${{ secrets.NPM_TOKEN }}
