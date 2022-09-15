@@ -26,3 +26,46 @@ npx pod-install
 Library on iOS uses Swift. Make sure that your project has bridging header configured (the easiest way is to create empty `.swift` file in XCode, which will offer to create bridging header).
 
 :::
+
+## Troubleshooting
+
+Sometimes when using this library you may find that your build fails due to incorrect `kotlinVersion` in your native project. To catch this you can do this depending on your configuration:
+
+- **React Native project and Expo bare workflow**
+
+you could modify `android/build.gradle` inside your android folder to specify your `kotlinVersion`
+
+```java
+buildscript {
+    ext {
+        kotlinVersion = "1.6.10"  // <-- add a version here for resolution
+    }
+}
+```
+
+- **Expo managed workflow**
+
+Install `expo-build-properties`
+
+```sh
+npx expo install expo-build-properties
+```
+
+Add plugin inside of your app.json or app.config.js
+
+```json
+{
+  "expo": {
+    "plugins": [
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "kotlinVersion": "1.6.10"
+          }
+        }
+      ]
+    ]
+  }
+}
+```
