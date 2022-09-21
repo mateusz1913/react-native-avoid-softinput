@@ -238,7 +238,7 @@ class AvoidSoftInputManager(private val context: ReactContext) {
         startDelay = mHideAnimationDelay
         interpolator = mAnimationInterpolator
         addListener(object: AnimatorListenerAdapter() {
-          override fun onAnimationEnd(animation: Animator?) {
+          override fun onAnimationEnd(animation: Animator) {
             super.onAnimationEnd(animation)
             mIsHideAnimationRunning = false
             mHideValueAnimator = null
@@ -276,7 +276,7 @@ class AvoidSoftInputManager(private val context: ReactContext) {
         startDelay = mShowAnimationDelay
         interpolator = mAnimationInterpolator
         addListener(object: AnimatorListenerAdapter() {
-          override fun onAnimationEnd(animation: Animator?) {
+          override fun onAnimationEnd(animation: Animator) {
             super.onAnimationEnd(animation)
             mIsShowAnimationRunning = false
             mShowValueAnimator = null
@@ -307,7 +307,7 @@ class AvoidSoftInputManager(private val context: ReactContext) {
         startDelay = mHideAnimationDelay
         interpolator = mAnimationInterpolator
         addListener(object: AnimatorListenerAdapter() {
-          override fun onAnimationEnd(animation: Animator?) {
+          override fun onAnimationEnd(animation: Animator) {
             super.onAnimationEnd(animation)
             mIsHideAnimationRunning = false
             mHideValueAnimator = null
@@ -350,7 +350,7 @@ class AvoidSoftInputManager(private val context: ReactContext) {
         startDelay = mShowAnimationDelay
         interpolator = mAnimationInterpolator
         addListener(object: AnimatorListenerAdapter() {
-          override fun onAnimationEnd(animation: Animator?) {
+          override fun onAnimationEnd(animation: Animator) {
             super.onAnimationEnd(animation)
             mIsShowAnimationRunning = false
             mShowValueAnimator = null
@@ -425,7 +425,7 @@ class AvoidSoftInputManager(private val context: ReactContext) {
         startDelay = mHideAnimationDelay
         interpolator = mAnimationInterpolator
         addListener(object: AnimatorListenerAdapter() {
-          override fun onAnimationEnd(animation: Animator?) {
+          override fun onAnimationEnd(animation: Animator) {
             super.onAnimationEnd(animation)
             mIsHideAnimationRunning = false
             mHideValueAnimator = null
@@ -465,7 +465,7 @@ class AvoidSoftInputManager(private val context: ReactContext) {
         startDelay = mShowAnimationDelay
         interpolator = mAnimationInterpolator
         addListener(object: AnimatorListenerAdapter() {
-          override fun onAnimationEnd(animation: Animator?) {
+          override fun onAnimationEnd(animation: Animator) {
             super.onAnimationEnd(animation)
             mIsShowAnimationRunning = false
             mShowValueAnimator = null
@@ -497,7 +497,7 @@ class AvoidSoftInputManager(private val context: ReactContext) {
         startDelay = mHideAnimationDelay
         interpolator = mAnimationInterpolator
         addListener(object: AnimatorListenerAdapter() {
-          override fun onAnimationEnd(animation: Animator?) {
+          override fun onAnimationEnd(animation: Animator) {
             super.onAnimationEnd(animation)
             mIsHideAnimationRunning = false
             mHideValueAnimator = null
@@ -547,7 +547,7 @@ class AvoidSoftInputManager(private val context: ReactContext) {
         startDelay = mShowAnimationDelay
         interpolator = mAnimationInterpolator
         addListener(object: AnimatorListenerAdapter() {
-          override fun onAnimationEnd(animation: Animator?) {
+          override fun onAnimationEnd(animation: Animator) {
             super.onAnimationEnd(animation)
             mIsShowAnimationRunning = false
             mShowValueAnimator = null
