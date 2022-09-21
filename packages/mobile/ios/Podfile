@@ -14,7 +14,12 @@ target 'AvoidSoftinputExample' do
 
   pod 'react-native-avoid-softinput', :path => '../../react-native-avoid-softinput'
 
+  # For showing tap/touch indicator inside example app
   pod 'ShowTime'
+
+  # For Swift code linting
+  pod 'SwiftFormat/CLI', '~> 0.49'
+  pod 'SwiftLint'
 
   # Enables Flipper.
   #

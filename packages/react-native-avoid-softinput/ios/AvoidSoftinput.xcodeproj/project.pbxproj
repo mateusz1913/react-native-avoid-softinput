@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8302DB6C28DB7C290064B2BD /* AvoidSoftInputConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302DB6B28DB7C290064B2BD /* AvoidSoftInputConstants.swift */; };
 		83693C9E26973C8800AF5E7E /* AvoidSoftInput.m in Sources */ = {isa = PBXBuildFile; fileRef = 83693C9726973C8800AF5E7E /* AvoidSoftInput.m */; };
 		83693C9F26973C8800AF5E7E /* AvoidSoftInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83693C9826973C8800AF5E7E /* AvoidSoftInput.swift */; };
 		83693CA026973C8800AF5E7E /* AvoidSoftInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83693C9926973C8800AF5E7E /* AvoidSoftInputView.swift */; };
@@ -35,6 +36,7 @@
 
 /* Begin PBXFileReference section */
 		134814201AA4EA6300B7C361 /* libAvoidSoftinput.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libAvoidSoftinput.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		8302DB6B28DB7C290064B2BD /* AvoidSoftInputConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AvoidSoftInputConstants.swift; sourceTree = "<group>"; };
 		83693C9726973C8800AF5E7E /* AvoidSoftInput.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AvoidSoftInput.m; sourceTree = "<group>"; };
 		83693C9826973C8800AF5E7E /* AvoidSoftInput.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AvoidSoftInput.swift; sourceTree = "<group>"; };
 		83693C9926973C8800AF5E7E /* AvoidSoftInputView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AvoidSoftInputView.swift; sourceTree = "<group>"; };
@@ -76,6 +78,7 @@
 				83693C9B26973C8800AF5E7E /* AvoidSoftinput-Bridging-Header.h */,
 				83693C9726973C8800AF5E7E /* AvoidSoftInput.m */,
 				83693C9826973C8800AF5E7E /* AvoidSoftInput.swift */,
+				8302DB6B28DB7C290064B2BD /* AvoidSoftInputConstants.swift */,
 				8382C4C027F0781A00536B68 /* AvoidSoftInputManager.swift */,
 				83693C9A26973C8800AF5E7E /* AvoidSoftInputUtils.swift */,
 				83693C9926973C8800AF5E7E /* AvoidSoftInputView.swift */,
@@ -165,6 +168,7 @@
 				83693CA026973C8800AF5E7E /* AvoidSoftInputView.swift in Sources */,
 				83693CA226973C8800AF5E7E /* AvoidSoftInputViewManager.swift in Sources */,
 				836FC8F326F9410B000ED360 /* BaseAvoidSoftInputEvent.swift in Sources */,
+				8302DB6C28DB7C290064B2BD /* AvoidSoftInputConstants.swift in Sources */,
 				83BF566226F7995A009C1F11 /* AvoidSoftInputShownEvent.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
