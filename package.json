@@ -17,12 +17,14 @@
   "scripts": {
     "test": "jest",
     "typescript": "tsc --noEmit",
-    "lint": "eslint \"**/*.{js,ts,tsx}\"",
+    "lint:js:ci": "eslint",
+    "lint:js": "eslint \"**/*.{js,ts,tsx}\"",
     "lint:android": "./packages/react-native-avoid-softinput/android/gradlew -p packages/react-native-avoid-softinput/android spotlessCheck --quiet",
+    "lint:ios:ci": "swiftlint lint --config ./packages/mobile/ios/.swiftlint.yml --quiet",
     "lint:ios": "./packages/mobile/ios/Pods/SwiftLint/swiftlint lint --config ./packages/mobile/ios/.swiftlint.yml --quiet",
     "format:android": "./packages/react-native-avoid-softinput/android/gradlew -p packages/react-native-avoid-softinput/android spotlessApply",
     "format:ios": "./packages/mobile/ios/Pods/SwiftFormat/CommandLineTool/swiftformat ./packages/react-native-avoid-softinput/ios ./packages/mobile/ios --config ./packages/mobile/ios/.swiftformat",
-    "prepare": "bob build && husky install",
+    "prepare": "bob build",
     "release": "yarn --cwd packages/react-native-avoid-softinput release-it",
     "example:mobile": "yarn --cwd packages/mobile",
     "bootstrap": "yarn example:mobile && yarn && yarn pods",
@@ -51,6 +53,7 @@
     "registry": "https://registry.npmjs.org/"
   },
   "devDependencies": {
+    "@arkweid/lefthook": "^0.7.7",
     "@commitlint/config-conventional": "13.1.0",
     "@release-it/conventional-changelog": "3.3.0",
     "@typescript-eslint/eslint-plugin": "4.31.2",
@@ -62,7 +65,6 @@
     "eslint-plugin-react": "7.26.0",
     "eslint-plugin-react-hooks": "^4.2.0",
     "eslint-plugin-react-native": "^3.11.0",
-    "husky": "^7.0.0",
     "pod-install": "0.1.27",
     "react-native-builder-bob": "^0.18.1",
     "release-it": "14.11.6",

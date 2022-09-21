@@ -1,0 +1,45 @@
+name: lint-js
+
+on:
+  pull_request:
+    branches: [master]
+    paths:
+      - "packages/app/src/**"
+      - "packages/app/package.json"
+      - "packages/app/tsconfig.json"
+      - "packages/mobile/babel.config.js"
+      - "packages/mobile/index.tsx"
+      - "packages/mobile/metro.config.js"
+      - "packages/mobile/package.json"
+      - "packages/react-native-avoid-softinput/src/**"
+      - "packages/react-native-avoid-softinput/src/package.json"
+      - ".eslintrc.js"
+      - "package.json"
+      - "tsconfig.base.json"
+      - "tsconfig.build.json"
+      - "tsconfig.jest.json"
+      - "tsconfig.json"
+      - ".github/workflows/lint-js.yml"
+
+jobs:
+  lint-js:
+    name: Lint JS/TS
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/cache@v2
+        with:
+          path: "**/node_modules"
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+      - name: Install modules
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "yarn"
+          registry-url: "https://registry.npmjs.org"
+          cache-dependency-path: "**/yarn.lock"
+      - run: yarn
+      - name: ESLint
+        run: yarn lint:js
+      - name: TypeScript
+        run: yarn typescript
