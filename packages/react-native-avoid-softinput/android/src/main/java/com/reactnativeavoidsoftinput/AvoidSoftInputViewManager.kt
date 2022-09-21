@@ -8,7 +8,10 @@ import com.facebook.react.bridge.JSApplicationIllegalArgumentException
 import com.facebook.react.bridge.ReadableArray
 import com.facebook.react.bridge.ReadableMap
 import com.facebook.react.common.MapBuilder
-import com.facebook.react.uimanager.*
+import com.facebook.react.uimanager.PixelUtil
+import com.facebook.react.uimanager.Spacing
+import com.facebook.react.uimanager.ThemedReactContext
+import com.facebook.react.uimanager.ViewProps
 import com.facebook.react.uimanager.annotations.ReactProp
 import com.facebook.react.uimanager.annotations.ReactPropGroup
 import com.facebook.react.views.view.ReactClippingViewManager
@@ -20,7 +23,7 @@ import com.reactnativeavoidsoftinput.events.AvoidSoftInputHeightChangedEvent
 import com.reactnativeavoidsoftinput.events.AvoidSoftInputHiddenEvent
 import com.reactnativeavoidsoftinput.events.AvoidSoftInputShownEvent
 
-class AvoidSoftInputViewManager: ReactClippingViewManager<AvoidSoftInputView>() {
+class AvoidSoftInputViewManager : ReactClippingViewManager<AvoidSoftInputView>() {
   override fun getName(): String {
     return AvoidSoftInputView.NAME
   }
@@ -158,14 +161,30 @@ class AvoidSoftInputViewManager: ReactClippingViewManager<AvoidSoftInputView>() 
       view.hitSlopRect = null
     } else {
       view.hitSlopRect = Rect(
-        if (hitSlop.hasKey("left")) PixelUtil.toPixelFromDIP(hitSlop.getDouble("left"))
-          .toInt() else 0,
-        if (hitSlop.hasKey("top")) PixelUtil.toPixelFromDIP(hitSlop.getDouble("top"))
-          .toInt() else 0,
-        if (hitSlop.hasKey("right")) PixelUtil.toPixelFromDIP(hitSlop.getDouble("right"))
-          .toInt() else 0,
-        if (hitSlop.hasKey("bottom")) PixelUtil.toPixelFromDIP(hitSlop.getDouble("bottom"))
-          .toInt() else 0
+        if (hitSlop.hasKey("left")) {
+          PixelUtil.toPixelFromDIP(hitSlop.getDouble("left"))
+            .toInt()
+        } else {
+          0
+        },
+        if (hitSlop.hasKey("top")) {
+          PixelUtil.toPixelFromDIP(hitSlop.getDouble("top"))
+            .toInt()
+        } else {
+          0
+        },
+        if (hitSlop.hasKey("right")) {
+          PixelUtil.toPixelFromDIP(hitSlop.getDouble("right"))
+            .toInt()
+        } else {
+          0
+        },
+        if (hitSlop.hasKey("bottom")) {
+          PixelUtil.toPixelFromDIP(hitSlop.getDouble("bottom"))
+            .toInt()
+        } else {
+          0
+        }
       )
     }
   }
@@ -173,10 +192,14 @@ class AvoidSoftInputViewManager: ReactClippingViewManager<AvoidSoftInputView>() 
   @ReactProp(name = "nativeBackgroundAndroid")
   fun setNativeBackground(view: ReactViewGroup, bg: ReadableMap?) {
     view.setTranslucentBackgroundDrawable(
-      if (bg == null) null else ReactDrawableHelper.createDrawableFromJSDescription(
-        view.context,
-        bg
-      )
+      if (bg == null) {
+        null
+      } else {
+        ReactDrawableHelper.createDrawableFromJSDescription(
+          view.context,
+          bg
+        )
+      }
     )
   }
 
@@ -184,15 +207,20 @@ class AvoidSoftInputViewManager: ReactClippingViewManager<AvoidSoftInputView>() 
   @ReactProp(name = "nativeForegroundAndroid")
   fun setNativeForeground(view: ReactViewGroup, fg: ReadableMap?) {
     view.foreground =
-      if (fg == null) null else ReactDrawableHelper.createDrawableFromJSDescription(
-        view.context,
-        fg
-      )
+      if (fg == null) {
+        null
+      } else {
+        ReactDrawableHelper.createDrawableFromJSDescription(
+          view.context,
+          fg
+        )
+      }
   }
 
   @ReactProp(name = ViewProps.NEEDS_OFFSCREEN_ALPHA_COMPOSITING)
   fun setNeedsOffscreenAlphaCompositing(
-    view: ReactViewGroup, needsOffscreenAlphaCompositing: Boolean
+    view: ReactViewGroup,
+    needsOffscreenAlphaCompositing: Boolean
   ) {
     view.setNeedsOffscreenAlphaCompositing(needsOffscreenAlphaCompositing)
   }

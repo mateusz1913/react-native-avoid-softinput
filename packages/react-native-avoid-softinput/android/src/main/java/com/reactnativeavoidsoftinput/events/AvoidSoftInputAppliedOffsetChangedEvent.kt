@@ -4,7 +4,7 @@ import com.facebook.react.bridge.Arguments
 import com.facebook.react.uimanager.events.Event
 import com.facebook.react.uimanager.events.RCTEventEmitter
 
-class AvoidSoftInputAppliedOffsetChangedEvent(viewId: Int, private val offset: Int): Event<AvoidSoftInputAppliedOffsetChangedEvent>(viewId) {
+class AvoidSoftInputAppliedOffsetChangedEvent(viewId: Int, private val offset: Int) : Event<AvoidSoftInputAppliedOffsetChangedEvent>(viewId) {
   override fun getEventName() = NAME
 
   override fun dispatch(rctEventEmitter: RCTEventEmitter?) {

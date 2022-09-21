@@ -4,10 +4,10 @@ import android.animation.TimeInterpolator
 import android.view.animation.LinearInterpolator
 import android.view.animation.PathInterpolator
 
-class AvoidSoftInputInterpolator: TimeInterpolator {
+class AvoidSoftInputInterpolator : TimeInterpolator {
   private val linearInterpolator = LinearInterpolator()
   private val pathInterpolator = PathInterpolator(0.42F, 0F, 1F, 1F)
-  private var mMode = MODE.LINEAR;
+  private var mMode = MODE.LINEAR
 
   var mode: MODE
     get() = mMode
