@@ -1,29 +1,31 @@
 class BaseAvoidSoftInputEvent: NSObject, RCTEvent {
+    // swiftlint:disable implicitly_unwrapped_optional
     var viewTag: NSNumber!
+    // swiftlint:disable implicitly_unwrapped_optional
     var eventName: String!
     var coalescingKey: UInt16 = 0
-    
+
     var height: CGFloat = 0
-    let SOFT_INPUT_HEIGHT_KEY = "softInputHeight"
-    
+
     func canCoalesce() -> Bool {
         return false
     }
-    
+
+    // swiftlint:disable implicitly_unwrapped_optional
     func coalesce(with newEvent: RCTEvent!) -> RCTEvent! {
         return newEvent
     }
-    
+
     static func moduleDotMethod() -> String! {
         return "RCTEventEmitter.receiveEvent"
     }
-    
+
     func arguments() -> [Any]! {
-        return [self.viewTag, RCTNormalizeInputEventName(self.eventName), [SOFT_INPUT_HEIGHT_KEY: self.height]]
+        return [viewTag!, RCTNormalizeInputEventName(eventName)!, [AvoidSoftInputConstants.softInputHeightKey: height]]
     }
-    
+
     init(reactTag: NSNumber, height: CGFloat) {
-        self.viewTag = reactTag
+        viewTag = reactTag
         self.height = height
     }
 }

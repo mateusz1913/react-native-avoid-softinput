@@ -3,7 +3,7 @@ func findFirstResponder(view: UIView) -> UIView? {
         return view
     }
 
-    if view.subviews.count > 0 {
+    if !view.subviews.isEmpty {
         for subview in view.subviews {
             if let v = findFirstResponder(view: subview) {
                 return v
@@ -13,7 +13,7 @@ func findFirstResponder(view: UIView) -> UIView? {
 
     return nil
 }
-    
+
 func findScrollViewForFirstResponder(view: UIView, rootView: UIView) -> UIScrollView? {
     guard let superview = view.superview else {
         return nil
@@ -37,7 +37,7 @@ func getReactRootView(withRootViewController viewController: UIViewController) -
     if viewController.view is RCTRootView {
         return viewController.view.subviews[0] as! RCTRootContentView
     }
-    
+
     return viewController.view
 }
 
@@ -45,19 +45,31 @@ func checkIfNestedInAvoidSoftInputView(view: UIView) -> Bool {
     guard let superview = view.superview else {
         return false
     }
-    
+
     if superview is AvoidSoftInputView {
         return true
     }
-    
+
     return checkIfNestedInAvoidSoftInputView(view: superview)
 }
 
 enum ReactNativeAvoidSoftInputLogger {
     @inlinable
-    static func log(level: RCTLogLevel, message: String, _ file: String = #file, _ lineNumber: Int = #line, _ function: String = #function) {
+    static func log(
+        level: RCTLogLevel,
+        message: String,
+        _ file: String = #file,
+        _ lineNumber: Int = #line,
+        _ function: String = #function
+    ) {
         #if DEBUG
-        RCTDefaultLogFunction(level, RCTLogSource.native, file, lineNumber as NSNumber, "AvoidSoftInput.\(function): \(message)")
+            RCTDefaultLogFunction(
+                level,
+                RCTLogSource.native,
+                file,
+                lineNumber as NSNumber,
+                "AvoidSoftInput.\(function): \(message)"
+            )
         #endif
     }
 }
