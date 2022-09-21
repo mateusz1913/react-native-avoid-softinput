@@ -1,5 +1,5 @@
 import { useFocusEffect } from '@react-navigation/native';
-import React, { useCallback, useRef, useState } from 'react';
+import * as React from 'react';
 import type { TextInput } from 'react-native';
 import { Image, ScrollView, StyleSheet, View } from 'react-native';
 import { AvoidSoftInput, AvoidSoftInputView } from 'react-native-avoid-softinput';
@@ -12,13 +12,13 @@ import { styles as commonStyles } from '../consts/styles';
 const icon = require('../../assets/AppIconTransparent.png');
 
 export const EnabledViewPropExample: React.FC = () => {
-  const inputRef = useRef<TextInput>(null);
-  const [ enabled, setEnabled ] = useState(false);
+  const inputRef = React.useRef<TextInput>(null);
+  const [ enabled, setEnabled ] = React.useState(false);
 
-  const onFocusEffect = useCallback(() => {
-    AvoidSoftInput.setAdjustNothing();
+  const onFocusEffect = React.useCallback(() => {
+    AvoidSoftInput.setShouldMimicIOSBehavior(true);
     return () => {
-      AvoidSoftInput.setDefaultAppSoftInputMode();
+      AvoidSoftInput.setShouldMimicIOSBehavior(false);
     };
   }, []);
 

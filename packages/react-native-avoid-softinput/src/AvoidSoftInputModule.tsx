@@ -48,6 +48,19 @@ function setEnabled(enabled: boolean) {
 }
 
 /**
+ * Set should mimic IOS ime behavior (true), or let Android OS handle (resize) window (false)
+ * 
+ * @platform `Android`
+ */
+function setShouldMimicIOSBehavior(shouldMimic: boolean) {
+  if (Platform.OS !== 'android') {
+    return;
+  }
+
+  module.setShouldMimicIOSBehavior(shouldMimic);
+}
+
+/**
  * Sets additional offset that will be added to value applied to root view/scroll view
  * 
  * Can be negative (then final value will be smaller, so that some part of focused view will be covered by soft input frame)
@@ -174,6 +187,7 @@ export const AvoidSoftInput = {
   setEnabled,
   setHideAnimationDelay,
   setHideAnimationDuration,
+  setShouldMimicIOSBehavior,
   setShowAnimationDelay,
   setShowAnimationDuration,
 };

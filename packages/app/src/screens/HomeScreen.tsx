@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useCallback } from 'react';
+import * as React from 'react';
 import type { ListRenderItem } from 'react-native';
 import {
   FlatList,
@@ -70,7 +70,7 @@ const DATA: Array<Example> = [
 export const HomeScreen: React.FC = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
 
-  const renderItem = useCallback<ListRenderItem<Example>>(({ item }) => {
+  const renderItem = React.useCallback<ListRenderItem<Example>>(({ item }) => {
     return <View style={styles.item}>
       <Button
         onPress={() => navigation.navigate(item.route)}

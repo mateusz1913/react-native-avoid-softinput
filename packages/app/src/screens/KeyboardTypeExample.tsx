@@ -1,5 +1,5 @@
 import { useFocusEffect } from '@react-navigation/native';
-import React, { useCallback, useRef } from 'react';
+import * as React from 'react';
 import type { TextInput } from 'react-native';
 import { Image, ScrollView, StyleSheet, View } from 'react-native';
 import { AvoidSoftInput } from 'react-native-avoid-softinput';
@@ -19,7 +19,7 @@ type InputsRef = {
 }
 
 export const KeyboardTypeExample: React.FC = () => {
-  const inputsRef = useRef<InputsRef>({
+  const inputsRef = React.useRef<InputsRef>({
     plain: null,
     email: null,
     password: null,
@@ -28,12 +28,12 @@ export const KeyboardTypeExample: React.FC = () => {
     numeric: null,
   });
 
-  const onFocusEffect = useCallback(() => {
-    AvoidSoftInput.setAdjustNothing();
+  const onFocusEffect = React.useCallback(() => {
+    AvoidSoftInput.setShouldMimicIOSBehavior(true);
     AvoidSoftInput.setEnabled(true);
     return () => {
       AvoidSoftInput.setEnabled(false);
-      AvoidSoftInput.setDefaultAppSoftInputMode();
+      AvoidSoftInput.setShouldMimicIOSBehavior(false);
     };
   }, []);
 

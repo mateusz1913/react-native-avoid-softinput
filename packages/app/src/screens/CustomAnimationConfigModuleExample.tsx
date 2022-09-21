@@ -1,5 +1,5 @@
 import { useFocusEffect } from '@react-navigation/native';
-import React, { useCallback } from 'react';
+import * as React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { AvoidSoftInput, useSoftInputState } from 'react-native-avoid-softinput';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -7,8 +7,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import SingleInput from '../components/SingleInput';
 
 export const CustomAnimationConfigModuleExample: React.FC = () => {
-  const onFocusEffect = useCallback(() => {
-    AvoidSoftInput.setAdjustNothing();
+  const onFocusEffect = React.useCallback(() => {
+    AvoidSoftInput.setShouldMimicIOSBehavior(true);
     AvoidSoftInput.setEnabled(true);
     AvoidSoftInput.setEasing('easeOut');
     AvoidSoftInput.setHideAnimationDelay(1000);
@@ -22,7 +22,7 @@ export const CustomAnimationConfigModuleExample: React.FC = () => {
       AvoidSoftInput.setShowAnimationDelay();
       AvoidSoftInput.setShowAnimationDuration();
       AvoidSoftInput.setEnabled(false);
-      AvoidSoftInput.setDefaultAppSoftInputMode();
+      AvoidSoftInput.setShouldMimicIOSBehavior(false);
     };
   }, []);
   
