@@ -18,6 +18,7 @@
     "test": "jest",
     "typescript": "tsc --noEmit",
     "lint": "eslint \"**/*.{js,ts,tsx}\"",
+    "lint:android": "./packages/react-native-avoid-softinput/android/gradlew -p packages/react-native-avoid-softinput/android spotlessCheck --quiet",
     "prepare": "bob build && husky install",
     "release": "yarn --cwd packages/react-native-avoid-softinput release-it",
     "example:mobile": "yarn --cwd packages/mobile",

@@ -1,7 +1,13 @@
 package com.reactnativeavoidsoftinput
 
 import android.view.WindowManager
-import com.facebook.react.bridge.*
+import com.facebook.react.bridge.Arguments
+import com.facebook.react.bridge.LifecycleEventListener
+import com.facebook.react.bridge.ReactApplicationContext
+import com.facebook.react.bridge.ReactContextBaseJavaModule
+import com.facebook.react.bridge.ReactMethod
+import com.facebook.react.bridge.UiThreadUtil
+import com.facebook.react.bridge.WritableMap
 import com.facebook.react.modules.core.DeviceEventManagerModule
 
 class AvoidSoftInputModule(
@@ -121,27 +127,39 @@ class AvoidSoftInputModule(
   }
 
   private fun sendAppliedOffsetChangedEvent(offset: Int) {
-    sendEvent(SOFT_INPUT_APPLIED_OFFSET_CHANGED, Arguments.createMap().apply {
-      putInt(SOFT_INPUT_APPLIED_OFFSET_KEY, offset)
-    })
+    sendEvent(
+      SOFT_INPUT_APPLIED_OFFSET_CHANGED,
+      Arguments.createMap().apply {
+        putInt(SOFT_INPUT_APPLIED_OFFSET_KEY, offset)
+      }
+    )
   }
 
   private fun sendHeightChangedEvent(height: Int) {
-    sendEvent(SOFT_INPUT_HEIGHT_CHANGED, Arguments.createMap().apply {
-      putInt(SOFT_INPUT_HEIGHT_KEY, height)
-    })
+    sendEvent(
+      SOFT_INPUT_HEIGHT_CHANGED,
+      Arguments.createMap().apply {
+        putInt(SOFT_INPUT_HEIGHT_KEY, height)
+      }
+    )
   }
 
   private fun sendHiddenEvent(height: Int) {
-    sendEvent(SOFT_INPUT_HIDDEN, Arguments.createMap().apply {
-      putInt(SOFT_INPUT_HEIGHT_KEY, height)
-    })
+    sendEvent(
+      SOFT_INPUT_HIDDEN,
+      Arguments.createMap().apply {
+        putInt(SOFT_INPUT_HEIGHT_KEY, height)
+      }
+    )
   }
 
   private fun sendShownEvent(height: Int) {
-    sendEvent(SOFT_INPUT_SHOWN, Arguments.createMap().apply {
-      putInt(SOFT_INPUT_HEIGHT_KEY, height)
-    })
+    sendEvent(
+      SOFT_INPUT_SHOWN,
+      Arguments.createMap().apply {
+        putInt(SOFT_INPUT_HEIGHT_KEY, height)
+      }
+    )
   }
 
   override fun onHostResume() {

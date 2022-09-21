@@ -43,7 +43,7 @@ class AvoidSoftInputManager(private val context: ReactContext) {
   private var mShowValueAnimator: ValueAnimator? = null
   private var mSoftInputVisible: Boolean = false
 
-  //MARK: Listeners
+  // MARK: Listeners
   private val mOnGlobalFocusChangeListener = ViewTreeObserver.OnGlobalFocusChangeListener { oldView, newView ->
     mCurrentFocusedView = newView
     mPreviousFocusedView = oldView
@@ -80,7 +80,7 @@ class AvoidSoftInputManager(private val context: ReactContext) {
     }
   }
 
-  //MARK: Public methods
+  // MARK: Public methods
   fun cleanupHandlers(view: View?) {
     if (mIsInitialized) {
       mAvoidSoftInputProvider?.dismiss()
@@ -143,7 +143,7 @@ class AvoidSoftInputManager(private val context: ReactContext) {
     mShouldCheckForAvoidSoftInputView = shouldCheck
   }
 
-  //MARK: Props
+  // MARK: Props
   fun setAvoidOffset(avoidOffset: Float) {
     mAvoidOffset = PixelUtil.toPixelFromDIP(avoidOffset)
   }
@@ -173,7 +173,7 @@ class AvoidSoftInputManager(private val context: ReactContext) {
     mShowAnimationDuration = duration?.toLong() ?: INCREASE_PADDING_DURATION_IN_MS
   }
 
-  //MARK: Private methods
+  // MARK: Private methods
   private fun onOffsetChanged(offset: Int) {
     mListener?.let { it(offset) }
   }
@@ -189,7 +189,7 @@ class AvoidSoftInputManager(private val context: ReactContext) {
     }
   }
 
-  //MARK: set offset to root view
+  // MARK: set offset to root view
   private fun setOffsetInRootView(from: Int, to: Int, currentFocusedView: View, rootView: View) {
     if (to == from) {
       return
@@ -237,7 +237,7 @@ class AvoidSoftInputManager(private val context: ReactContext) {
         duration = mHideAnimationDuration
         startDelay = mHideAnimationDelay
         interpolator = mAnimationInterpolator
-        addListener(object: AnimatorListenerAdapter() {
+        addListener(object : AnimatorListenerAdapter() {
           override fun onAnimationEnd(animation: Animator) {
             super.onAnimationEnd(animation)
             mIsHideAnimationRunning = false
@@ -275,7 +275,7 @@ class AvoidSoftInputManager(private val context: ReactContext) {
         duration = mShowAnimationDuration
         startDelay = mShowAnimationDelay
         interpolator = mAnimationInterpolator
-        addListener(object: AnimatorListenerAdapter() {
+        addListener(object : AnimatorListenerAdapter() {
           override fun onAnimationEnd(animation: Animator) {
             super.onAnimationEnd(animation)
             mIsShowAnimationRunning = false
@@ -306,7 +306,7 @@ class AvoidSoftInputManager(private val context: ReactContext) {
         duration = mHideAnimationDuration
         startDelay = mHideAnimationDelay
         interpolator = mAnimationInterpolator
-        addListener(object: AnimatorListenerAdapter() {
+        addListener(object : AnimatorListenerAdapter() {
           override fun onAnimationEnd(animation: Animator) {
             super.onAnimationEnd(animation)
             mIsHideAnimationRunning = false
@@ -349,7 +349,7 @@ class AvoidSoftInputManager(private val context: ReactContext) {
         duration = mShowAnimationDuration
         startDelay = mShowAnimationDelay
         interpolator = mAnimationInterpolator
-        addListener(object: AnimatorListenerAdapter() {
+        addListener(object : AnimatorListenerAdapter() {
           override fun onAnimationEnd(animation: Animator) {
             super.onAnimationEnd(animation)
             mIsShowAnimationRunning = false
@@ -375,7 +375,7 @@ class AvoidSoftInputManager(private val context: ReactContext) {
     rootView.translationY = -animatedOffset
   }
 
-  //MARK: set offset to scroll view
+  // MARK: set offset to scroll view
   private fun setOffsetInScrollView(from: Int, to: Int, currentFocusedView: View, scrollView: ScrollView) {
     if (to == from) {
       return
@@ -424,7 +424,7 @@ class AvoidSoftInputManager(private val context: ReactContext) {
         duration = mHideAnimationDuration
         startDelay = mHideAnimationDelay
         interpolator = mAnimationInterpolator
-        addListener(object: AnimatorListenerAdapter() {
+        addListener(object : AnimatorListenerAdapter() {
           override fun onAnimationEnd(animation: Animator) {
             super.onAnimationEnd(animation)
             mIsHideAnimationRunning = false
@@ -464,7 +464,7 @@ class AvoidSoftInputManager(private val context: ReactContext) {
         duration = mShowAnimationDuration
         startDelay = mShowAnimationDelay
         interpolator = mAnimationInterpolator
-        addListener(object: AnimatorListenerAdapter() {
+        addListener(object : AnimatorListenerAdapter() {
           override fun onAnimationEnd(animation: Animator) {
             super.onAnimationEnd(animation)
             mIsShowAnimationRunning = false
@@ -496,7 +496,7 @@ class AvoidSoftInputManager(private val context: ReactContext) {
         duration = mHideAnimationDuration
         startDelay = mHideAnimationDelay
         interpolator = mAnimationInterpolator
-        addListener(object: AnimatorListenerAdapter() {
+        addListener(object : AnimatorListenerAdapter() {
           override fun onAnimationEnd(animation: Animator) {
             super.onAnimationEnd(animation)
             mIsHideAnimationRunning = false
@@ -546,7 +546,7 @@ class AvoidSoftInputManager(private val context: ReactContext) {
         duration = mShowAnimationDuration
         startDelay = mShowAnimationDelay
         interpolator = mAnimationInterpolator
-        addListener(object: AnimatorListenerAdapter() {
+        addListener(object : AnimatorListenerAdapter() {
           override fun onAnimationEnd(animation: Animator) {
             super.onAnimationEnd(animation)
             mIsShowAnimationRunning = false

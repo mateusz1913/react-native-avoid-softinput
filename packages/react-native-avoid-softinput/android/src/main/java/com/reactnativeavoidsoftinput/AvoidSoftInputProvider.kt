@@ -3,7 +3,11 @@ package com.reactnativeavoidsoftinput
 import android.graphics.Color
 import android.graphics.Rect
 import android.graphics.drawable.ColorDrawable
-import android.view.*
+import android.view.Gravity
+import android.view.View
+import android.view.ViewGroup
+import android.view.ViewTreeObserver
+import android.view.WindowManager
 import android.widget.PopupWindow
 import com.facebook.react.bridge.ReactContext
 import com.facebook.react.uimanager.DisplayMetricsHolder
@@ -11,7 +15,7 @@ import com.facebook.react.uimanager.PixelUtil
 import java.util.Timer
 import kotlin.concurrent.schedule
 
-class AvoidSoftInputProvider(): PopupWindow(), ViewTreeObserver.OnGlobalLayoutListener {
+class AvoidSoftInputProvider() : PopupWindow(), ViewTreeObserver.OnGlobalLayoutListener {
   private lateinit var mRootView: View
   private var mParent: View? = null
   private var mRect = Rect()
@@ -26,7 +30,7 @@ class AvoidSoftInputProvider(): PopupWindow(), ViewTreeObserver.OnGlobalLayoutLi
 
   constructor(reactContext: ReactContext) : this(reactContext, null)
 
-  constructor(reactContext: ReactContext, rootView: ViewGroup?): this() {
+  constructor(reactContext: ReactContext, rootView: ViewGroup?) : this() {
     mReactContext = reactContext
     mRootView = View(mReactContext.currentActivity)
     mParent = rootView

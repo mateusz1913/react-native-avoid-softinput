@@ -67,7 +67,8 @@ private fun getRootWindowBottomInsetR(rootView: View): Int? {
     rootView.rootWindowInsets?.getInsets(
       WindowInsets.Type.statusBars() or
         WindowInsets.Type.displayCutout() or
-        WindowInsets.Type.navigationBars())
+        WindowInsets.Type.navigationBars()
+    )
       ?: return null
   return insets.bottom
 }
