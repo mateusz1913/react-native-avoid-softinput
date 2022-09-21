@@ -5,7 +5,7 @@ pre-commit:
       # Run linter for JS/TS files if any of them are staged
       files: git diff --name-only @{push}
       glob: "*.{js,ts,jsx,tsx}"
-      run: yarn lint:js:ci ${staged_files}
+      run: yarn lint:js
     typescript:
       # Run type-checking for TS files if any of them are staged
       files: git diff --name-only @{push}

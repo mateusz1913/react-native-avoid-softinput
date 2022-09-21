@@ -1,5 +1,6 @@
 package com.reactnativeavoidsoftinput
 
+import android.view.View
 import android.view.WindowManager
 import com.facebook.react.bridge.Arguments
 import com.facebook.react.bridge.LifecycleEventListener
@@ -9,18 +10,19 @@ import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.bridge.UiThreadUtil
 import com.facebook.react.bridge.WritableMap
 import com.facebook.react.modules.core.DeviceEventManagerModule
+import com.reactnativeavoidsoftinput.listeners.SoftInputListener
 
 class AvoidSoftInputModule(
   private val reactContext: ReactApplicationContext
-) : ReactContextBaseJavaModule(reactContext), LifecycleEventListener, AvoidSoftInputProvider.SoftInputListener {
+) : ReactContextBaseJavaModule(reactContext), LifecycleEventListener, SoftInputListener {
   private var mDefaultSoftInputMode: Int = reactContext.currentActivity?.window?.attributes?.softInputMode ?: WindowManager.LayoutParams.SOFT_INPUT_STATE_UNSPECIFIED
 
   private var mManager: AvoidSoftInputManager = AvoidSoftInputManager(reactContext).apply {
     setIsEnabled(false)
-    setShouldCheckForAvoidSoftInputView(true)
     setOnOffsetChangedListener { offset: Int ->
       sendAppliedOffsetChangedEvent(offset)
     }
+    setOnSoftInputEventsListener(this@AvoidSoftInputModule)
   }
 
   override fun getName(): String = NAME
@@ -30,6 +32,11 @@ class AvoidSoftInputModule(
 
     mDefaultSoftInputMode = reactContext.currentActivity?.window?.attributes?.softInputMode ?: WindowManager.LayoutParams.SOFT_INPUT_STATE_UNSPECIFIED
     reactContext.addLifecycleEventListener(this)
+  }
+
+  @ReactMethod
+  fun setShouldMimicIOSBehavior(shouldMimic: Boolean) {
+    mManager.setShouldMimicIOSBehavior(shouldMimic)
   }
 
   @ReactMethod
@@ -114,10 +121,8 @@ class AvoidSoftInputModule(
     sendHiddenEvent(convertFromPixelToDIP(0))
   }
 
-  override fun onSoftInputHeightChange(from: Int, to: Int) {
+  override fun onSoftInputHeightChange(from: Int, to: Int, isOrientationChanged: Boolean) {
     sendHeightChangedEvent(convertFromPixelToDIP(to))
-
-    mManager.onSoftInputHeightChange(from, to)
   }
 
   private fun sendEvent(eventName: String, params: WritableMap?) {
@@ -163,13 +168,14 @@ class AvoidSoftInputModule(
   }
 
   override fun onHostResume() {
-    mManager.initializeHandlers(reactContext, this, reactContext.currentActivity?.window?.decorView?.rootView)
+    mManager.setRootView(getReactRootView(reactContext) as View?)
+    mManager.initializeHandlers()
   }
 
   override fun onHostPause() {}
 
   override fun onHostDestroy() {
-    mManager.cleanupHandlers(reactContext.currentActivity?.window?.decorView?.rootView)
+    mManager.cleanupHandlers()
   }
 
   companion object {

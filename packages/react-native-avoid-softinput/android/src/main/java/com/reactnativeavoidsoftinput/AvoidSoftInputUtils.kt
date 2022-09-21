@@ -3,13 +3,14 @@ package com.reactnativeavoidsoftinput
 import android.os.Build
 import android.util.Log
 import android.view.View
-import android.view.WindowInsets
 import android.widget.ScrollView
-import androidx.annotation.RequiresApi
-import com.facebook.react.bridge.ReactContext
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.allViews
+import com.facebook.react.bridge.ReactApplicationContext
+import com.facebook.react.uimanager.DisplayMetricsHolder
 import com.facebook.react.uimanager.PixelUtil
 import com.facebook.react.uimanager.RootView
-import kotlin.math.min
 
 fun getScrollViewParent(view: View?, rootView: View): ScrollView? {
   if (view == null || view.parent == rootView || view.parent !is View) {
@@ -38,7 +39,14 @@ fun convertFromPixelToDIP(to: Int): Int {
   return PixelUtil.toDIPFromPixel(to.toFloat()).toInt()
 }
 
-fun getReactRootView(view: View?): RootView? {
+fun getReactRootView(reactContext: ReactApplicationContext): RootView? {
+  val activity = reactContext.currentActivity ?: return null
+  val decorRootView = activity.window.decorView
+
+  return decorRootView.allViews.find { it is RootView } as RootView?
+}
+
+fun getNearestParentReactRootView(view: View?): RootView? {
   var currentView: View? = view
   while (true) {
     if (currentView == null) {
@@ -55,43 +63,23 @@ fun getReactRootView(view: View?): RootView? {
   }
 }
 
-/**
- * Get bottom navigation bar inset (if it exists), like in react-native-safe-area-context library
- *
- * https://github.com/th3rdwave/react-native-safe-area-context/blob/main/android/src/main/java/com/th3rdwave/safeareacontext/SafeAreaUtils.kt
- */
+fun getRootViewBottomInset(view: View): Int {
+  val insets = ViewCompat.getRootWindowInsets(view)?.getInsets(WindowInsetsCompat.Type.systemBars())
 
-@RequiresApi(Build.VERSION_CODES.R)
-private fun getRootWindowBottomInsetR(rootView: View): Int? {
-  val insets =
-    rootView.rootWindowInsets?.getInsets(
-      WindowInsets.Type.statusBars() or
-        WindowInsets.Type.displayCutout() or
-        WindowInsets.Type.navigationBars()
-    )
-      ?: return null
-  return insets.bottom
+  return insets?.bottom ?: 0
 }
 
-@RequiresApi(Build.VERSION_CODES.M)
-@Suppress("DEPRECATION")
-private fun getRootWindowBottomInsetM(rootView: View): Int? {
-  val insets = rootView.rootWindowInsets ?: return null
-  return min(insets.systemWindowInsetBottom, insets.stableInsetBottom)
+fun getViewDistanceToBottomEdge(view: View): Int {
+  val viewLocation = IntArray(2)
+  view.getLocationOnScreen(viewLocation)
+  return DisplayMetricsHolder.getScreenDisplayMetrics().heightPixels - (viewLocation[1] + view.height) - getRootViewBottomInset(view)
 }
 
-private fun getRootWindowBottomInsetCompat(rootView: View): Int? {
-  val visibleRect = android.graphics.Rect()
-  rootView.getWindowVisibleDisplayFrame(visibleRect)
-  return (rootView.height - visibleRect.bottom)
-}
-
-fun getRootViewBottomInset(reactContext: ReactContext): Int? {
-  val rootView = reactContext.currentActivity?.window?.decorView?.rootView ?: return null
-  return when {
-    Build.VERSION.SDK_INT >= Build.VERSION_CODES.R -> getRootWindowBottomInsetR(rootView)
-    Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> getRootWindowBottomInsetM(rootView)
-    else -> getRootWindowBottomInsetCompat(rootView)
+fun setScrollListenerCompat(scrollView: ScrollView, listener: ((scrollY: Int) -> Unit)?) {
+  if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+    scrollView.setOnScrollChangeListener { _, _, scrollY, _, _ ->
+      listener?.invoke(scrollY)
+    }
   }
 }
 

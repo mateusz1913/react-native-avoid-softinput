@@ -1,5 +1,5 @@
 import { useFocusEffect } from '@react-navigation/native';
-import React, { useCallback } from 'react';
+import * as React from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { AvoidSoftInput, useSoftInputHeightChanged } from 'react-native-avoid-softinput';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
@@ -21,11 +21,11 @@ export const StickyFooterExample: React.FC = () => {
     };
   });
 
-  const onFocusEffect = useCallback(() => {
-    AvoidSoftInput.setAdjustNothing();
+  const onFocusEffect = React.useCallback(() => {
+    AvoidSoftInput.setShouldMimicIOSBehavior(true);
 
     return () => {
-      AvoidSoftInput.setDefaultAppSoftInputMode();
+      AvoidSoftInput.setShouldMimicIOSBehavior(false);
     };
   }, []);
 

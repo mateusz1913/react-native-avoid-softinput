@@ -18,6 +18,7 @@ export const module: Module = {
   setEnabled: NOOP,
   setHideAnimationDelay: NOOP,
   setHideAnimationDuration: NOOP,
+  setShouldMimicIOSBehavior: NOOP,
   setShowAnimationDelay: NOOP,
   setShowAnimationDuration: NOOP,
 };

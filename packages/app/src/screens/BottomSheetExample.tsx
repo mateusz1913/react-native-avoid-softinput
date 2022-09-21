@@ -1,7 +1,7 @@
 import { BottomSheetModal, BottomSheetView } from '@gorhom/bottom-sheet';
 import { useBottomSheetDynamicSnapPoints } from '@gorhom/bottom-sheet';
 import { useFocusEffect } from '@react-navigation/native';
-import React, { useCallback, useRef } from 'react';
+import * as React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { AvoidSoftInput } from 'react-native-avoid-softinput';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -15,7 +15,7 @@ const SNAP_POINTS = [ 'CONTENT_HEIGHT' ];
 const Backdrop: React.FC = () => <View style={styles.backdrop} />;
 
 export const BottomSheetExample: React.FC = () => {
-  const bottomSheetModalRef = useRef<BottomSheetModal>(null);
+  const bottomSheetModalRef = React.useRef<BottomSheetModal>(null);
 
   function dismissBottomSheet() {
     bottomSheetModalRef.current?.dismiss();
@@ -32,15 +32,15 @@ export const BottomSheetExample: React.FC = () => {
     handleContentLayout,
   } = useBottomSheetDynamicSnapPoints(SNAP_POINTS);
 
-  const onFocusEffect = useCallback(() => {
-    AvoidSoftInput.setAdjustNothing();
+  const onFocusEffect = React.useCallback(() => {
+    AvoidSoftInput.setShouldMimicIOSBehavior(true);
     AvoidSoftInput.setEnabled(true);
     AvoidSoftInput.setAvoidOffset(70);
 
     return () => {
       AvoidSoftInput.setAvoidOffset(0);
       AvoidSoftInput.setEnabled(false);
-      AvoidSoftInput.setDefaultAppSoftInputMode();
+      AvoidSoftInput.setShouldMimicIOSBehavior(false);
     };
   }, []);
 
@@ -62,7 +62,7 @@ export const BottomSheetExample: React.FC = () => {
       snapPoints={animatedSnapPoints}
     >
       <BottomSheetView onLayout={handleContentLayout} style={styles.bottomSheet}>
-        <SafeAreaView edges={[ 'bottom' ]} style={styles.bottomSheet}>
+        <SafeAreaView edges={[ 'bottom', 'left', 'right' ]} style={styles.bottomSheet}>
           <Text style={styles.header}>Header</Text>
           <SingleInput style={styles.input} />
           <View style={styles.submitButtonContainer}>

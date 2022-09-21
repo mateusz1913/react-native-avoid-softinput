@@ -1,6 +1,7 @@
-import React, { useState  } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
+import * as React from 'react';
 import { Image, Modal, ScrollView, StyleSheet, View } from 'react-native';
-import { AvoidSoftInputView } from 'react-native-avoid-softinput';
+import { AvoidSoftInput, AvoidSoftInputView } from 'react-native-avoid-softinput';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import Button from '../components/Button';
@@ -12,7 +13,16 @@ import { styles as commonStyles } from '../consts/styles';
 const icon = require('../../assets/AppIconTransparent.png');
 
 export const ModalExample: React.FC = () => {
-  const [ modalVisible, setModalVisible ] = useState(false);
+  const [ modalVisible, setModalVisible ] = React.useState(false);
+
+  const onFocusEffect = React.useCallback(() => {
+    AvoidSoftInput.setShouldMimicIOSBehavior(true);
+    return () => {
+      AvoidSoftInput.setShouldMimicIOSBehavior(false);
+    };
+  }, []);
+
+  useFocusEffect(onFocusEffect);
 
   function closeModal() {
     setModalVisible(false);

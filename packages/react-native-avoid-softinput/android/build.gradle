@@ -126,9 +126,13 @@ repositories {
 }
 
 def kotlin_version = getExtOrDefault('kotlinVersion')
+def kotlin_coroutines_version = getExtOrDefault('kotlinCoroutinesVersion')
+def androidX_core_ktx_version = getExtOrDefault('androidXCoreKtxVersion')
 
 dependencies {
   // noinspection GradleDynamicVersion
   api 'com.facebook.react:react-native:+'
   implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+  implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlin_coroutines_version"
+  implementation "androidx.core:core-ktx:$androidX_core_ktx_version"
 }

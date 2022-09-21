@@ -13,6 +13,7 @@ export interface Module extends NativeModule {
   setEnabled(enabled: boolean): void;
   setHideAnimationDelay(delay?: number): void;
   setHideAnimationDuration(duration?: number): void;
+  setShouldMimicIOSBehavior(shouldMimic: boolean): void;
   setShowAnimationDelay(delay?: number): void;
   setShowAnimationDuration(duration?: number): void;
 }

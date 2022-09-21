@@ -8,29 +8,31 @@ import com.reactnativeavoidsoftinput.events.AvoidSoftInputAppliedOffsetChangedEv
 import com.reactnativeavoidsoftinput.events.AvoidSoftInputHeightChangedEvent
 import com.reactnativeavoidsoftinput.events.AvoidSoftInputHiddenEvent
 import com.reactnativeavoidsoftinput.events.AvoidSoftInputShownEvent
+import com.reactnativeavoidsoftinput.listeners.SoftInputListener
 
 @SuppressLint("ViewConstructor")
 class AvoidSoftInputView(
   private val reactContext: ThemedReactContext
-) : ReactViewGroup(reactContext), AvoidSoftInputProvider.SoftInputListener {
-  private val mManager = AvoidSoftInputManager(reactContext).apply {
+) : ReactViewGroup(reactContext), SoftInputListener {
+  private val mManager = AvoidSoftInputManager(reactContext.reactApplicationContext).apply {
     setIsEnabled(true)
-    setShouldCheckForAvoidSoftInputView(false)
+    setRootView(this@AvoidSoftInputView)
     setOnOffsetChangedListener { offset: Int ->
       sendAppliedOffsetChangedEvent(offset)
     }
+    setOnSoftInputEventsListener(this@AvoidSoftInputView)
   }
 
   private fun getEventDispatcher() = reactContext.getNativeModule(UIManagerModule::class.java)?.eventDispatcher
 
   override fun onAttachedToWindow() {
     super.onAttachedToWindow()
-    mManager.initializeHandlers(reactContext, this, this)
+    mManager.initializeHandlers()
   }
 
   override fun onDetachedFromWindow() {
     super.onDetachedFromWindow()
-    mManager.cleanupHandlers(this)
+    mManager.cleanupHandlers()
   }
 
   fun setAvoidOffset(avoidOffset: Float) {
@@ -69,10 +71,8 @@ class AvoidSoftInputView(
     sendHiddenEvent(convertFromPixelToDIP(0))
   }
 
-  override fun onSoftInputHeightChange(from: Int, to: Int) {
-    sendHeightChangedEvent(to)
-
-    mManager.onSoftInputHeightChange(from, to, this)
+  override fun onSoftInputHeightChange(from: Int, to: Int, isOrientationChanged: Boolean) {
+    sendHeightChangedEvent(convertFromPixelToDIP(to))
   }
 
   private fun sendAppliedOffsetChangedEvent(offset: Int) {

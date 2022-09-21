@@ -1,10 +1,10 @@
-package com.reactnativeavoidsoftinput
+package com.reactnativeavoidsoftinput.animations
 
 import android.animation.TimeInterpolator
 import android.view.animation.LinearInterpolator
 import android.view.animation.PathInterpolator
 
-class AvoidSoftInputInterpolator : TimeInterpolator {
+class AnimationInterpolator : TimeInterpolator {
   private val linearInterpolator = LinearInterpolator()
   private val pathInterpolator = PathInterpolator(0.42F, 0F, 1F, 1F)
   private var mMode = MODE.LINEAR
