@@ -1,0 +1,41 @@
+
+# it fails with following error
+# yarn run v1.22.19
+# $ ./packages/mobile/ios/Pods/SwiftLint/swiftlint lint --config ./packages/mobile/ios/.swiftlint.yml --quiet
+# dyld: Library not loaded: /usr/lib/swift/libswift_Concurrency.dylib
+#   Referenced from: /Users/runner/work/react-native-avoid-softinput/react-native-avoid-softinput/./packages/mobile/ios/Pods/SwiftLint/swiftlint
+#   Reason: image not found
+# info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.
+# error Command failed with signal "SIGABRT".
+# Error: Process completed with exit code 1.
+
+# name: lint-ios
+
+# on:
+#   pull_request:
+#     branches: [master]
+#     paths:
+#       - "packages/mobile/ios/**"
+#       - "packages/react-native-avoid-softinput/ios/**"
+#       - ".github/workflows/lint-ios.yml"
+
+# jobs:
+#   lint-ios:
+#     name: Lint Swift
+#     runs-on: macos-latest
+#     steps:
+#       - uses: actions/checkout@v2
+#       - uses: actions/cache@v2
+#         with:
+#           path: "**/node_modules"
+#           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+#       - name: Install modules
+#         uses: actions/setup-node@v2
+#         with:
+#           node-version: ${{ matrix.node-version }}
+#           cache: "yarn"
+#           registry-url: "https://registry.npmjs.org"
+#           cache-dependency-path: "**/yarn.lock"
+#       - run: yarn
+#       - name: SwiftLint
+#         run: yarn lint:ios

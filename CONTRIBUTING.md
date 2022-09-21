@@ -41,13 +41,13 @@ Make sure your code passes TypeScript and ESLint. Run the following to verify:
 
 ```sh
 yarn typescript
-yarn lint
+yarn lint:js
 ```
 
 To fix formatting errors, run the following:
 
 ```sh
-yarn lint --fix
+yarn lint:js --fix
 ```
 
 To edit the Swift and Objective-C files, run `yarn ios:xcode` and find the source files at `Pods > Development Pods > react-native-avoid-softinput`.
@@ -99,9 +99,11 @@ git branch chore/2-configuration
 
 ### Linting and tests
 
-[ESLint](https://eslint.org/), [TypeScript](https://www.typescriptlang.org/)
-
-We use [TypeScript](https://www.typescriptlang.org/) for type checking, [ESLint](https://eslint.org/) for linting and formatting the code.
+- [ESLint](https://eslint.org/) - JS/TS linting and formatting
+- [TypeScript](https://www.typescriptlang.org/) - TS type checking
+- [Spotless](https://github.com/diffplug/spotless) & [Ktlint](https://github.com/pinterest/ktlint) - Kotlin/Java linting and formatting
+- [SwiftFormat](https://github.com/nicklockwood/SwiftFormat) - Swift formatting
+- [SwiftLint](https://github.com/realm/SwiftLint) - Swift linting
 
 Our pre-commit hooks verify that the linter and type checks pass when committing.
 
@@ -120,7 +122,11 @@ yarn release
 The `package.json` file contains various scripts for common tasks:
 
 - `yarn typescript`: type-check files with TypeScript.
-- `yarn lint`: lint files with ESLint.
+- `yarn lint:js`: lint all JS/TS files with ESLint.
+- `yarn lint:android`: run linter (Spotless/Ktlint) for all Kotlin/Java files.
+- `yarn lint:ios`: run linter (SwiftLint) for all Swift files.
+- `yarn format:android`: format (Spotless/Ktlint) all Kotlin/Java files.
+- `yarn format:ios`: format (SwiftFormat) all Swift files.
 - `yarn release` release library to npm.
 - `yarn bootstrap`: setup project by installing all dependencies and pods.
 - `yarn pods`: setup project's pods.
