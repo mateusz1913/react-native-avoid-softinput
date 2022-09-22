@@ -1,0 +1,25 @@
+---
+id: on-soft-input-shown
+title: onSoftInputShown
+sidebar_label: onSoftInputShown
+---
+
+Use `onSoftInputShown` method, if you want to listen to events when soft input is shown.
+
+### Parameters
+
+| Type                                                       | Required | Description                                                                 |
+| ---------------------------------------------------------- | -------- | --------------------------------------------------------------------------- |
+| ({ softInputHeight }: { softInputHeight: number }) => void | yes      | function called with current soft input height when soft input is displayed |
+
+### Example
+
+```ts
+import { AvoidSoftInput } from "react-native-avoid-softinput";
+
+const unsubscribe = AvoidSoftInput.onSoftInputShown(({ softInputHeight }) => {
+  // Do sth
+});
+
+// later invoke unsubscribe.remove()
+```

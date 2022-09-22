@@ -1,0 +1,19 @@
+---
+id: alternatives
+title: Alternatives
+sidebar_label: Alternatives
+---
+
+If, for whatever reason, the library does not satisfy your project's use case, you can check following alternatives (all of them are great and much better than KeyboardAvoidingView):
+
+## [react-native-keyboard-manager](https://github.com/douglasjunior/react-native-keyboard-manager) + `android:windowSoftInputMode="adjustResize"`
+
+On iOS, you can use react-native-keyboard-manager which under the hood uses well-known [IQKeyboardManager](https://github.com/hackiftekhar/IQKeyboardManager). And for the Android, you might try default `adjustResize` behavior.
+
+## [react-native-keyboard-controller](https://github.com/kirillzyusko/react-native-keyboard-controller)
+
+react-native-keyboard-controller has an interesting approach of detecting keyboard appearance on native side and letting you apply detected height to Reanimated or vanilla Animated views. It's written in Kotlin and Swift, it uses WindowInsetsCompat API on Android and it also supports Fabric & TurboModules from version 1.2.0.
+
+## [react-native-keyboard-aware-scroll-view](https://github.com/APSL/react-native-keyboard-aware-scroll-view)
+
+react-native-keyboard-aware-scroll-view can be used as a drop-in replacement for scroll containers that need to be keyboard aware. It has fully JS implementation, so it can be used in Expo Go apps.

@@ -19,17 +19,17 @@ export const FormExample: React.FC = () => {
    *
    * ```
    * useEffect(() => {
-   *   AvoidSoftInput.setShouldMimicIOSBehavior(true); // <---- Tell Android that library will handle keyboard insets manually to match iOS behavior
+   *   AvoidSoftInput.setAdjustNothing(); // <---- Set windowSoftInputMode on Android to match iOS behavior
    *   AvoidSoftInput.setEnabled(true); // <---- Enable module
    * }, [])
    * ```
    */
   const onFocusEffect = useCallback(() => {
-    AvoidSoftInput.setShouldMimicIOSBehavior(true); // <---- Tell Android that library will handle keyboard insets manually to match iOS behavior
+    AvoidSoftInput.setAdjustNothing(); // <---- Set windowSoftInputMode on Android to match iOS behavior
     AvoidSoftInput.setEnabled(true); // <---- Enable module
     return () => {
       AvoidSoftInput.setEnabled(false);
-      AvoidSoftInput.setShouldMimicIOSBehavior(false);
+      AvoidSoftInput.setDefaultAppSoftInputMode();
     };
   }, []);
 

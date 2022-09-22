@@ -21,20 +21,20 @@ export const BottomSheetExample: React.FC = () => {
    *
    * ```
    * useEffect(() => {
-   *   AvoidSoftInput.setShouldMimicIOSBehavior(true); // <---- Tell Android that library will handle keyboard insets manually to match iOS behavior
+   *   AvoidSoftInput.setAdjustNothing(); // <---- Set windowSoftInputMode on Android to match iOS behavior
    *   AvoidSoftInput.setEnabled(true); // <---- Enable module
    * }, [])
    * ```
    */
   const onFocusEffect = useCallback(() => {
-    AvoidSoftInput.setShouldMimicIOSBehavior(true); // <---- Tell Android that library will handle keyboard insets manually to match iOS behavior
+    AvoidSoftInput.setAdjustNothing(); // <---- Set windowSoftInputMode on Android to match iOS behavior
     AvoidSoftInput.setEnabled(true); // <---- Enable module
     AvoidSoftInput.setAvoidOffset(50); // <---- if you have CTA button at the bottom of the screen, set additional offset to make button also visible
 
     return () => {
       AvoidSoftInput.setAvoidOffset(0);
       AvoidSoftInput.setEnabled(false);
-      AvoidSoftInput.setShouldMimicIOSBehavior(false);
+      AvoidSoftInput.setDefaultAppSoftInputMode();
     };
   }, []);
 

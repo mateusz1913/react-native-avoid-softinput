@@ -1,0 +1,32 @@
+---
+id: recipes-modal
+title: Modal recipe
+sidebar_label: Modal
+---
+
+To handle React Native `Modal` components, you must wrap modal content in `AvoidSoftInputView`.
+
+### Example
+
+```tsx
+export const ModalExample: React.FC = () => {
+  return (
+    // ... some JSX
+
+    <Modal /** ...modal props */>
+      <AvoidSoftInputView>
+        // ... wrapped content
+        <ScrollView>
+          <View>
+            <TextInput placeholder="Single line" />
+            <TextInput placeholder="Multiline" />
+            <Button />
+          </View>
+        </ScrollView>
+      </AvoidSoftInputView>
+    </Modal>
+
+    //... some JSX
+  );
+};
+```

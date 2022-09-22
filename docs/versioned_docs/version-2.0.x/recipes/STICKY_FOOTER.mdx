@@ -28,12 +28,12 @@ export const StickyFooterExample: React.FC = () => {
   });
 
   const onFocusEffect = useCallback(() => {
-    AvoidSoftInput.setShouldMimicIOSBehavior(true); // <---- Tell Android that library will handle keyboard insets manually to match iOS behavior
+    AvoidSoftInput.setAdjustNothing();
     AvoidSoftInput.setEnabled(true);
 
     return () => {
       AvoidSoftInput.setEnabled(false);
-      AvoidSoftInput.setShouldMimicIOSBehavior(false);
+      AvoidSoftInput.setDefaultAppSoftInputMode();
     };
   }, []);
 

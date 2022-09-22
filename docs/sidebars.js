@@ -5,8 +5,11 @@ const sidebars = {
   docsSidebar: {
     'Guides': [
       'guides/installation',
+      'guides/migration_to_3_0_x',
       'guides/usage-module',
       'guides/usage-view',
+      'guides/jest-mock-usage',
+      'guides/alternatives',
     ],
     'Recipes': [
       'recipes/recipes-form',
@@ -22,6 +25,7 @@ const sidebars = {
         label: 'AvoidSoftInput',
         items: [
           'api/module/set-enabled',
+          'api/module/set-should-mimic-ios-behavior',
           'api/module/set-avoid-offset',
           'api/module/set-easing',
           'api/module/set-hide-animation-delay',
