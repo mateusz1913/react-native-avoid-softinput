@@ -1,6 +1,6 @@
 import { useEffect, useReducer } from 'react';
 
-import { AvoidSoftInput } from './AvoidSoftInputModule';
+import { AvoidSoftInput } from './AvoidSoftInput';
 import type { State } from './stateReducer';
 import { createAction, initialState, reducer } from './stateReducer';
 import type { SoftInputAppliedOffsetEventData, SoftInputEventData } from './types';

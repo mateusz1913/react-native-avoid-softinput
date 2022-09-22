@@ -383,7 +383,7 @@ class AnimationHandlerImpl : AnimationHandler {
     mAvoidOffset = PixelUtil.toPixelFromDIP(avoidOffset)
   }
 
-  override fun setEasing(easing: String) {
+  override fun setEasing(easing: String?) {
     mAnimationInterpolator.mode = when (easing) {
       "easeIn" -> AnimationInterpolator.Companion.MODE.EASE_IN
       "easeInOut" -> AnimationInterpolator.Companion.MODE.EASE_IN_OUT

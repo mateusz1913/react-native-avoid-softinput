@@ -51,12 +51,20 @@
   ],
   "devDependencies": {
     "@types/react": "17.0.39",
-    "@types/react-native": "0.67.1",
-    "react": "17.0.2",
-    "react-native": "0.67.3"
+    "@types/react-native": "0.70.3",
+    "react": "18.1.0",
+    "react-native": "0.70.1"
   },
   "peerDependencies": {
-    "react": ">=16.8.0",
-    "react-native": ">=0.64.0"
+    "react": ">=17.0.0",
+    "react-native": ">=0.65.0"
+  },
+  "codegenConfig": {
+    "name": "rnavoidsoftinput",
+    "type": "all",
+    "jsSrcsDir": "./src",
+    "android": {
+      "javaPackageName": "com.reactnativeavoidsoftinput"
+    }
   }
 }

@@ -1,6 +1,6 @@
-import React from 'react';
+import * as React from 'react';
 
-import { NativeAvoidSoftInputView } from './NativeAvoidSoftInputView';
+import NativeAvoidSoftInputView from './NativeAvoidSoftInputView';
 import type { AvoidSoftInputViewProps } from './types';
 
 /**

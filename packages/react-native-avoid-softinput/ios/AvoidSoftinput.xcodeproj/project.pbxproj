@@ -8,11 +8,12 @@
 
 /* Begin PBXBuildFile section */
 		8302DB6C28DB7C290064B2BD /* AvoidSoftInputConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302DB6B28DB7C290064B2BD /* AvoidSoftInputConstants.swift */; };
-		83693C9E26973C8800AF5E7E /* AvoidSoftInput.m in Sources */ = {isa = PBXBuildFile; fileRef = 83693C9726973C8800AF5E7E /* AvoidSoftInput.m */; };
-		83693C9F26973C8800AF5E7E /* AvoidSoftInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83693C9826973C8800AF5E7E /* AvoidSoftInput.swift */; };
+		831B299B28DF79E1002377F4 /* AvoidSoftInputImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831B299328DF79E0002377F4 /* AvoidSoftInputImpl.swift */; };
+		831B299C28DF79E1002377F4 /* AvoidSoftInput.mm in Sources */ = {isa = PBXBuildFile; fileRef = 831B299628DF79E1002377F4 /* AvoidSoftInput.mm */; };
+		831B299D28DF79E1002377F4 /* AvoidSoftInputViewComponentView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 831B299728DF79E1002377F4 /* AvoidSoftInputViewComponentView.mm */; };
+		831B299E28DF79E1002377F4 /* AvoidSoftInputObjCPPUtils.mm in Sources */ = {isa = PBXBuildFile; fileRef = 831B299928DF79E1002377F4 /* AvoidSoftInputObjCPPUtils.mm */; };
 		83693CA026973C8800AF5E7E /* AvoidSoftInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83693C9926973C8800AF5E7E /* AvoidSoftInputView.swift */; };
 		83693CA126973C8800AF5E7E /* AvoidSoftInputUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83693C9A26973C8800AF5E7E /* AvoidSoftInputUtils.swift */; };
-		83693CA226973C8800AF5E7E /* AvoidSoftInputViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83693C9C26973C8800AF5E7E /* AvoidSoftInputViewManager.swift */; };
 		83693CA326973C8800AF5E7E /* AvoidSoftInputViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 83693C9D26973C8800AF5E7E /* AvoidSoftInputViewManager.m */; };
 		836FC8F326F9410B000ED360 /* BaseAvoidSoftInputEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836FC8F026F9410B000ED360 /* BaseAvoidSoftInputEvent.swift */; };
 		836FC8F426F9410B000ED360 /* AvoidSoftInputHiddenEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836FC8F126F9410B000ED360 /* AvoidSoftInputHiddenEvent.swift */; };
@@ -37,12 +38,17 @@
 /* Begin PBXFileReference section */
 		134814201AA4EA6300B7C361 /* libAvoidSoftinput.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libAvoidSoftinput.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		8302DB6B28DB7C290064B2BD /* AvoidSoftInputConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AvoidSoftInputConstants.swift; sourceTree = "<group>"; };
-		83693C9726973C8800AF5E7E /* AvoidSoftInput.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AvoidSoftInput.m; sourceTree = "<group>"; };
-		83693C9826973C8800AF5E7E /* AvoidSoftInput.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AvoidSoftInput.swift; sourceTree = "<group>"; };
+		831B299328DF79E0002377F4 /* AvoidSoftInputImpl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AvoidSoftInputImpl.swift; sourceTree = "<group>"; };
+		831B299428DF79E1002377F4 /* AvoidSoftInputObjCPPUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AvoidSoftInputObjCPPUtils.h; sourceTree = "<group>"; };
+		831B299528DF79E1002377F4 /* AvoidSoftInput.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AvoidSoftInput.h; sourceTree = "<group>"; };
+		831B299628DF79E1002377F4 /* AvoidSoftInput.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AvoidSoftInput.mm; sourceTree = "<group>"; };
+		831B299728DF79E1002377F4 /* AvoidSoftInputViewComponentView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AvoidSoftInputViewComponentView.mm; sourceTree = "<group>"; };
+		831B299828DF79E1002377F4 /* AvoidSoftInputViewManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AvoidSoftInputViewManager.h; sourceTree = "<group>"; };
+		831B299928DF79E1002377F4 /* AvoidSoftInputObjCPPUtils.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AvoidSoftInputObjCPPUtils.mm; sourceTree = "<group>"; };
+		831B299A28DF79E1002377F4 /* AvoidSoftInputViewComponentView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AvoidSoftInputViewComponentView.h; sourceTree = "<group>"; };
 		83693C9926973C8800AF5E7E /* AvoidSoftInputView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AvoidSoftInputView.swift; sourceTree = "<group>"; };
 		83693C9A26973C8800AF5E7E /* AvoidSoftInputUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AvoidSoftInputUtils.swift; sourceTree = "<group>"; };
 		83693C9B26973C8800AF5E7E /* AvoidSoftinput-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AvoidSoftinput-Bridging-Header.h"; sourceTree = "<group>"; };
-		83693C9C26973C8800AF5E7E /* AvoidSoftInputViewManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AvoidSoftInputViewManager.swift; sourceTree = "<group>"; };
 		83693C9D26973C8800AF5E7E /* AvoidSoftInputViewManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AvoidSoftInputViewManager.m; sourceTree = "<group>"; };
 		836FC8F026F9410B000ED360 /* BaseAvoidSoftInputEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BaseAvoidSoftInputEvent.swift; path = events/BaseAvoidSoftInputEvent.swift; sourceTree = "<group>"; };
 		836FC8F126F9410B000ED360 /* AvoidSoftInputHiddenEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AvoidSoftInputHiddenEvent.swift; path = events/AvoidSoftInputHiddenEvent.swift; sourceTree = "<group>"; };
@@ -74,16 +80,21 @@
 		58B511D21A9E6C8500147676 = {
 			isa = PBXGroup;
 			children = (
-				83BF566426F7996E009C1F11 /* events */,
 				83693C9B26973C8800AF5E7E /* AvoidSoftinput-Bridging-Header.h */,
-				83693C9726973C8800AF5E7E /* AvoidSoftInput.m */,
-				83693C9826973C8800AF5E7E /* AvoidSoftInput.swift */,
+				831B299528DF79E1002377F4 /* AvoidSoftInput.h */,
+				831B299628DF79E1002377F4 /* AvoidSoftInput.mm */,
+				831B299A28DF79E1002377F4 /* AvoidSoftInputViewComponentView.h */,
+				831B299728DF79E1002377F4 /* AvoidSoftInputViewComponentView.mm */,
+				831B299428DF79E1002377F4 /* AvoidSoftInputObjCPPUtils.h */,
+				831B299928DF79E1002377F4 /* AvoidSoftInputObjCPPUtils.mm */,
+				831B299828DF79E1002377F4 /* AvoidSoftInputViewManager.h */,
+				83693C9D26973C8800AF5E7E /* AvoidSoftInputViewManager.m */,
 				8302DB6B28DB7C290064B2BD /* AvoidSoftInputConstants.swift */,
+				831B299328DF79E0002377F4 /* AvoidSoftInputImpl.swift */,
 				8382C4C027F0781A00536B68 /* AvoidSoftInputManager.swift */,
 				83693C9A26973C8800AF5E7E /* AvoidSoftInputUtils.swift */,
 				83693C9926973C8800AF5E7E /* AvoidSoftInputView.swift */,
-				83693C9D26973C8800AF5E7E /* AvoidSoftInputViewManager.m */,
-				83693C9C26973C8800AF5E7E /* AvoidSoftInputViewManager.swift */,
+				83BF566426F7996E009C1F11 /* events */,
 				134814211AA4EA7D00B7C361 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -157,16 +168,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				831B299C28DF79E1002377F4 /* AvoidSoftInput.mm in Sources */,
+				831B299B28DF79E1002377F4 /* AvoidSoftInputImpl.swift in Sources */,
 				8382C4C127F0781A00536B68 /* AvoidSoftInputManager.swift in Sources */,
 				836FC8F526F9410B000ED360 /* AvoidSoftInputAppliedOffsetChangedEvent.swift in Sources */,
 				8382C4BF27F0780E00536B68 /* AvoidSoftInputHeightChangedEvent.swift in Sources */,
 				83693CA126973C8800AF5E7E /* AvoidSoftInputUtils.swift in Sources */,
 				83693CA326973C8800AF5E7E /* AvoidSoftInputViewManager.m in Sources */,
-				83693C9F26973C8800AF5E7E /* AvoidSoftInput.swift in Sources */,
-				83693C9E26973C8800AF5E7E /* AvoidSoftInput.m in Sources */,
 				836FC8F426F9410B000ED360 /* AvoidSoftInputHiddenEvent.swift in Sources */,
+				831B299D28DF79E1002377F4 /* AvoidSoftInputViewComponentView.mm in Sources */,
 				83693CA026973C8800AF5E7E /* AvoidSoftInputView.swift in Sources */,
-				83693CA226973C8800AF5E7E /* AvoidSoftInputViewManager.swift in Sources */,
+				831B299E28DF79E1002377F4 /* AvoidSoftInputObjCPPUtils.mm in Sources */,
 				836FC8F326F9410B000ED360 /* BaseAvoidSoftInputEvent.swift in Sources */,
 				8302DB6C28DB7C290064B2BD /* AvoidSoftInputConstants.swift in Sources */,
 				83BF566226F7995A009C1F11 /* AvoidSoftInputShownEvent.swift in Sources */,

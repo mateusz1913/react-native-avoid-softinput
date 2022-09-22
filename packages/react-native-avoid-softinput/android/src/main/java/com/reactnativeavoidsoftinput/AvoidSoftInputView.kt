@@ -2,7 +2,6 @@ package com.reactnativeavoidsoftinput
 
 import android.annotation.SuppressLint
 import com.facebook.react.uimanager.ThemedReactContext
-import com.facebook.react.uimanager.UIManagerModule
 import com.facebook.react.views.view.ReactViewGroup
 import com.reactnativeavoidsoftinput.events.AvoidSoftInputAppliedOffsetChangedEvent
 import com.reactnativeavoidsoftinput.events.AvoidSoftInputHeightChangedEvent
@@ -23,7 +22,7 @@ class AvoidSoftInputView(
     setOnSoftInputEventsListener(this@AvoidSoftInputView)
   }
 
-  private fun getEventDispatcher() = reactContext.getNativeModule(UIManagerModule::class.java)?.eventDispatcher
+  private fun getEventDispatcher() = getEventDispatcher(reactContext, this)
 
   override fun onAttachedToWindow() {
     super.onAttachedToWindow()
@@ -39,7 +38,7 @@ class AvoidSoftInputView(
     mManager.setAvoidOffset(avoidOffset)
   }
 
-  fun setEasing(easing: String) {
+  fun setEasing(easing: String?) {
     mManager.setEasing(easing)
   }
 
@@ -76,19 +75,19 @@ class AvoidSoftInputView(
   }
 
   private fun sendAppliedOffsetChangedEvent(offset: Int) {
-    getEventDispatcher()?.dispatchEvent(AvoidSoftInputAppliedOffsetChangedEvent(this.id, offset))
+    getEventDispatcher()?.dispatchEvent(AvoidSoftInputAppliedOffsetChangedEvent(getSurfaceId(reactContext), this.id, offset))
   }
 
   private fun sendHeightChangedEvent(height: Int) {
-    getEventDispatcher()?.dispatchEvent(AvoidSoftInputHeightChangedEvent(this.id, height))
+    getEventDispatcher()?.dispatchEvent(AvoidSoftInputHeightChangedEvent(getSurfaceId(reactContext), this.id, height))
   }
 
   private fun sendHiddenEvent(height: Int) {
-    getEventDispatcher()?.dispatchEvent(AvoidSoftInputHiddenEvent(this.id, height))
+    getEventDispatcher()?.dispatchEvent(AvoidSoftInputHiddenEvent(getSurfaceId(reactContext), this.id, height))
   }
 
   private fun sendShownEvent(height: Int) {
-    getEventDispatcher()?.dispatchEvent(AvoidSoftInputShownEvent(this.id, height))
+    getEventDispatcher()?.dispatchEvent(AvoidSoftInputShownEvent(getSurfaceId(reactContext), this.id, height))
   }
 
   companion object {

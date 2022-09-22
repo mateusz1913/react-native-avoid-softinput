@@ -1,4 +1,6 @@
 
+# TODO: Handle linting for both Swift and ObjC code
+
 # it fails with following error
 # yarn run v1.22.19
 # $ ./packages/mobile/ios/Pods/SwiftLint/swiftlint lint --config ./packages/mobile/ios/.swiftlint.yml --quiet
@@ -38,4 +40,6 @@
 #           cache-dependency-path: "**/yarn.lock"
 #       - run: yarn
 #       - name: SwiftLint
-#         run: yarn lint:ios
+#         run: yarn lint:ios:swift
+#       - name: ClangFormat
+#         run: yarn lint:ios:objc --Werror

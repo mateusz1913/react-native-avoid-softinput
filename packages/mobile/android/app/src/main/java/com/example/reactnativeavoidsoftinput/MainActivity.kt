@@ -1,7 +1,7 @@
 package com.example.reactnativeavoidsoftinput
 
-import com.facebook.react.ReactActivity
 import android.os.Bundle
+import com.facebook.react.ReactActivity
 import com.facebook.react.ReactActivityDelegate
 import com.zoontek.rnbootsplash.RNBootSplash
 
