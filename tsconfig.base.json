@@ -9,6 +9,9 @@
     "lib": ["es2017"],
     "moduleResolution": "node",
     "noEmit": true,
+    "paths": {
+      "react-native-avoid-softinput": ["./packages/react-native-avoid-softinput/src/index"]
+    },
     "resolveJsonModule": true,
     "strict": true,
     // Solves https://github.com/DefinitelyTyped/DefinitelyTyped/issues/16825

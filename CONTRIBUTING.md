@@ -104,6 +104,7 @@ git branch chore/2-configuration
 - [Spotless](https://github.com/diffplug/spotless) & [Ktlint](https://github.com/pinterest/ktlint) - Kotlin/Java linting and formatting
 - [SwiftFormat](https://github.com/nicklockwood/SwiftFormat) - Swift formatting
 - [SwiftLint](https://github.com/realm/SwiftLint) - Swift linting
+- [ClangFormat](https://clang.llvm.org/) - ObjC/ObjC++ linting and formatting
 
 Our pre-commit hooks verify that the linter and type checks pass when committing.
 
@@ -124,21 +125,35 @@ The `package.json` file contains various scripts for common tasks:
 - `yarn typescript`: type-check files with TypeScript.
 - `yarn lint:js`: lint all JS/TS files with ESLint.
 - `yarn lint:android`: run linter (Spotless/Ktlint) for all Kotlin/Java files.
-- `yarn lint:ios`: run linter (SwiftLint) for all Swift files.
+- `yarn lint:ios:swift`: run linter (SwiftLint) for all Swift files within old arch project (install [SwiftLint](https://github.com/realm/SwiftLint) e.g. with Homebrew).
+- `yarn lint:ios:objc`: run linter (ClangFormat) for all ObjC/ObjC++ files within old arch project (install [ClangFormat](https://clang.llvm.org/) e.g. with Homebrew).
+- `yarn lint:fabric:ios:swift`: run linter (SwiftLint) for all Swift files within new arch project (install [SwiftLint](https://github.com/realm/SwiftLint) e.g. with Homebrew).
+- `yarn lint:fabric:ios:objc`: run linter (ClangFormat) for all ObjC/ObjC++ files within new arch project (install [ClangFormat](https://clang.llvm.org/) e.g. with Homebrew).
 - `yarn format:android`: format (Spotless/Ktlint) all Kotlin/Java files.
-- `yarn format:ios`: format (SwiftFormat) all Swift files.
+- `yarn format:ios:swift`: format (SwiftFormat) all Swift files within old arch project (install [SwiftFormat](https://github.com/nicklockwood/SwiftFormat) e.g. with Homebrew).
+- `yarn format:ios:objc`: format (ClangFormat) all ObjC/ObjC++ files within old arch project (install [ClangFormat](https://clang.llvm.org/) e.g. with Homebrew).
+- `yarn format:fabric:ios:swift`: format (SwiftFormat) all Swift files within new arch project (install [SwiftFormat](https://github.com/nicklockwood/SwiftFormat) e.g. with Homebrew).
+- `yarn format:fabric:ios:objc`: format (ClangFormat) all ObjC/ObjC++ files within new arch project (install [ClangFormat](https://clang.llvm.org/) e.g. with Homebrew).
 - `yarn release` release library to npm.
-- `yarn bootstrap`: setup project by installing all dependencies and pods.
+- `yarn bootstrap`: setup projects (old and new arch) by installing all dependencies and pods.
+- `yarn bootstrap:mobile`: setup old arch project by installing all dependencies and pods.
+- `yarn bootstrap:fabricMobile`: setup new arch project by installing all dependencies and pods.
 - `yarn pods`: setup project's pods.
 - `yarn reset`: clean all project's dependencies and pods.
 - `yarn reset:node_modules`: clean all project's dependencies.
 - `yarn reset:pods`: clean all project's pods.
-- `yarn android:metro`: start the Metro server for the example app.
-- `yarn android:start`: run the example app on Android.
-- `yarn android:studio`: open Android project in Android Studio.
-- `yarn ios:metro`: start the Metro server for the example app.
-- `yarn ios:start`: run the example app on iOS.
-- `yarn ios:xcode`: open iOS project in XCode.
+- `yarn android:metro`: start the Metro server for the old arch example app.
+- `yarn android:start`: run the old arch example app on Android.
+- `yarn android:studio`: open old arch Android project in Android Studio.
+- `yarn ios:metro`: start the Metro server for the old arch example app.
+- `yarn ios:start`: run the old arch example app on iOS.
+- `yarn ios:xcode`: open old arch iOS project in XCode.
+- `yarn fabric:android:metro`: start the Metro server for the new arch example app.
+- `yarn fabric:android:start`: run the new arch example app on Android.
+- `yarn fabric:android:studio`: open new arch Android project in Android Studio.
+- `yarn fabric:ios:metro`: start the Metro server for the new arch example app.
+- `yarn fabric:ios:start`: run the new arch example app on iOS.
+- `yarn fabric:ios:xcode`: open new arch iOS project in XCode.
 - `yarn docs:start`: run Docusaurus documentation locally.
 - `yarn docs:build`: build Docusaurus documentation.
 - `yarn docs:clear`: clear Docusaurus project.

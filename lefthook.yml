@@ -16,9 +16,22 @@ pre-commit:
       files: git diff --name-only --cached | grep -e "**/*.kt" -e "**/*.java"
       run: yarn lint:android
     lint-ios:
-      # if any Swift file changed, run Swift linter
-      files: git diff --name-only --cached | grep -e "**/*.swift"
-      run: yarn lint:ios
+      # if any Swift/ObjC/ObjC++ file changed, run Swift and ObjC linter
+      files: git diff --name-only --cached | grep -e "**/*.swift" -e "**/*.h" -e "**/*.m" -e "**/*.mm" -e "**/*.cpp"
+      run: |
+        #!/bin/bash
+        if command -v swiftlint &> /dev/null
+        then
+          yarn lint:ios:swift
+        else
+          echo "SwiftLint is not installed. Skipping"
+        fi
+        if command -v clang-format &> /dev/null
+        then
+          yarn lint:ios:objc --Werror
+        else
+          echo "ClangFormat is not installed. Skipping"
+        fi
 commit-msg:
   commands:
     commitlint:

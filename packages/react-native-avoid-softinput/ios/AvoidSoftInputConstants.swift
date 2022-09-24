@@ -1,12 +1,12 @@
-public enum AvoidSoftInputConstants {
-    static let hideAnimationDelayInSeconds: Double = 0.3
-    static let hideAnimationDurationInSeconds: Double = 0.66
-    static let showAnimationDelayInSeconds: Double = 0
-    static let showAnimationDurationInSeconds: Double = 0.22
-    static let softInputHeightKey = "softInputHeight"
-    static let softInputAppliedOffsetKey = "appliedOffset"
-    static let softInputAppliedOffsetChanged = "softInputAppliedOffsetChanged"
-    static let softInputHeightChanged = "softInputHeightChanged"
-    static let softInputHidden = "softInputHidden"
-    static let softInputShown = "softInputShown"
+@objc public class AvoidSoftInputConstants: NSObject {
+    @objc public static let hideAnimationDelayInSeconds: Double = 0.3
+    @objc public static let hideAnimationDurationInSeconds: Double = 0.66
+    @objc public static let showAnimationDelayInSeconds: Double = 0
+    @objc public static let showAnimationDurationInSeconds: Double = 0.22
+    @objc public static let softInputHeightKey = "softInputHeight"
+    @objc public static let softInputAppliedOffsetKey = "appliedOffset"
+    @objc public static let softInputAppliedOffsetChanged = "softInputAppliedOffsetChanged"
+    @objc public static let softInputHeightChanged = "softInputHeightChanged"
+    @objc public static let softInputHidden = "softInputHidden"
+    @objc public static let softInputShown = "softInputShown"
 }

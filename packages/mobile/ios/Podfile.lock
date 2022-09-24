@@ -278,7 +278,7 @@ PODS:
     - React-jsi (= 0.67.3)
     - React-logger (= 0.67.3)
     - React-perflogger (= 0.67.3)
-  - RNBootSplash (4.1.3):
+  - RNBootSplash (4.3.2):
     - React-Core
   - RNGestureHandler (2.3.0):
     - React-Core
@@ -314,8 +314,6 @@ PODS:
     - React-Core
     - React-RCTImage
   - ShowTime (2.5.3)
-  - SwiftFormat/CLI (0.49.18)
-  - SwiftLint (0.49.1)
   - Yoga (1.14.0)
 
 DEPENDENCIES:
@@ -357,16 +355,12 @@ DEPENDENCIES:
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../../../node_modules/react-native-screens`)
   - ShowTime
-  - SwiftFormat/CLI (~> 0.49)
-  - SwiftLint
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
   trunk:
     - fmt
     - ShowTime
-    - SwiftFormat
-    - SwiftLint
 
 EXTERNAL SOURCES:
   boost:
@@ -461,7 +455,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: 15ea57ead631a11fad57634ff69f78e797113a39
   React-jsinspector: 1e1e03345cf6d47779e2061d679d0a87d9ae73d8
   React-logger: 1e10789cb84f99288479ba5f20822ce43ced6ffe
-  react-native-avoid-softinput: a5827b215076edf3d454098bf27c886e65812bc9
+  react-native-avoid-softinput: 5aa93fc4f4a7fdc8903945be108ffc7df82de51f
   react-native-safe-area-context: 9e40fb181dac02619414ba1294d6c2a807056ab9
   React-perflogger: 93d3f142d6d9a46e635f09ba0518027215a41098
   React-RCTActionSheet: 87327c3722203cc79cf79d02fb83e7332aeedd18
@@ -475,15 +469,13 @@ SPEC CHECKSUMS:
   React-RCTVibration: d0361f15ea978958fab7ffb6960f475b5063d83f
   React-runtimeexecutor: af1946623656f9c5fd64ca6f36f3863516193446
   ReactCommon: 650e33cde4fb7d36781cd3143f5276da0abb2f96
-  RNBootSplash: 4f34ccf1a0c2573cb4ba918ab7f69d51d610827f
+  RNBootSplash: 5f346163977573d6b2aeba1b25df9d2245c0d73c
   RNGestureHandler: 77d59828d40838c9fabb76a12d2d0a80c006906f
   RNReanimated: 32c91e28f5780937b8efc07ddde1bab8d373fe0b
   RNScreens: aa12070b21c1d6011b3627a0b1d09b627232b070
   ShowTime: 06cc9dc79886274b21041fe19b79c9eff59b9714
-  SwiftFormat: 2402d29b26746f169cce5454d5af88314cbb2e35
-  SwiftLint: 32ee33ded0636d0905ef6911b2b67bbaeeedafa5
   Yoga: 90dcd029e45d8a7c1ff059e8b3c6612ff409061a
 
-PODFILE CHECKSUM: 153ca49e81a1bec8b3be86ff166afd9408b3beaf
+PODFILE CHECKSUM: 0089fc3c8b09e03fc44d0159cd00a133d00b3e46
 
 COCOAPODS: 1.11.3

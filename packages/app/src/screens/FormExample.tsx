@@ -1,7 +1,7 @@
 import { useFocusEffect } from '@react-navigation/native';
 import * as React from 'react';
 import { Image, ScrollView, StyleSheet, View } from 'react-native';
-import { AvoidSoftInput } from 'react-native-avoid-softinput';
+import { AvoidSoftInput, useSoftInputAppliedOffsetChanged } from 'react-native-avoid-softinput';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import Button from '../components/Button';
@@ -25,6 +25,10 @@ export const FormExample: React.FC = () => {
   }, []);
 
   useFocusEffect(onFocusEffect);
+
+  useSoftInputAppliedOffsetChanged(({ appliedOffset }) => {
+    console.log({ appliedOffset });
+  });
 
   return <SafeAreaView edges={[ 'bottom', 'left', 'right' ]} style={commonStyles.screenContainer}>
     <ScrollView

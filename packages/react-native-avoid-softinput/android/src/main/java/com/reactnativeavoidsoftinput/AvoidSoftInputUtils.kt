@@ -1,5 +1,6 @@
 package com.reactnativeavoidsoftinput
 
+import android.content.Context
 import android.os.Build
 import android.util.Log
 import android.view.View
@@ -8,9 +9,12 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.allViews
 import com.facebook.react.bridge.ReactApplicationContext
+import com.facebook.react.bridge.ReactContext
 import com.facebook.react.uimanager.DisplayMetricsHolder
 import com.facebook.react.uimanager.PixelUtil
 import com.facebook.react.uimanager.RootView
+import com.facebook.react.uimanager.UIManagerHelper
+import com.facebook.react.uimanager.events.EventDispatcher
 
 fun getScrollViewParent(view: View?, rootView: View): ScrollView? {
   if (view == null || view.parent == rootView || view.parent !is View) {
@@ -81,6 +85,22 @@ fun setScrollListenerCompat(scrollView: ScrollView, listener: ((scrollY: Int) ->
       listener?.invoke(scrollY)
     }
   }
+}
+
+/** Available from RN 0.63 */
+fun getEventDispatcher(context: ReactContext, view: View): EventDispatcher? {
+  val reactTag = view.id
+  return UIManagerHelper.getEventDispatcherForReactTag(context, reactTag)
+}
+
+/** Available from RN 0.63 */
+fun getReactContext(view: View): ReactContext {
+  return UIManagerHelper.getReactContext(view)
+}
+
+/** Available from RN 0.65, on non-Fabric, returns -1 */
+fun getSurfaceId(context: Context): Int {
+  return UIManagerHelper.getSurfaceId(context)
 }
 
 object ReactNativeAvoidSoftInputLogger {

@@ -104,7 +104,7 @@ class AvoidSoftInputManager: NSObject {
                 return
             }
 
-            let rootView = getReactRootView(withRootViewController: viewController)
+            let rootView = AvoidSoftInputObjCPPUtils.getReactRootView(withRootViewController: viewController)
 
             guard let firstResponder = findFirstResponder(view: rootView) ?? currentFocusedView else {
                 return
