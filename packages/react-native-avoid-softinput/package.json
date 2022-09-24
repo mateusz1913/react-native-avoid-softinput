@@ -37,6 +37,7 @@
     "ios",
     "cpp",
     "react-native-avoid-softinput.podspec",
+    "jest",
     "!lib/typescript/example",
     "!android/.gradle",
     "!android/build",

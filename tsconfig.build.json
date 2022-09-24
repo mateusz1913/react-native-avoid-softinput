@@ -4,6 +4,7 @@
   "exclude": [
     "docs",
     "packages/app",
+    "packages/fabricMobile",
     "packages/mobile"
   ]
 }
