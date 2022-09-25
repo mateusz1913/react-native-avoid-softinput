@@ -1,6 +1,6 @@
 {
   "name": "react-native-avoid-softinput",
-  "version": "2.4.7",
+  "version": "3.0.0-rc.0",
   "description": "Native logic for avoiding covering  text inputs by soft input views",
   "keywords": [
     "react-native",
