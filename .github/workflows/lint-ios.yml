@@ -36,12 +36,12 @@ jobs:
             brew install swiftlint
           fi
           yarn lint:ios:swift
-      # - name: ClangFormat
-      #   run: |
-      #     #!/bin/bash
-      #     if !command -v clang-format &> /dev/null
-      #     then
-      #       echo "ClangFormat is not installed. Installing"
-      #       brew install clang-format
-      #     fi
-      #     yarn lint:ios:objc --Werror
+      - name: ClangFormat
+        run: |
+          #!/bin/bash
+          if !command -v clang-format &> /dev/null
+          then
+            echo "ClangFormat is not installed. Installing"
+            brew install clang-format
+          fi
+          yarn lint:ios:objc --Werror
