@@ -13,11 +13,11 @@ pre-commit:
       run: yarn typescript
     lint-android:
       # if any Kotlin/Java file changed, run Android linter
-      files: git diff --name-only --cached | grep -e "**/*.kt" -e "**/*.java"
+      files: git diff --name-only --cached | grep -e "**/*.kt$" -e "**/*.java$"
       run: yarn lint:android
-    lint-ios:
-      # if any Swift/ObjC/ObjC++ file changed, run Swift and ObjC linter
-      files: git diff --name-only --cached | grep -e "**/*.swift" -e "**/*.h" -e "**/*.m" -e "**/*.mm" -e "**/*.cpp"
+    lint-swift:
+      # if any Swift file changed, run Swift linter
+      files: git diff --name-only --cached | grep -e "**/*.swift$"
       run: |
         #!/bin/bash
         if command -v swiftlint &> /dev/null
@@ -26,6 +26,11 @@ pre-commit:
         else
           echo "SwiftLint is not installed. Skipping"
         fi
+    lint-objc:
+      # if any ObjC/ObjC++ file changed, run ObjC linter
+      files: git diff --name-only --cached | grep -e "**/*.h$" -e "**/*.m$" -e "**/*.mm$" -e "**/*.cpp$"
+      run: |
+        #!/bin/bash
         if command -v clang-format &> /dev/null
         then
           yarn lint:ios:objc --Werror
