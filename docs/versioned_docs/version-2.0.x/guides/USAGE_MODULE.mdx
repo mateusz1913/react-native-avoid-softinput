@@ -27,7 +27,7 @@ Enable module:
 
 :::
 
-If you cannot, or don't want to use Android system support, then enable module and call `setShouldMimicIOSBehavior(true)`
+If you cannot, or don't want to use Android system support, then enable module and call `setAdjustNothing` method or set `android:windowSoftInputMode` attribute to `adjustNothing` in manifest.
 
 :::warning
 
@@ -40,7 +40,7 @@ import React from "react";
 import { AvoidSoftInput } from "react-native-avoid-softinput";
 
 React.useEffect(() => {
-  AvoidSoftInput.setShouldMimicIOSBehavior(true);
+  AvoidSoftInput.setAdjustNothing();
   AvoidSoftInput.setEnabled(true);
 }, []);
 ```

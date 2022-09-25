@@ -11,7 +11,7 @@ Applied offset animation can be configured both when using `AvoidSoftInput` modu
 ```tsx
 export const CustomAnimationConfigModuleExample: React.FC = () => {
   const onFocusEffect = useCallback(() => {
-    AvoidSoftInput.setShouldMimicIOSBehavior(true);
+    AvoidSoftInput.setAdjustNothing();
     AvoidSoftInput.setEnabled(true);
 
     /** Customize animation delay, duration & easing */
@@ -28,7 +28,7 @@ export const CustomAnimationConfigModuleExample: React.FC = () => {
       AvoidSoftInput.setShowAnimationDelay();
       AvoidSoftInput.setShowAnimationDuration();
       AvoidSoftInput.setEnabled(false);
-      AvoidSoftInput.setShouldMimicIOSBehavior(false);
+      AvoidSoftInput.setDefaultAppSoftInputMode();
     };
   }, []);
 

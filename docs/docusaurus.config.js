@@ -42,6 +42,10 @@ const config = {
         },
         items: [
           {
+            type: 'docsVersionDropdown',
+            position: 'left',
+          },
+          {
             label: 'Docs',
             to: '/docs/guides',
             position: 'left',

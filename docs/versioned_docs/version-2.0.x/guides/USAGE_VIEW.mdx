@@ -10,13 +10,13 @@ import { AvoidSoftInputView } from "react-native-avoid-softinput";
 
 /**
  * If you want to use `AvoidSoftInputView` on Android,
- * remember to call `setShouldMimicIOSBehavior(true)` somewhere in the root component
+ * remember to call `setAdjustNothing()` somewhere in the root component
  * or inside `useFocusEffect` callback, if you use react-navigation and want to use
  * `AvoidSoftInputView` only on specific screen
  * 
  * ```ts
  * React.useEffect(() => {
- *   AvoidSoftInput.setShouldMimicIOSBehavior(true);
+ *   AvoidSoftInput.setAdjustNothing();
  * }, []);
  * ```
  */
