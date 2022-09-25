@@ -18,7 +18,7 @@ jobs:
       - name: SwiftLint
         run: |
           #!/bin/bash
-          if !command -v swiftlint &> /dev/null
+          if ! command -v swiftlint &> /dev/null
           then
             echo "SwiftLint is not installed. Installing"
             brew install swiftlint
@@ -27,7 +27,7 @@ jobs:
       - name: ClangFormat
         run: |
           #!/bin/bash
-          if !command -v clang-format &> /dev/null
+          if ! command -v clang-format &> /dev/null
           then
             echo "ClangFormat is not installed. Installing"
             brew install clang-format
