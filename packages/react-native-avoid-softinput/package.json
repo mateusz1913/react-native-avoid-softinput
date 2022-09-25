@@ -38,6 +38,7 @@
     "cpp",
     "react-native-avoid-softinput.podspec",
     "jest",
+    "LICENSE",
     "!lib/typescript/example",
     "!android/.gradle",
     "!android/build",
