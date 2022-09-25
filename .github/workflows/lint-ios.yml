@@ -14,19 +14,19 @@ jobs:
     name: Lint Swift
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/cache@v2
-        with:
-          path: "**/node_modules"
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
-      - name: Install modules
-        uses: actions/setup-node@v2
-        with:
-          node-version: ${{ matrix.node-version }}
-          cache: "yarn"
-          registry-url: "https://registry.npmjs.org"
-          cache-dependency-path: "**/yarn.lock"
-      - run: yarn
+      # - uses: actions/checkout@v2
+      # - uses: actions/cache@v2
+      #   with:
+      #     path: "**/node_modules"
+      #     key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+      # - name: Install modules
+      #   uses: actions/setup-node@v2
+      #   with:
+      #     node-version: ${{ matrix.node-version }}
+      #     cache: "yarn"
+      #     registry-url: "https://registry.npmjs.org"
+      #     cache-dependency-path: "**/yarn.lock"
+      # - run: yarn
       - name: SwiftLint
         run: |
           #!/bin/bash
@@ -39,9 +39,9 @@ jobs:
       - name: ClangFormat
         run: |
           #!/bin/bash
-          if !command -v clang-format &> /dev/null
+          if command -v clang-format &> /dev/null
           then
             echo "ClangFormat is not installed. Installing"
-            brew install clang-format
+            yarn lint:ios:objc --Werror
+            # brew install clang-format
           fi
-          yarn lint:ios:objc --Werror
