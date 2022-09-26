@@ -3,21 +3,23 @@ pre-commit:
   commands:
     lint-js:
       # Run linter for JS/TS files if any of them are staged
-      files: git diff --name-only @{push}
+      files: git diff --name-only --cached
       glob: "*.{js,ts,jsx,tsx}"
       run: yarn lint:js
     typescript:
       # Run type-checking for TS files if any of them are staged
-      files: git diff --name-only @{push}
+      files: git diff --name-only --cached
       glob: "*.{js,ts,jsx,tsx}"
       run: yarn typescript
     lint-android:
       # if any Kotlin/Java file changed, run Android linter
-      files: git diff --name-only --cached | grep -e "**/*.kt$" -e "**/*.java$"
+      files: git diff --name-only --cached
+      glob: "*.{kt,java}"
       run: yarn lint:android
     lint-swift:
       # if any Swift file changed, run Swift linter
-      files: git diff --name-only --cached | grep -e "**/*.swift$"
+      files: git diff --name-only --cached
+      glob: "*.swift"
       run: |
         #!/bin/bash
         if command -v swiftlint &> /dev/null
@@ -28,7 +30,8 @@ pre-commit:
         fi
     lint-objc:
       # if any ObjC/ObjC++ file changed, run ObjC linter
-      files: git diff --name-only --cached | grep -e "**/*.h$" -e "**/*.m$" -e "**/*.mm$" -e "**/*.cpp$"
+      files: git diff --name-only --cached
+      glob: "*.{h,m,mm,cpp}"
       run: |
         #!/bin/bash
         if command -v clang-format &> /dev/null

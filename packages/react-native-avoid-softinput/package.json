@@ -51,15 +51,52 @@
     "!**/__fixtures__",
     "!**/__mocks__"
   ],
+  "scripts": {
+    "build-library": "bob build",
+    "release-library": "release-it"
+  },
   "devDependencies": {
     "@types/react": "17.0.39",
     "@types/react-native": "0.70.3",
     "react": "18.1.0",
-    "react-native": "0.70.1"
+    "react-native": "0.70.1",
+    "react-native-builder-bob": "0.18.3",
+    "release-it": "15.4.2"
   },
   "peerDependencies": {
     "react": ">=17.0.0",
     "react-native": ">=0.65.0"
+  },
+  "release-it": {
+    "git": {
+      "commitMessage": "chore: release ${version}",
+      "tagName": "v${version}"
+    },
+    "npm": {
+      "publish": true
+    },
+    "github": {
+      "release": true
+    },
+    "plugins": {
+      "@release-it/conventional-changelog": {
+        "preset": "angular"
+      }
+    }
+  },
+  "react-native-builder-bob": {
+    "source": "src",
+    "output": "lib",
+    "targets": [
+      "commonjs",
+      "module",
+      [
+        "typescript",
+        {
+          "project": "tsconfig.json"
+        }
+      ]
+    ]
   },
   "codegenConfig": {
     "name": "rnavoidsoftinput",
