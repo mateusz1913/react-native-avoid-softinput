@@ -67,9 +67,8 @@
     "registry": "https://registry.npmjs.org/"
   },
   "devDependencies": {
-    "@evilmartians/lefthook": "1.1.1",
     "@commitlint/config-conventional": "13.1.0",
-    "@release-it/conventional-changelog": "3.3.0",
+    "@evilmartians/lefthook": "1.1.1",
     "@typescript-eslint/eslint-plugin": "4.31.2",
     "@typescript-eslint/parser": "4.31.2",
     "commitlint": "13.1.0",
