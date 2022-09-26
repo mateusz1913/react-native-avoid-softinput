@@ -32,7 +32,9 @@ jobs:
           cache: "yarn"
           registry-url: "https://registry.npmjs.org"
           cache-dependency-path: "**/yarn.lock"
-      - run: yarn
+      - run: |
+          yarn --cwd packages/react-native-avoid-softinput
+          yarn prepare
       - name: Run Release
         run: |
           git config --global user.email "luigimario1913@gmail.com"
