@@ -200,6 +200,13 @@ class AvoidSoftInputManager: NSObject {
     }
     
     private func removeOffsetInRootView(rootView: UIView) {
+        if rootView.frame.origin.y == 0 {
+            // https://github.com/mateusz1913/react-native-avoid-softinput/issues/86
+            // If we are here, it means that the view which had offset applied was probably unmounted.
+            // This can happen e.g. when user interactively dismiss iOS modal screen in react-navigation
+            // (I reproduced it in Native Stack, but the issue reporters had it in JS Stack - both use react-native-screens under the hood)
+            return
+        }
         let initialRootViewFrameOriginY = rootView.frame.origin.y
         beginHideAnimation(initialOffset: bottomOffset, addedOffset: -bottomOffset)
         UIView.animate(withDuration: hideDuration, delay: hideDelay, options: [.beginFromCurrentState, easingOption]) {
