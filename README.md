@@ -41,6 +41,11 @@ npx pod-install
 
 For reference, you can visit [Getting started](https://mateusz1913.github.io/react-native-avoid-softinput/docs/guides/) section
 
+## Expo
+
+- ✅ You can use this library with [Development Builds](https://docs.expo.dev/development/introduction/). No config plugin is required.
+- ❌ This library can't be used in the "Expo Go" app because it [requires custom native code](https://docs.expo.dev/workflow/customizing/).
+
 ## Usage
 
 Check usage guides for [module](https://mateusz1913.github.io/react-native-avoid-softinput/docs/guides/usage-module) and [view](https://mateusz1913.github.io/react-native-avoid-softinput/docs/guides/usage-view)
