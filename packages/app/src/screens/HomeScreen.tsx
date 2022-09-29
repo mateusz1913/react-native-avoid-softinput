@@ -51,9 +51,19 @@ const DATA: Array<Example> = [
     route: ROUTES.Modal,
   },
   {
+    description: 'Learn how to handle text fields rendered inside formsheet modal',
+    label: 'ModalFormSheet',
+    route: ROUTES.ModalFormSheet,
+  },
+  {
     description: 'Look how to implement animation with Reanimated library based on keyboard events',
     label: 'Reanimated',
     route: ROUTES.Reanimated,
+  },
+  {
+    description: 'Learn how to handle text fields rendered inside React Navigation (Native Stack) formsheet modal',
+    label: 'ScreensNativeModal',
+    route: ROUTES.ScreensNativeModal,
   },
   {
     description: 'Learn how to handle seperate parts of a form - text field in scroll component and CTA button with fixed position at the bottom of the screen',

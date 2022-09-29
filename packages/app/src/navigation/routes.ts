@@ -7,6 +7,8 @@ export const ROUTES = {
   Form: 'Form' as const,
   KeyboardType: 'KeyboardType' as const,
   Modal: 'Modal' as const,
+  ModalFormSheet: 'ModalFormSheet' as const,
   Reanimated: 'Reanimated' as const,
+  ScreensNativeModal: 'ScreensNativeModal' as const,
   StickyFooter: 'StickyFooter' as const,
 };
