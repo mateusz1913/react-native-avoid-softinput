@@ -83,7 +83,7 @@ class AnimationHandlerImpl : AnimationHandler {
         startDelay = if (isShowAnimation) mShowAnimationDelay else mHideAnimationDelay
         interpolator = mAnimationInterpolator
         addListener(object : AnimatorListenerAdapter() {
-          override fun onAnimationEnd(animation: Animator?) {
+          override fun onAnimationEnd(animation: Animator) {
             super.onAnimationEnd(animation)
             if (isShowAnimation) {
               mIsShowAnimationRunning = false
