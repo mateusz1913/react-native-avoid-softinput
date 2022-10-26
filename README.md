@@ -9,13 +9,11 @@
 
 Native solution for common React Native problem of focused views being covered by soft input view. It is solved by listening for soft input events and applying translation to react root view (or bottom padding if focused element's parent is scroll view) entirely on native side and only if currently focused view is covered by soft input frame. It supports focused views being positioned in scroll views and regular views (check out example app). It also supports modal content, when content is wrapped in [AvoidSoftInputView](https://mateusz1913.github.io/react-native-avoid-softinput/docs/api/view/).
 
-<div style="display: flex; flex-direction: row; justify-content: space-evenly;">
-  <div style="padding: 30px">
+<div align="center" style="padding: 30px">
+  <p align="center">
     <img src="./static/form.gif" alt="Form example" />
-  </div>
-  <div style="padding: 30px">
     <img src="./static/sticky-footer.gif" alt="Sticky footer example" />
-  </div>
+  </p>
 </div>
 
 ## Documentation
