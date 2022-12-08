@@ -6,5 +6,8 @@ module.exports = {
     'react-native-avoid-softinput': {
       root: path.resolve(__dirname, '../../', 'node_modules/react-native-avoid-softinput'),
     },
+    'react-native-safe-area-context': {
+      root: path.resolve(__dirname, '../../', 'node_modules/react-native-safe-area-context'),
+    },
   },
 };

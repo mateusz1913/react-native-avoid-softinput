@@ -10,7 +10,7 @@
 // MARK: Swift classes in ObjC++
 
 // Does not work https://github.com/CocoaPods/CocoaPods/issues/10544
-//#import "react_native_avoid_softinput-Swift.h"
+// #import "react_native_avoid_softinput-Swift.h"
 __attribute__((objc_runtime_name("_TtC28react_native_avoid_softinput23AvoidSoftInputConstants")))
 @interface AvoidSoftInputConstants : NSObject
 + (double)hideAnimationDelayInSeconds;

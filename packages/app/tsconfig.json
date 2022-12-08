@@ -1,5 +1,12 @@
 {
   "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "paths": {
+      "react": ["./node_modules/@types/react"],
+      "react-native": ["./node_modules/@types/react-native"],
+      "react-native-avoid-softinput": ["../react-native-avoid-softinput/src/index"]
+    },
+  },
   "include": ["src"],
   "exclude": ["node_modules"]
 }

@@ -13,8 +13,6 @@ function onNavigationReady() {
 }
 
 export const App: React.FC = () => {
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  //@ts-ignore
   return <GestureHandlerRootView style={styles.rootView}>
     <SafeAreaProvider>
       <BottomSheetModalProvider>

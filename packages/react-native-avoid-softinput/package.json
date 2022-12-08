@@ -56,13 +56,13 @@
     "release-library": "release-it"
   },
   "devDependencies": {
-    "@release-it/conventional-changelog": "5.1.0",
-    "@types/react": "17.0.39",
-    "@types/react-native": "0.70.3",
+    "@release-it/conventional-changelog": "5.1.1",
+    "@types/react": "17.0.52",
+    "@types/react-native": "0.70.8",
     "react": "18.1.0",
-    "react-native": "0.70.1",
-    "react-native-builder-bob": "0.18.3",
-    "release-it": "15.4.2"
+    "react-native": "0.70.6",
+    "react-native-builder-bob": "0.20.3",
+    "release-it": "15.5.1"
   },
   "peerDependencies": {
     "react": ">=17.0.0",
