@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import * as React from 'react';
-import type { ListRenderItem } from 'react-native';
+import type { ListRenderItem, PlatformOSType } from 'react-native';
 import {
   FlatList,
   Platform,
@@ -17,7 +17,7 @@ import { styles as commonStyles } from '../consts/styles';
 import { ROUTES } from '../navigation/routes';
 import type { RootStackNavigationProp } from '../navigation/types';
 
-type Example = { description: string, label: string, route: keyof typeof ROUTES }
+type Example = { description: string, label: string, platform?: PlatformOSType, route: keyof typeof ROUTES }
 
 const DATA: Array<Example> = [
   {
@@ -53,6 +53,7 @@ const DATA: Array<Example> = [
   {
     description: 'Learn how to handle text fields rendered inside formsheet modal',
     label: 'ModalFormSheet',
+    platform: 'ios',
     route: ROUTES.ModalFormSheet,
   },
   {
@@ -95,7 +96,7 @@ export const HomeScreen: React.FC = () => {
     <SafeAreaView edges={[ 'left', 'right', 'bottom' ]} style={commonStyles.screenContainer}>
       <View style={commonStyles.screenContainer}>
         <FlatList
-          data={DATA}
+          data={DATA.filter((item) => typeof item.platform === 'undefined' || item.platform === Platform.OS)}
           keyExtractor={(item) => item.route}
           renderItem={renderItem}
         />
