@@ -25,7 +25,8 @@
 #else
         RCTRootView
 #endif
-        class]])
+        class]]
+      && viewController.view.subviews.count > 0)
     {
     return viewController.view.subviews[0];
   }
