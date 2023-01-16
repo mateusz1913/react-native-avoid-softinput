@@ -5,7 +5,7 @@ on:
 
 jobs:
   npm-release-major:
-    uses: mateusz1913/react-native-avoid-softinput/.github/workflows/npm-release-template.yml@master
+    uses: mateusz1913/react-native-avoid-softinput/.github/workflows/npm-release-template.yml@main
     with:
       increment: minor
     secrets:

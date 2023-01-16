@@ -2,7 +2,7 @@ name: lint-android
 
 on:
   pull_request:
-    branches: [master]
+    branches: [main]
     paths:
       - "packages/mobile/android/**"
       - "packages/react-native-avoid-softinput/android/**"

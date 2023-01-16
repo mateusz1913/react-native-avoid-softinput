@@ -51,7 +51,7 @@ const config = {
             position: 'left',
           },
           {
-            href: 'https://github.com/mateusz1913/react-native-avoid-softinput/tree/master/packages/mobile',
+            href: 'https://github.com/mateusz1913/react-native-avoid-softinput/tree/main/packages/mobile',
             label: 'Example App',
             position: 'left',
           },

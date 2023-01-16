@@ -2,7 +2,7 @@ name: lint-js
 
 on:
   pull_request:
-    branches: [master]
+    branches: [main]
     paths:
       - "packages/app/src/**"
       - "packages/app/package.json"

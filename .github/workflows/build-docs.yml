@@ -2,13 +2,13 @@ name: build-docs
 
 on:
   pull_request:
-    branches: [master]
+    branches: [main]
     paths:
       - "docs/**"
       - "packages/react-native-avoid-softinput/**"
       - ".github/workflows/build-docs.yml"
   push:
-    branches: [master]
+    branches: [main]
     paths:
       - "docs/**"
       - "packages/react-native-avoid-softinput/**"
@@ -72,7 +72,7 @@ jobs:
         env:
           USE_SSH: true
           GIT_USER: git
-          CURRENT_BRANCH: master
+          CURRENT_BRANCH: main
           DEPLOYMENT_BRANCH: gh-pages
           github_token: ${{ secrets.GITHUB_TOKEN }}
         run: |
