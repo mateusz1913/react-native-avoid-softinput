@@ -1,9 +1,9 @@
 // import { useFocusEffect } from '@react-navigation/native';
 import * as React from 'react';
 import type { TextInput } from 'react-native';
-import { Image, ScrollView, StyleSheet, View } from 'react-native';
+import { Image, SafeAreaView, ScrollView, StyleSheet, View } from 'react-native';
 import { AvoidSoftInput, AvoidSoftInputView } from 'react-native-avoid-softinput';
-import { SafeAreaView } from 'react-native-safe-area-context';
+// import { SafeAreaView } from 'react-native-safe-area-context';
 
 import Button from '../components/Button';
 import SingleInput from '../components/SingleInput';
@@ -36,7 +36,9 @@ export const EnabledViewPropExample: React.FC = () => {
     setEnabled((prev) => !prev);
   }
 
-  return <SafeAreaView edges={[ 'bottom', 'left', 'right' ]} style={commonStyles.screenContainer}>
+  return <SafeAreaView
+    // edges={[ 'bottom', 'left', 'right' ]}
+    style={commonStyles.screenContainer}>
     <AvoidSoftInputView enabled={enabled} style={commonStyles.screenContainer}>
       <ScrollView
         bounces={false}

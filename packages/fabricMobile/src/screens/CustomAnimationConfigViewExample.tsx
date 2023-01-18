@@ -1,8 +1,8 @@
 // import { useFocusEffect } from '@react-navigation/native';
 import * as React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import { AvoidSoftInput, AvoidSoftInputView } from 'react-native-avoid-softinput';
-import { SafeAreaView } from 'react-native-safe-area-context';
+// import { SafeAreaView } from 'react-native-safe-area-context';
 
 import SingleInput from '../components/SingleInput';
 
@@ -22,7 +22,9 @@ export const CustomAnimationConfigViewExample: React.FC = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return <SafeAreaView edges={[ 'left', 'bottom', 'right' ]} style={styles.container}>
+  return <SafeAreaView
+    // edges={[ 'left', 'bottom', 'right' ]}
+    style={styles.container}>
     <AvoidSoftInputView
       easing="easeOut"
       hideAnimationDelay={1000}

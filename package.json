@@ -3,15 +3,6 @@
   "workspaces": {
     "packages": [
       "packages/*"
-    ],
-    "nohoist": [
-      "**/react",
-      "**/react-dom",
-      "**/react-native",
-      "**/react-native/**",
-      "**/@gorhom/bottom-sheet",
-      "**/react-native-gesture-handler",
-      "**/react-native-reanimated"
     ]
   },
   "scripts": {
@@ -32,9 +23,6 @@
     "release": "yarn --cwd packages/react-native-avoid-softinput release-it",
     "example:mobile": "yarn --cwd packages/mobile",
     "example:fabricMobile": "yarn --cwd packages/fabricMobile",
-    "bootstrap": "yarn bootstrap:mobile && yarn bootstrap:fabricMobile",
-    "bootstrap:mobile": "yarn example:mobile && yarn && yarn pods:mobile",
-    "bootstrap:fabricMobile": "yarn example:fabricMobile && yarn && yarn pods:fabricMobile",
     "pods:mobile": "pod-install packages/mobile/ios --quiet",
     "pods:fabricMobile": "RCT_NEW_ARCH_ENABLED=1 pod-install packages/fabricMobile/ios --quiet",
     "reset": "yarn reset:node_modules && yarn reset:pods",
@@ -51,10 +39,7 @@
     "fabric:android:studio": "yarn workspace @avoid-softinput-example/fabric-mobile studio",
     "fabric:ios:metro": "yarn workspace @avoid-softinput-example/fabric-mobile start",
     "fabric:ios:start": "yarn workspace @avoid-softinput-example/fabric-mobile ios",
-    "fabric:ios:xcode": "yarn workspace @avoid-softinput-example/fabric-mobile xcode",
-    "docs:start": "yarn --cwd docs start --host 0.0.0.0",
-    "docs:build": "yarn --cwd docs build",
-    "docs:clear": "yarn --cwd docs clear"
+    "fabric:ios:xcode": "yarn workspace @avoid-softinput-example/fabric-mobile xcode"
   },
   "repository": "https://github.com/mateusz1913/react-native-avoid-softinput",
   "author": "Mateusz Mędrek <luigimario1913@gmail.com> (https://github.com/mateusz1913)",
@@ -85,5 +70,6 @@
     "extends": [
       "@commitlint/config-conventional"
     ]
-  }
+  },
+  "packageManager": "yarn@3.3.1"
 }

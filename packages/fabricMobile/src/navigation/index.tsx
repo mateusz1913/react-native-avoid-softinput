@@ -1,7 +1,7 @@
 // import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import * as React from 'react';
-import { Platform, Pressable, StyleSheet, Text, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { Platform, Pressable, SafeAreaView, StyleSheet, Text, View } from 'react-native';
+// import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { CustomAnimationConfigModuleExample } from '../screens/CustomAnimationConfigModuleExample';
 import { CustomAnimationConfigViewExample } from '../screens/CustomAnimationConfigViewExample';
@@ -66,7 +66,9 @@ export const Navigation: React.FC = () => {
       </SafeAreaView>
       {currentRoute !== ROUTES.Home && 
         <View style={[ StyleSheet.absoluteFillObject, styles.childScreen ]}>
-          <SafeAreaView edges={[ 'top', 'left', 'right' ]} style={styles.childScreenHeader}>
+          <SafeAreaView
+            // edges={[ 'top', 'left', 'right' ]}
+            style={styles.childScreenHeader}>
             <Pressable
               android_ripple={{
                 borderless: false,

@@ -1,8 +1,8 @@
 // import { useFocusEffect } from '@react-navigation/native';
 import * as React from 'react';
-import { Image, Modal, ScrollView, StyleSheet, View } from 'react-native';
+import { Image, Modal, SafeAreaView, ScrollView, StyleSheet, View } from 'react-native';
 import { AvoidSoftInput, AvoidSoftInputView } from 'react-native-avoid-softinput';
-import { SafeAreaView } from 'react-native-safe-area-context';
+// import { SafeAreaView } from 'react-native-safe-area-context';
 
 import Button from '../components/Button';
 import CloseButton from '../components/CloseButton';
@@ -36,7 +36,9 @@ export const ModalExample: React.FC = () => {
     setModalVisible(true);
   }
 
-  return <SafeAreaView edges={[ 'left', 'right' ]} style={commonStyles.screenContainer}>
+  return <SafeAreaView
+    // edges={[ 'left', 'right' ]}
+    style={commonStyles.screenContainer}>
     <Button
       onPress={openModal}
       title="Open modal"
@@ -50,7 +52,9 @@ export const ModalExample: React.FC = () => {
       transparent={true}
       visible={modalVisible}
     >
-      <SafeAreaView edges={[ 'left', 'right', 'bottom' ]} style={styles.modalContent}>
+      <SafeAreaView
+        // edges={[ 'left', 'right', 'bottom' ]}
+        style={styles.modalContent}>
         <View style={styles.container}>
           <View style={styles.closeContainer}>
             <CloseButton onPress={closeModal} />

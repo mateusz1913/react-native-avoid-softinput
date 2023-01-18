@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import * as React from 'react';
 import { Platform, Pressable, StyleSheet, Text } from 'react-native';
 
 interface Props {
@@ -7,7 +7,7 @@ interface Props {
 }
 
 const Button: React.FC<Props> = ({ onPress, title }) => {
-  const formattedTitle = useMemo(() => {
+  const formattedTitle = React.useMemo(() => {
     if (Platform.OS === 'android') {
       return title.toUpperCase();
     }

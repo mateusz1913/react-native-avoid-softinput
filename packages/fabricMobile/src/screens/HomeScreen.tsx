@@ -4,13 +4,14 @@ import type { ListRenderItem } from 'react-native';
 import {
   FlatList,
   Platform,
+  SafeAreaView,
   StatusBar,
   StyleSheet,
   Text,
   View,
 } from 'react-native';
 import { AvoidSoftInput } from 'react-native-avoid-softinput';
-import { SafeAreaView } from 'react-native-safe-area-context';
+// import { SafeAreaView } from 'react-native-safe-area-context';
 
 import Button from '../components/Button';
 import { styles as commonStyles } from '../consts/styles';
@@ -70,55 +71,55 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ navigateWithRoute }) => 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return (
-    <SafeAreaView edges={[ 'left', 'right', 'bottom' ]} style={commonStyles.screenContainer}>
-      <View style={commonStyles.screenContainer}>
-        <FlatList
-          data={DATA}
-          keyExtractor={(item) => item.route}
-          renderItem={renderItem}
+  return <SafeAreaView 
+    // edges={[ 'left', 'right', 'bottom' ]}
+    style={commonStyles.screenContainer}>
+    <View style={commonStyles.screenContainer}>
+      <FlatList
+        data={DATA}
+        keyExtractor={(item) => item.route}
+        renderItem={renderItem}
+      />
+    </View>
+    {Platform.OS === 'android' ? <View style={styles.adjustContainer}>
+      <View style={styles.adjustItem}>
+        <Button
+          onPress={() => AvoidSoftInput.setAdjustNothing()}
+          title="Adjust Nothing"
         />
       </View>
-      {Platform.OS === 'android' ? <View style={styles.adjustContainer}>
-        <View style={styles.adjustItem}>
-          <Button
-            onPress={() => AvoidSoftInput.setAdjustNothing()}
-            title="Adjust Nothing"
-          />
-        </View>
-        <View style={styles.adjustItem}>
-          <Button
-            onPress={() => AvoidSoftInput.setAdjustPan()}
-            title="Adjust Pan"
-          />
-        </View>
-        <View style={styles.adjustItem}>
-          <Button
-            onPress={() => AvoidSoftInput.setAdjustResize()}
-            title="Adjust Resize"
-          />
-        </View>
-        <View style={styles.adjustItem}>
-          <Button
-            onPress={() => AvoidSoftInput.setAdjustUnspecified()}
-            title="Adjust Unspecified"
-          />
-        </View>
-        <View style={styles.adjustItem}>
-          <Button
-            onPress={() => AvoidSoftInput.setDefaultAppSoftInputMode()}
-            title="Default softinput mode"
-          />
-        </View>
-      </View> : null}
-      <StatusBar
-        animated={true}
-        backgroundColor={'transparent'}
-        barStyle={'dark-content'}
-        translucent={true}
-      />
-    </SafeAreaView>
-  );
+      <View style={styles.adjustItem}>
+        <Button
+          onPress={() => AvoidSoftInput.setAdjustPan()}
+          title="Adjust Pan"
+        />
+      </View>
+      <View style={styles.adjustItem}>
+        <Button
+          onPress={() => AvoidSoftInput.setAdjustResize()}
+          title="Adjust Resize"
+        />
+      </View>
+      <View style={styles.adjustItem}>
+        <Button
+          onPress={() => AvoidSoftInput.setAdjustUnspecified()}
+          title="Adjust Unspecified"
+        />
+      </View>
+      <View style={styles.adjustItem}>
+        <Button
+          onPress={() => AvoidSoftInput.setDefaultAppSoftInputMode()}
+          title="Default softinput mode"
+        />
+      </View>
+    </View> : null}
+    <StatusBar
+      animated={true}
+      backgroundColor={'transparent'}
+      barStyle={'dark-content'}
+      translucent={true}
+    />
+  </SafeAreaView>;
 };
 
 const styles = StyleSheet.create({

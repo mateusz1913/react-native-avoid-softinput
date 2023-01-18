@@ -1,7 +1,7 @@
 // import { NavigationContainer } from '@react-navigation/native';
 import * as React from 'react';
 import RNBootSplash from 'react-native-bootsplash';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
+// import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { Navigation } from './navigation';
 
@@ -14,9 +14,9 @@ export const App: React.FC = () => {
     onNavigationReady();
   }, []);
 
-  return <SafeAreaProvider>
+  return <>
     {/* <NavigationContainer onReady={onNavigationReady}> */}
        <Navigation />
     {/* </NavigationContainer> */}
-  </SafeAreaProvider>;
+  </>;
 };

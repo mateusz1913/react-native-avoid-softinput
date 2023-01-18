@@ -57,12 +57,11 @@
   },
   "devDependencies": {
     "@release-it/conventional-changelog": "5.1.1",
-    "@types/react": "17.0.52",
-    "@types/react-native": "0.70.8",
-    "react": "18.1.0",
-    "react-native": "0.70.6",
+    "@types/react": "18.0.26",
+    "react": "18.2.0",
+    "react-native": "0.71.0",
     "react-native-builder-bob": "0.20.3",
-    "release-it": "15.5.1"
+    "release-it": "15.6.0"
   },
   "peerDependencies": {
     "react": ">=17.0.0",
