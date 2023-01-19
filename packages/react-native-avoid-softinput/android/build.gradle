@@ -27,8 +27,17 @@ if (project == rootProject) {
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
+apply from: "$projectDir/react-native-helpers.gradle"
+
 if (isNewArchitectureEnabled()) {
   apply plugin: "com.facebook.react"
+
+  def reactNativeDirectory = project.ext.resolveReactNativeDirectory()
+
+  react {
+    reactNativeDir = file(reactNativeDirectory)
+    codegenDir = file("${file(reactNativeDirectory).getParentFile()}/react-native-codegen")
+  }
 }
 
 def getExtOrDefault(name) {
@@ -46,16 +55,6 @@ def reactNativeArchitectures() {
 
 android {
   compileSdkVersion getExtOrIntegerDefault('compileSdkVersion')
-  buildToolsVersion getExtOrDefault('buildToolsVersion')
-
-  // Used to override the NDK path/version on internal CI or by allowing
-  // users to customize the NDK path/version from their root project (e.g. for M1 support)
-  if (rootProject.hasProperty("ndkPath")) {
-    ndkPath rootProject.ext.ndkPath
-  }
-  if (rootProject.hasProperty("ndkVersion")) {
-    ndkVersion rootProject.ext.ndkVersion
-  }
 
   defaultConfig {
     minSdkVersion 21
@@ -63,9 +62,6 @@ android {
     versionCode 1
     versionName "1.0"
     buildConfigField "boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString()
-    ndk {
-      abiFilters (*reactNativeArchitectures())
-    }
   }
 
   sourceSets {
@@ -83,16 +79,11 @@ android {
       minifyEnabled false
     }
   }
+
   lintOptions {
     disable 'GradleCompatible'
   }
-  packagingOptions {
-    // For some reason gradle only complains about the duplicated version of libreact_render libraries
-    // while there are more libraries copied in intermediates folder of the lib build directory, we exclude
-    // only the ones that make the build fail (ideally we should only include librnavoidsoftinput_modules but we
-    // are only allowed to specify exclude patterns)
-    exclude "**/libreact_render*.so"
-  }
+
   compileOptions {
     sourceCompatibility JavaVersion.VERSION_1_8
     targetCompatibility JavaVersion.VERSION_1_8
@@ -111,8 +102,8 @@ repositories {
     defaultDir = rootProject.ext.get('reactNativeAndroidRoot')
   } else {
     defaultDir = new File(
-            projectDir,
-            '/../../../node_modules/react-native/android'
+      projectDir,
+      '/../../../node_modules/react-native/android'
     )
   }
 
@@ -132,13 +123,13 @@ repositories {
       parentDir = parentDir.parentFile
 
       def androidSourcesDir = new File(
-              parentDir,
-              'node_modules/react-native'
+        parentDir,
+        'node_modules/react-native'
       )
 
       def androidPrebuiltBinaryDir = new File(
-              parentDir,
-              'node_modules/react-native/android'
+        parentDir,
+        'node_modules/react-native/android'
       )
 
       if (androidPrebuiltBinaryDir.exists()) {
@@ -163,8 +154,8 @@ repositories {
 
   if (!found) {
     throw new GradleException(
-            "${project.name}: unable to locate React Native android sources. " +
-                    "Ensure you have you installed React Native as a dependency in your project and try again."
+      "${project.name}: unable to locate React Native android sources. " +
+      "Ensure you have you installed React Native as a dependency in your project and try again."
     )
   }
 }
@@ -174,8 +165,12 @@ def kotlin_coroutines_version = getExtOrDefault('kotlinCoroutinesVersion')
 def androidX_core_ktx_version = getExtOrDefault('androidXCoreKtxVersion')
 
 dependencies {
-  // noinspection GradleDynamicVersion
-  api 'com.facebook.react:react-native:+'
+  if (project.ext.shouldConsumeReactNativeFromMavenCentral()) {
+    implementation "com.facebook.react:react-android" // Set by the React Native Gradle Plugin
+  } else {
+    // noinspection GradleDynamicVersion
+    implementation 'com.facebook.react:react-native:+' // From node_modules
+  }
   implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
   implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlin_coroutines_version"
   implementation "androidx.core:core-ktx:$androidX_core_ktx_version"

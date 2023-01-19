@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { Platform, Pressable, StyleSheet, View } from 'react-native';
 
 interface Props {

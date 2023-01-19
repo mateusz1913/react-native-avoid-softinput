@@ -35,8 +35,8 @@ jobs:
             ${{ runner.os }}-yarn-
       - name: Test Build
         run: |
-          yarn --cwd docs install --frozen-lockfile
-          yarn --cwd docs build
+          yarn docs/ install --immutable
+          yarn docs/ build
   gh-release:
     if: github.event_name != 'pull_request'
     name: Deploy docs
@@ -78,5 +78,5 @@ jobs:
         run: |
           git config --global user.email "luigimario1913@gmail.com"
           git config --global user.name "Mateusz Mędrek"
-          yarn --cwd docs install --frozen-lockfile
-          yarn --cwd docs deploy
+          yarn docs/ install --immutable
+          yarn docs/ deploy

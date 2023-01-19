@@ -1,5 +1,5 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import React from 'react';
+import * as React from 'react';
 
 import { BottomSheetExample } from '../screens/BottomSheetExample';
 import { CustomAnimationConfigModuleExample } from '../screens/CustomAnimationConfigModuleExample';

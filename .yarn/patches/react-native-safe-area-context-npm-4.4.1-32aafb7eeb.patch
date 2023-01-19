@@ -1,0 +1,94 @@
+diff --git a/android/build.gradle b/android/build.gradle
+index 7b5b358c6081d37edcd61e28b65dde87a7eb24d9..d72f86e2b9c426baba1f7308d06f4a5f96e8b2a9 100644
+--- a/android/build.gradle
++++ b/android/build.gradle
+@@ -27,8 +27,17 @@ def isNewArchitectureEnabled() {
+ apply plugin: 'com.android.library'
+ apply plugin: 'kotlin-android'
+ 
++apply from: "$projectDir/react-native-helpers.gradle"
++
+ if (isNewArchitectureEnabled()) {
+     apply plugin: "com.facebook.react"
++
++    def reactNativeDirectory = project.ext.resolveReactNativeDirectory()
++
++    react {
++        reactNativeDir = file(reactNativeDirectory)
++        codegenDir = file("${file(reactNativeDirectory).getParentFile()}/react-native-codegen")
++    }
+ }
+ 
+ android {
+@@ -99,10 +108,6 @@ repositories {
+ def kotlin_version = getExtOrDefault('kotlinVersion', project.properties['RNSAC_kotlinVersion'])
+ 
+ dependencies {
+-    if (isNewArchitectureEnabled()) {
+-        implementation project(":ReactAndroid")
+-    } else {
+-        implementation 'com.facebook.react:react-native:+'
+-    }
++    implementation 'com.facebook.react:react-native:+'
+     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+ }
+diff --git a/android/react-native-helpers.gradle b/android/react-native-helpers.gradle
+new file mode 100644
+index 0000000000000000000000000000000000000000..96db8326a07da5f77b1aff8425602ba4a9d8eb4a
+--- /dev/null
++++ b/android/react-native-helpers.gradle
+@@ -0,0 +1,54 @@
++def safeAppExtGet(prop, fallback) {
++  def appProject = rootProject.allprojects.find { it.plugins.hasPlugin('com.android.application') }
++  appProject?.ext?.has(prop) ? appProject.ext.get(prop) : fallback
++}
++
++// Let's detect react-native's directory, it will be used to determine RN's version
++// https://github.com/software-mansion/react-native-reanimated/blob/cda4627c3337c33674f05f755b7485165c6caca9/android/build.gradle#L88
++def resolveReactNativeDirectory() {
++  def reactNativeLocation = safeAppExtGet("REACT_NATIVE_NODE_MODULES_DIR", null)
++  if (reactNativeLocation != null) {
++    return file(reactNativeLocation)
++  }
++
++  // monorepo workaround
++  // react-native can be hoisted or in project's own node_modules
++  def reactNativeFromProjectNodeModules = file("${rootProject.projectDir}/../node_modules/react-native")
++  if (reactNativeFromProjectNodeModules.exists()) {
++    return reactNativeFromProjectNodeModules
++  }
++
++  // When running library's example projects (fabricMobile or mobile)
++  def reactNativeFromLibraryRepo = file("${projectDir}/../../../node_modules/react-native")
++  if (reactNativeFromLibraryRepo.exists()) {
++    return reactNativeFromLibraryRepo
++  }
++
++  def reactNativeFromNodeModules = file("${projectDir}/../../react-native")
++  if (reactNativeFromNodeModules.exists()) {
++    return reactNativeFromNodeModules
++  }
++
++  throw new GradleException(
++    "${project.name}: unable to resolve react-native location in " +
++    "node_modules. You should project extension property (in app/build.gradle) " +
++    "`REACT_NATIVE_NODE_MODULES_DIR` with path to react-native."
++  )
++}
++
++// https://github.com/software-mansion/react-native-reanimated/blob/cda4627c3337c33674f05f755b7485165c6caca9/android/build.gradle#L199#L205
++def reactNativeRootDir = resolveReactNativeDirectory()
++
++def reactProperties = new Properties()
++file("$reactNativeRootDir/ReactAndroid/gradle.properties").withInputStream { reactProperties.load(it) }
++
++def REACT_NATIVE_VERSION = reactProperties.getProperty("VERSION_NAME")
++def REACT_NATIVE_MINOR_VERSION = REACT_NATIVE_VERSION.startsWith("0.0.0-") ? 1000 : REACT_NATIVE_VERSION.split("\\.")[1].toInteger()
++
++project.ext.resolveReactNativeDirectory = { ->
++  return resolveReactNativeDirectory()
++}
++
++project.ext.shouldConsumeReactNativeFromMavenCentral = { ->
++  return REACT_NATIVE_MINOR_VERSION >= 71
++}
