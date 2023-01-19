@@ -7,7 +7,7 @@
   },
   "scripts": {
     "test": "jest",
-    "typescript": "tsc --noEmit",
+    "typescript": "tsc --noEmit -p packages/app/tsconfig.json && tsc --noEmit -p packages/fabricMobile/tsconfig.json && tsc --noEmit -p packages/mobile/tsconfig.json && tsc --noEmit -p packages/react-native-avoid-softinput/tsconfig.json",
     "lint:js": "eslint \"**/*.{js,ts,tsx}\"",
     "lint:android": "./packages/react-native-avoid-softinput/android/gradlew -p packages/react-native-avoid-softinput/android spotlessCheck --quiet",
     "lint:ios:swift": "swiftlint lint --config ./packages/mobile/ios/.swiftlint.yml --quiet",
