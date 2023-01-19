@@ -39,6 +39,9 @@ __metadata:
     "@babel/core": 7.20.12
     "@babel/preset-env": 7.20.2
     "@babel/runtime": 7.20.7
+    "@gorhom/bottom-sheet": 4.4.5
+    "@react-navigation/native": 6.1.2
+    "@react-navigation/native-stack": 6.9.8
     "@types/jest": 29.2.4
     "@types/react": 18.0.26
     "@types/react-test-renderer": 18.0.0
@@ -50,7 +53,11 @@ __metadata:
     react: 18.2.0
     react-native: 0.71.0
     react-native-bootsplash: 4.4.1
+    react-native-gesture-handler: 2.9.0
     react-native-monorepo-tools: 1.2.1
+    react-native-reanimated: 3.0.0-rc.10
+    react-native-safe-area-context: 4.4.1
+    react-native-screens: 3.19.0
     react-test-renderer: 18.2.0
   languageName: unknown
   linkType: soft
@@ -78,7 +85,7 @@ __metadata:
     react-native-bootsplash: 4.4.1
     react-native-gesture-handler: 2.9.0
     react-native-monorepo-tools: 1.2.1
-    react-native-reanimated: 2.14.2
+    react-native-reanimated: 3.0.0-rc.10
     react-native-safe-area-context: 4.4.1
     react-native-screens: 3.19.0
     react-test-renderer: 18.2.0
@@ -12363,6 +12370,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-native-gesture-handler@patch:react-native-gesture-handler@npm%3A2.9.0#./.yarn/patches/react-native-gesture-handler-npm-2.9.0-ff86f6b305.patch::locator=root-workspace-0b6124%40workspace%3A.":
+  version: 2.9.0
+  resolution: "react-native-gesture-handler@patch:react-native-gesture-handler@npm%3A2.9.0#./.yarn/patches/react-native-gesture-handler-npm-2.9.0-ff86f6b305.patch::version=2.9.0&hash=66b9a3&locator=root-workspace-0b6124%40workspace%3A."
+  dependencies:
+    "@egjs/hammerjs": ^2.0.17
+    hoist-non-react-statics: ^3.3.0
+    invariant: ^2.2.4
+    lodash: ^4.17.21
+    prop-types: ^15.7.2
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  checksum: c5d01dd8e43e36627ea6bf8f480b687329716cd826646fc7d0bdd30df49a5e18bcfde601351e3114631a772fedefc022769f227c97c4b903859528e6eea4dd56
+  languageName: node
+  linkType: hard
+
 "react-native-gradle-plugin@npm:^0.71.12":
   version: 0.71.12
   resolution: "react-native-gradle-plugin@npm:0.71.12"
@@ -12380,9 +12403,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-reanimated@npm:2.14.2":
-  version: 2.14.2
-  resolution: "react-native-reanimated@npm:2.14.2"
+"react-native-reanimated@npm:3.0.0-rc.10":
+  version: 3.0.0-rc.10
+  resolution: "react-native-reanimated@npm:3.0.0-rc.10"
   dependencies:
     "@babel/plugin-transform-object-assign": ^7.16.7
     "@babel/preset-typescript": ^7.16.7
@@ -12395,7 +12418,7 @@ __metadata:
     "@babel/core": ^7.0.0-0
     react: "*"
     react-native: "*"
-  checksum: 5ffd139e474c7412775bd92a0d3b2c45ac0e9dc2d6df5a15a08be3e7fa5f2a5ce0a2434180221a1fb43284569de94bfa9b99b7bbde844cb5da9e5a25d3511aeb
+  checksum: 79c3277d20d34bfc8647e6362b69a2fa9c0d8b53922b1151bc19a1e75814bf0dad723fa167a28c196ae5b41c358290e447e660a1106555ce02eb989fc3772d0f
   languageName: node
   linkType: hard
 
@@ -12409,6 +12432,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-native-safe-area-context@patch:react-native-safe-area-context@npm%3A4.4.1#./.yarn/patches/react-native-safe-area-context-npm-4.4.1-32aafb7eeb.patch::locator=root-workspace-0b6124%40workspace%3A.":
+  version: 4.4.1
+  resolution: "react-native-safe-area-context@patch:react-native-safe-area-context@npm%3A4.4.1#./.yarn/patches/react-native-safe-area-context-npm-4.4.1-32aafb7eeb.patch::version=4.4.1&hash=7a5257&locator=root-workspace-0b6124%40workspace%3A."
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  checksum: db1689a8fe7e8d1f38e52835ce3e51669c99b799d03d2976c770b87745551d61f8a774c06a1c5c73bab9492a3690302b91d44bf407dd2339abb8bb1f60339824
+  languageName: node
+  linkType: hard
+
 "react-native-screens@npm:3.19.0":
   version: 3.19.0
   resolution: "react-native-screens@npm:3.19.0"
@@ -12419,6 +12452,19 @@ __metadata:
     react: "*"
     react-native: "*"
   checksum: 3a0116bf0628a735bdb87d7e4648f4bbac278152599a2bdd973e4dec92f87cb2c805dd7adb844d01236c7c92bab017ea8de59bea44d9f58397fddb6f9f3077c5
+  languageName: node
+  linkType: hard
+
+"react-native-screens@patch:react-native-screens@npm%3A3.19.0#./.yarn/patches/react-native-screens-npm-3.19.0-957b6ec020.patch::locator=root-workspace-0b6124%40workspace%3A.":
+  version: 3.19.0
+  resolution: "react-native-screens@patch:react-native-screens@npm%3A3.19.0#./.yarn/patches/react-native-screens-npm-3.19.0-957b6ec020.patch::version=3.19.0&hash=1e99a9&locator=root-workspace-0b6124%40workspace%3A."
+  dependencies:
+    react-freeze: ^1.0.0
+    warn-once: ^0.1.0
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  checksum: c81024a72d428389cdd3c99f0f4bb68836558993a6557d78e0e49c932b59f7bbf83919c3c1598a2696cf42a9f633d674de8c752108e903ba43f46ccbe1de1aad
   languageName: node
   linkType: hard
 

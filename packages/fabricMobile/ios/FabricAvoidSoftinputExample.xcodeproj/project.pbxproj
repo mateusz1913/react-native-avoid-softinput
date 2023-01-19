@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
-		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		13B07FC11A68108700A75B9A /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.mm */; };
 		3920C804D2264F9842F7FCF8 /* libPods-FabricAvoidSoftinputExample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8085F598CAD7203A141FFD88 /* libPods-FabricAvoidSoftinputExample.a */; };
 		83441F9328DC7289006E37F3 /* BootSplash.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 83441F9228DC7289006E37F3 /* BootSplash.storyboard */; };
 /* End PBXBuildFile section */
@@ -20,7 +20,7 @@
 		13B07FB01A68108700A75B9A /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = FabricAvoidSoftinputExample/AppDelegate.mm; sourceTree = "<group>"; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = FabricAvoidSoftinputExample/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = FabricAvoidSoftinputExample/Info.plist; sourceTree = "<group>"; };
-		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = FabricAvoidSoftinputExample/main.m; sourceTree = "<group>"; };
+		13B07FB71A68108700A75B9A /* main.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = main.mm; path = FabricAvoidSoftinputExample/main.mm; sourceTree = "<group>"; };
 		1753E1727692138625639E33 /* Pods-FabricAvoidSoftinputExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FabricAvoidSoftinputExample.release.xcconfig"; path = "Target Support Files/Pods-FabricAvoidSoftinputExample/Pods-FabricAvoidSoftinputExample.release.xcconfig"; sourceTree = "<group>"; };
 		8085F598CAD7203A141FFD88 /* libPods-FabricAvoidSoftinputExample.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-FabricAvoidSoftinputExample.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		83441F9228DC7289006E37F3 /* BootSplash.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = BootSplash.storyboard; path = FabricAvoidSoftinputExample/BootSplash.storyboard; sourceTree = "<group>"; };
@@ -48,7 +48,7 @@
 				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
-				13B07FB71A68108700A75B9A /* main.m */,
+				13B07FB71A68108700A75B9A /* main.mm */,
 				83441F9228DC7289006E37F3 /* BootSplash.storyboard */,
 				83441F9428DC7464006E37F3 /* FabricAvoidSoftinputExample-Bridging-Header.h */,
 			);
@@ -270,7 +270,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */,
-				13B07FC11A68108700A75B9A /* main.m in Sources */,
+				13B07FC11A68108700A75B9A /* main.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
