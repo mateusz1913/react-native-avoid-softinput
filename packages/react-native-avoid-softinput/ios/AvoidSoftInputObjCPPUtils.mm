@@ -1,6 +1,7 @@
 #import "AvoidSoftInputObjCPPUtils.h"
 
 #import <React/RCTRootView.h>
+#import <React/RCTUtils.h>
 #ifdef RCT_NEW_ARCH_ENABLED
 #import <React/RCTFabricSurfaceHostingProxyRootView.h>
 #endif
@@ -16,22 +17,28 @@
  *
  * In case, we have to handle <Modal /> component, simply return view of presented view controller
  */
-+ (UIView *_Nonnull)getReactRootViewWithRootViewController:(UIViewController *)viewController
++ (UIView *_Nullable)getReactRootView
 {
-  if ([
-        viewController.view isKindOfClass:[
+    UIViewController *_Nullable presentedViewController = RCTPresentedViewController();
+
+    if (presentedViewController == nil) {
+        return nil;
+    }
+
+    if ([
+        presentedViewController.view isKindOfClass:[
 #ifdef RCT_NEW_ARCH_ENABLED
         RCTFabricSurfaceHostingProxyRootView
 #else
         RCTRootView
 #endif
         class]]
-      && viewController.view.subviews.count > 0)
+        && presentedViewController.view.subviews.count > 0)
     {
-    return viewController.view.subviews[0];
-  }
+        return presentedViewController.view.subviews[0];
+    }
 
-  return viewController.view;
+    return presentedViewController.view;
 }
 
 @end

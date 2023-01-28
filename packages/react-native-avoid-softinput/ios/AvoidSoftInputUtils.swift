@@ -1,48 +1,80 @@
-func findFirstResponder(view: UIView) -> UIView? {
-    if view.isFirstResponder {
-        return view
+extension UIView {
+    func checkIfNestedInAvoidSoftInputView() -> Bool {
+        guard let superview = superview else {
+            return false
+        }
+
+        if superview is AvoidSoftInputView {
+            return true
+        }
+
+        return superview.checkIfNestedInAvoidSoftInputView()
     }
 
-    if !view.subviews.isEmpty {
-        for subview in view.subviews {
-            if let v = findFirstResponder(view: subview) {
-                return v
+    func findFirstResponder() -> UIView? {
+        if isFirstResponder {
+            return self
+        }
+
+        if !subviews.isEmpty {
+            for subview in subviews {
+                if let v = subview.findFirstResponder() {
+                    return v
+                }
             }
         }
-    }
 
-    return nil
-}
-
-func findScrollViewForFirstResponder(view: UIView, rootView: UIView) -> UIScrollView? {
-    guard let superview = view.superview else {
         return nil
     }
-    if superview == rootView {
-        return nil
-    }
-    if superview is UIScrollView {
-        if let scrollView = superview as? UIScrollView {
-            if scrollView.frame.width < scrollView.contentSize.width {
+
+    func findScrollViewForFirstResponderInRootView(_ rootView: UIView) -> UIScrollView? {
+        guard let superview = superview else {
+            return nil
+        }
+        if superview == rootView {
+            return nil
+        }
+        if superview is UIScrollView {
+            if let scrollView = superview as? UIScrollView {
                 // IGNORE HORIZONTAL SCROLL VIEW
-                return findScrollViewForFirstResponder(view: superview, rootView: rootView)
+                if scrollView.frame.width >= scrollView.contentSize.width {
+                    return scrollView
+                }
             }
-            return scrollView
         }
-    }
-    return findScrollViewForFirstResponder(view: superview, rootView: rootView)
-}
-
-func checkIfNestedInAvoidSoftInputView(view: UIView) -> Bool {
-    guard let superview = view.superview else {
-        return false
+        return superview.findScrollViewForFirstResponderInRootView(rootView)
     }
 
-    if superview is AvoidSoftInputView {
-        return true
+    func getDistanceToBottomEdgeInRootView(_ rootView: UIView) -> CGFloat? {
+        guard let position = getPositionInSuperview() else {
+            return nil
+        }
+        let edgeY = position.y + frame.height
+        return rootView.getScreenHeight() - edgeY - rootView.getSafeBottomInset()
     }
 
-    return checkIfNestedInAvoidSoftInputView(view: superview)
+    func getPositionInSuperview() -> CGPoint? {
+        return superview?.convert(frame.origin, to: nil)
+    }
+
+    #if os(iOS)
+        func getSafeBottomInset() -> CGFloat {
+            if #available(iOS 11.0, *) {
+                return self.safeAreaInsets.bottom
+            }
+
+            return 0
+        }
+    #endif
+
+    func getScreenHeight() -> CGFloat {
+        if #available(iOS 13.0, *) {
+            if let screen = self.window?.windowScene?.screen {
+                return screen.bounds.size.height
+            }
+        }
+        return UIScreen.main.bounds.size.height
+    }
 }
 
 enum ReactNativeAvoidSoftInputLogger {

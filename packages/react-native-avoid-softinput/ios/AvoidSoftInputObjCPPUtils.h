@@ -2,6 +2,6 @@
 
 @interface AvoidSoftInputObjCPPUtils : NSObject
 
-+ (UIView *_Nonnull)getReactRootViewWithRootViewController:(UIViewController *)viewController;
++ (UIView *_Nullable)getReactRootView;
 
 @end

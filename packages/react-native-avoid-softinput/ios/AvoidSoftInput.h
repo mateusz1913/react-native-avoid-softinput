@@ -1,10 +1,12 @@
 #import <React/RCTBridgeModule.h>
 #import <React/RCTEventEmitter.h>
 
-// Does not work https://github.com/CocoaPods/CocoaPods/issues/10544
-//@class AvoidSoftInputConstants;
-//@class AvoidSoftInputImpl;
+@class AvoidSoftInputConstants;
+@class AvoidSoftInputManager;
+@protocol AvoidSoftInputManagerDelegate;
 
 @interface AvoidSoftInput : RCTEventEmitter <RCTBridgeModule>
+
+@property (nonatomic, readonly, strong) AvoidSoftInputManager *_Nonnull manager;
 
 @end
