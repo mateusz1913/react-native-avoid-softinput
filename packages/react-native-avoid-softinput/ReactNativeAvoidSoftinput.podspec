@@ -11,7 +11,7 @@ fabric_enabled = ENV['RCT_NEW_ARCH_ENABLED'] == '1'
 folly_compiler_flags = '-DFOLLY_NO_CONFIG -DFOLLY_MOBILE=1 -DFOLLY_USE_LIBCPP=1 -Wno-comma -Wno-shorten-64-to-32'
 
 Pod::Spec.new do |s|
-  s.name         = "react-native-avoid-softinput"
+  s.name         = "ReactNativeAvoidSoftinput"
   s.version      = package["version"]
   s.summary      = package["description"]
   s.homepage     = package["homepage"]
@@ -31,6 +31,7 @@ Pod::Spec.new do |s|
         "OTHER_CPLUSPLUSFLAGS" => "-DFOLLY_NO_CONFIG -DFOLLY_MOBILE=1 -DFOLLY_USE_LIBCPP=1",
         "CLANG_CXX_LANGUAGE_STANDARD" => "c++17",
         "DEFINES_MODULE" => "YES",
+        "SWIFT_OBJC_INTERFACE_HEADER_NAME" => "ReactNativeAvoidSoftinput-Swift.h",
         # This is handy when we want to detect if new arch is enabled in Swift code
         # and can be used like:
         # #if AVOID_SOFTINPUT_NEW_ARCH_ENABLED
@@ -48,6 +49,9 @@ Pod::Spec.new do |s|
     s.dependency "RCTTypeSafety"
     s.dependency "ReactCommon/turbomodule/core"
   else
-    s.pod_target_xcconfig = { "DEFINES_MODULE" => "YES" }
+    s.pod_target_xcconfig = {
+      "DEFINES_MODULE" => "YES",
+      "SWIFT_OBJC_INTERFACE_HEADER_NAME" => "ReactNativeAvoidSoftinput-Swift.h"
+    }
   end
 end

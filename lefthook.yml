@@ -24,7 +24,8 @@ pre-commit:
         #!/bin/bash
         if command -v swiftlint &> /dev/null
         then
-          yarn lint:ios:swift
+          yarn lint:ios:swift --strict
+          yarn lint:fabric:ios:swift --strict
         else
           echo "SwiftLint is not installed. Skipping"
         fi
@@ -37,6 +38,7 @@ pre-commit:
         if command -v clang-format &> /dev/null
         then
           yarn lint:ios:objc --Werror
+          yarn lint:fabric:ios:objc --Werror
         else
           echo "ClangFormat is not installed. Skipping"
         fi

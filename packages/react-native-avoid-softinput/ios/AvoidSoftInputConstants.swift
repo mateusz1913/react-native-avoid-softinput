@@ -1,4 +1,5 @@
-@objc public class AvoidSoftInputConstants: NSObject {
+@objc(AvoidSoftInputConstants)
+public class AvoidSoftInputConstants: NSObject {
     @objc public static let hideAnimationDelayInSeconds: Double = 0.3
     @objc public static let hideAnimationDurationInSeconds: Double = 0.66
     @objc public static let showAnimationDelayInSeconds: Double = 0
