@@ -69,15 +69,15 @@ class AnimationHandlerImpl : AnimationHandler {
     animationEnd: Float,
     onAnimatorEventListener: OnAnimatorEventListener
   ) {
-    mIsHideAnimationCancelled = isShowAnimation
-    mIsShowAnimationCancelled = !isShowAnimation
-    if (isShowAnimation) {
-      mHideValueAnimator?.cancel()
-    } else {
-      mShowValueAnimator?.cancel()
-    }
-    onAnimatorEventListener.onBeforeStart()
     UiThreadUtil.runOnUiThread {
+      mIsHideAnimationCancelled = isShowAnimation
+      mIsShowAnimationCancelled = !isShowAnimation
+      if (isShowAnimation) {
+        mHideValueAnimator?.cancel()
+      } else {
+        mShowValueAnimator?.cancel()
+      }
+      onAnimatorEventListener.onBeforeStart()
       val animator = ValueAnimator.ofFloat(animationStart, animationEnd).apply {
         duration = if (isShowAnimation) mShowAnimationDuration else mHideAnimationDuration
         startDelay = if (isShowAnimation) mShowAnimationDelay else mHideAnimationDelay
