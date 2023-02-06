@@ -3,8 +3,11 @@
 #import <React/UIView+React.h>
 
 // MARK: Swift classes in ObjC++
-
+#if __has_include("ReactNativeAvoidSoftinput/ReactNativeAvoidSoftinput-Swift.h")
+#import "ReactNativeAvoidSoftinput/ReactNativeAvoidSoftinput-Swift.h"
+#else
 #import "ReactNativeAvoidSoftinput-Swift.h"
+#endif
 
 // MARK: Manager delegate
 
