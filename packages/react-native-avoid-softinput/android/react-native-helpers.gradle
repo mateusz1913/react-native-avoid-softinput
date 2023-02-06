@@ -30,7 +30,7 @@ def resolveReactNativeDirectory() {
   }
 
   throw new GradleException(
-    "${project.name}: unable to resolve react-native location in " +
+    "[ReactNativeAvoidSoftinput]: unable to resolve react-native location in " +
     "node_modules. You should project extension property (in app/build.gradle) " +
     "`REACT_NATIVE_NODE_MODULES_DIR` with path to react-native."
   )

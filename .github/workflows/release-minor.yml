@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  npm-release-major:
+  npm-release-minor:
     uses: mateusz1913/react-native-avoid-softinput/.github/workflows/npm-release-template.yml@main
     with:
       increment: minor

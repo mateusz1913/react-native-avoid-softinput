@@ -11,22 +11,10 @@ on:
 
 jobs:
   lint-ios:
-    name: Lint Swift
+    name: Lint Swift & ObjC
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/cache@v3
-        with:
-          path: "**/node_modules"
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
-      - name: Install modules
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ matrix.node-version }}
-          cache: "yarn"
-          registry-url: "https://registry.npmjs.org"
-          cache-dependency-path: "**/yarn.lock"
-      - run: yarn
       - name: SwiftLint
         run: |
           #!/bin/bash
@@ -35,7 +23,8 @@ jobs:
             echo "SwiftLint is not installed. Installing"
             brew install swiftlint
           fi
-          yarn lint:ios:swift
+          swiftlint lint --config ./packages/mobile/ios/.swiftlint.yml --quiet
+          swiftlint lint --config ./packages/fabricMobile/ios/.swiftlint.yml --quiet
       - name: ClangFormat
         run: |
           #!/bin/bash
@@ -44,4 +33,5 @@ jobs:
             echo "ClangFormat is not installed. Installing"
             brew install clang-format
           fi
-          yarn lint:ios:objc --Werror
+          clang-format --dry-run -i ./packages/react-native-avoid-softinput/ios/*.{h,mm} ./packages/mobile/ios/AvoidSoftinputExample/*.{h,mm} -Werror
+          clang-format --dry-run -i ./packages/react-native-avoid-softinput/ios/*.{h,mm} ./packages/fabricMobile/ios/FabricAvoidSoftinputExample/*.{h,mm} -Werror
