@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  npm-release-major:
+  pre-release:
     uses: mateusz1913/react-native-avoid-softinput/.github/workflows/npm-release-template.yml@main
     with:
       pre_release: true
