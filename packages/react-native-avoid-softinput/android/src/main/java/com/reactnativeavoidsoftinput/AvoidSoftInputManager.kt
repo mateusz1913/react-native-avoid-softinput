@@ -53,7 +53,7 @@ class AvoidSoftInputManager(
 
   // MARK: Private methods
   private fun onFocus(oldView: View?, newView: View?) {
-    if (!mSoftInputVisible || !mIsEnabled) {
+    if (!mIsEnabled) {
       return
     }
     val reactRootView = getNearestParentReactRootView(newView)
@@ -61,6 +61,11 @@ class AvoidSoftInputManager(
       return
     }
     val scrollView = getScrollViewParent(newView, reactRootView) ?: return
+    mScrollY = scrollView.scrollY
+    if (!mSoftInputVisible) {
+      return
+    }
+
     setScrollListenerCompat(scrollView) {
       if (currentFocusedView != null) {
         mScrollY = it
@@ -70,7 +75,6 @@ class AvoidSoftInputManager(
 
     val scrollToOffset = max(mCompleteSoftInputHeight - currentFocusedViewDistanceToBottom, 0)
 
-    mScrollY = scrollView.scrollY
     scrollView.smoothScrollTo(0, scrollView.scrollY + scrollToOffset)
   }
 
