@@ -50,7 +50,7 @@ class AnimationHandlerImpl : AnimationHandler {
     currentFocusedView.getLocationOnScreen(currentFocusedViewLocation)
     val currentFocusedViewDistanceToBottom = getViewDistanceToBottomEdge(scrollView)
 
-    return min(max(softInputHeight - currentFocusedViewDistanceToBottom, 0), (currentFocusedViewLocation[1] - scrollViewLocation[1]))
+    return min(max(softInputHeight - currentFocusedViewDistanceToBottom, 0), max(currentFocusedViewLocation[1] - scrollViewLocation[1], 0))
   }
 
   private fun onScrollViewAnimationUpdate(scrollView: ScrollView, animatedOffset: Float) {
