@@ -12,6 +12,7 @@ export type RootStackParamList = {
   [ROUTES.KeyboardType]: undefined;
   [ROUTES.Modal]: undefined;
   [ROUTES.ModalFormSheet]: undefined;
+  [ROUTES.PasswordForm]: undefined;
   [ROUTES.Reanimated]: undefined;
   [ROUTES.ScreensNativeModal]: undefined;
   [ROUTES.StickyFooter]: undefined;

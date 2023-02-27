@@ -8,6 +8,7 @@ export const ROUTES = Object.freeze({
   KeyboardType: 'KeyboardType',
   Modal: 'Modal',
   ModalFormSheet: 'ModalFormSheet',
+  PasswordForm: 'PasswordForm',
   Reanimated: 'Reanimated',
   ScreensNativeModal: 'ScreensNativeModal',
   StickyFooter: 'StickyFooter',

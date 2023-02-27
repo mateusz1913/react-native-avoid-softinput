@@ -220,6 +220,7 @@ public class AvoidSoftInputAnimationHandler: AvoidSoftInputAnimatorDelegate {
                         initialOffset: self.bottomOffset,
                         addedOffset: newBottomOffset - self.bottomOffset
                     )
+                    self.softInputVisible = true
                     self.hideAnimator.cleanup()
                 },
                 onAnimate: {
@@ -305,6 +306,7 @@ public class AvoidSoftInputAnimationHandler: AvoidSoftInputAnimatorDelegate {
                         initialOffset: 0,
                         addedOffset: self.bottomOffset
                     )
+                    self.softInputVisible = true
                     self.hideAnimator.cleanup()
                 },
                 onAnimate: {
@@ -455,6 +457,7 @@ public class AvoidSoftInputAnimationHandler: AvoidSoftInputAnimatorDelegate {
                         initialOffset: self.bottomOffset,
                         addedOffset: newBottomOffset - self.bottomOffset
                     )
+                    self.softInputVisible = true
                     self.hideAnimator.cleanup()
                 },
                 onAnimate: {
@@ -560,6 +563,7 @@ public class AvoidSoftInputAnimationHandler: AvoidSoftInputAnimatorDelegate {
                 easing: easingOption,
                 onStart: {
                     self.showAnimator.beginAnimation(initialOffset: 0, addedOffset: self.bottomOffset)
+                    self.softInputVisible = true
                     self.hideAnimator.cleanup()
                 },
                 onAnimate: {

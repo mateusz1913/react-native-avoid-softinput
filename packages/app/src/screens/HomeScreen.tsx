@@ -41,6 +41,11 @@ const DATA: Array<Example> = [
     route: ROUTES.Form,
   },
   {
+    description: 'Check how to make classic username & password form\'s text fields always displayed above the keyboard',
+    label: 'PasswordForm',
+    route: ROUTES.PasswordForm,
+  },
+  {
     description: 'Check how AvoidSoftInput module works with different keyboard types',
     label: 'Keyboard type',
     route: ROUTES.KeyboardType,
@@ -68,7 +73,7 @@ const DATA: Array<Example> = [
   },
   {
     description: 'Learn how to handle seperate parts of a form - text field in scroll component and CTA button with fixed position at the bottom of the screen',
-    label: 'Sticky footer', 
+    label: 'Sticky footer',
     route: ROUTES.StickyFooter,
   },
   {
