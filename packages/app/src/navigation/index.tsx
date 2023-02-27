@@ -10,6 +10,7 @@ import { HomeScreen } from '../screens/HomeScreen';
 import { KeyboardTypeExample } from '../screens/KeyboardTypeExample';
 import { ModalExample } from '../screens/ModalExample';
 import { ModalFormSheetExample } from '../screens/ModalFormSheetExample';
+import { PasswordFormExample } from '../screens/PasswordFormExample';
 import { ReanimatedExample } from '../screens/ReanimatedExample';
 import { ScreensNativeModalExample } from '../screens/ScreensNativeModalExample';
 import { StickyFooterExample } from '../screens/StickyFooterExample';
@@ -30,6 +31,7 @@ export const Navigation: React.FC = () => {
     <Stack.Screen name={ROUTES.KeyboardType} component={KeyboardTypeExample} />
     <Stack.Screen name={ROUTES.Modal} component={ModalExample} />
     <Stack.Screen name={ROUTES.ModalFormSheet} component={ModalFormSheetExample} />
+    <Stack.Screen name={ROUTES.PasswordForm} component={PasswordFormExample} />
     <Stack.Screen name={ROUTES.Reanimated} component={ReanimatedExample} />
     <Stack.Screen
       name={ROUTES.ScreensNativeModal}
