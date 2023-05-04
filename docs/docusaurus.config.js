@@ -34,6 +34,7 @@ const config = {
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     {
+      image: 'img/AppIconOG.png',
       navbar: {
         title: 'React Native Avoid SoftInput',
         logo: {

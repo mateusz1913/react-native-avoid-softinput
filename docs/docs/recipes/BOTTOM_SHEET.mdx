@@ -2,34 +2,54 @@
 id: recipes-bottom-sheet
 title: Bottom sheet recipe
 sidebar_label: Bottom sheet
+keywords: [react-native-avoid-softinput, bottom sheet, recipe]
 ---
 
 Depending on bottom sheet implementation in your project, you should use either `AvoidSoftInput` module or `AvoidSoftInputView` component.
 
-If your bottom sheet implementation uses React Native `Modal` component, you should use `AvoidSoftInputView` component ([check Modal recipe](recipes-modal)). Otherwise use `AvoidSoftInput` module ([check Form recipe](recipes-form)).
+If your bottom sheet implementation uses React Native `Modal` component, you should use `AvoidSoftInputView` component ([check Modal recipe](./recipes-modal)). Otherwise use `AvoidSoftInput` module like in the example below.
 
-### Example (bottom sheet without modal implementation)
+This example assumes the bottom sheet is implemented with [React Native Bottom Sheet](https://github.com/gorhom/react-native-bottom-sheet)
 
-````tsx
+```tsx title="packages/app/src/screens/BottomSheetExample.tsx"
+import { BottomSheetModal, BottomSheetView } from '@gorhom/bottom-sheet';
+import { useBottomSheetDynamicSnapPoints } from '@gorhom/bottom-sheet';
+import { useFocusEffect } from '@react-navigation/native';
+import * as React from 'react';
+import { StyleSheet, Text, View } from 'react-native';
+import { AvoidSoftInput } from 'react-native-avoid-softinput';
+import { SafeAreaView } from 'react-native-safe-area-context';
+
+import Button from '../components/Button';
+import SingleInput from '../components/SingleInput';
+import { styles as commonStyles } from '../consts/styles';
+
+const SNAP_POINTS = [ 'CONTENT_HEIGHT' ];
+
+const Backdrop: React.FC = () => <View style={styles.backdrop} />;
+
 export const BottomSheetExample: React.FC = () => {
-  /**
-   * If you use react-navigation and want to enable module only in specific screen,
-   * you can call it in react-navigation `useFocusEffect` callback
-   *
-   * If you want to have module always enabled,
-   * just call it inside `useEffect` in your root component
-   *
-   * ```
-   * useEffect(() => {
-   *   AvoidSoftInput.setShouldMimicIOSBehavior(true); // <---- Tell Android that library will handle keyboard insets manually to match iOS behavior
-   *   AvoidSoftInput.setEnabled(true); // <---- Enable module
-   * }, [])
-   * ```
-   */
-  const onFocusEffect = useCallback(() => {
-    AvoidSoftInput.setShouldMimicIOSBehavior(true); // <---- Tell Android that library will handle keyboard insets manually to match iOS behavior
-    AvoidSoftInput.setEnabled(true); // <---- Enable module
-    AvoidSoftInput.setAvoidOffset(50); // <---- if you have CTA button at the bottom of the screen, set additional offset to make button also visible
+  const bottomSheetModalRef = React.useRef<BottomSheetModal>(null);
+
+  function dismissBottomSheet() {
+    bottomSheetModalRef.current?.dismiss();
+  }
+
+  function presentBottomSheet() {
+    bottomSheetModalRef.current?.present();
+  }
+
+  const {
+    animatedContentHeight,
+    animatedHandleHeight,
+    animatedSnapPoints,
+    handleContentLayout,
+  } = useBottomSheetDynamicSnapPoints(SNAP_POINTS);
+
+  const onFocusEffect = React.useCallback(() => {
+    AvoidSoftInput.setShouldMimicIOSBehavior(true);
+    AvoidSoftInput.setEnabled(true);
+    AvoidSoftInput.setAvoidOffset(70);
 
     return () => {
       AvoidSoftInput.setAvoidOffset(0);
@@ -40,44 +60,60 @@ export const BottomSheetExample: React.FC = () => {
 
   useFocusEffect(onFocusEffect);
 
-  // Sample bottom sheet
-  return (
-    <SafeAreaView>
-      // ... some JSX
-      <BottomSheetComponent>
-        <SafeAreaView>
-          <Text>Header</Text>
-          <TextInput />
-          <View>
-            <Button />
+  return <SafeAreaView edges={[ 'left', 'right' ]} style={commonStyles.screenContainer}>
+    <Button
+      onPress={presentBottomSheet}
+      title="Open bottom sheet"
+    />
+    <BottomSheetModal
+      ref={bottomSheetModalRef}
+      backdropComponent={Backdrop}
+      contentHeight={animatedContentHeight}
+      enableDismissOnClose
+      enablePanDownToClose
+      handleHeight={animatedHandleHeight}
+      index={0}
+      snapPoints={animatedSnapPoints}
+    >
+      <BottomSheetView onLayout={handleContentLayout} style={styles.bottomSheet}>
+        <SafeAreaView edges={[ 'bottom', 'left', 'right' ]} style={styles.bottomSheet}>
+          <Text style={styles.header}>Header</Text>
+          <SingleInput style={styles.input} />
+          <View style={styles.submitButtonContainer}>
+            <Button
+              onPress={dismissBottomSheet}
+              title="Submit"
+            />
           </View>
         </SafeAreaView>
-      </BottomSheetComponent>
-    </SafeAreaView>
-  );
+      </BottomSheetView>
+    </BottomSheetModal>
+  </SafeAreaView>;
 };
-````
 
-### Example (bottom sheet with modal implementation)
-
-```ts
-export const ModalBottomSheetExample: React.FC = () => {
-  // Sample modal bottom sheet
-  return (
-    // ... some JSX
-    <ModalBottomSheetComponent>
-      <SafeAreaView>
-        {/** if you have CTA button at the bottom of the screen, set additional offset to make button also visible */}
-        <AvoidSoftInputView avoidOffset={50}>
-          <Text>Header</Text>
-          <TextInput />
-          <View>
-            <Button />
-          </View>
-        </AvoidSoftInputView>
-      </SafeAreaView>
-    </ModalBottomSheetComponent>
-    // ... some JSX
-  );
-};
+const styles = StyleSheet.create({
+  backdrop: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+  },
+  bottomSheet: {
+    alignItems: 'center',
+    alignSelf: 'stretch',
+    backgroundColor: 'white',
+  },
+  header: {
+    color: 'black',
+    fontSize: 28,
+    fontWeight: 'bold',
+    paddingBottom: 40,
+    paddingTop: 30,
+  },
+  input: {
+    marginHorizontal: 50,
+  },
+  submitButtonContainer: {
+    alignSelf: 'stretch',
+    marginBottom: 30,
+  },
+});
 ```
