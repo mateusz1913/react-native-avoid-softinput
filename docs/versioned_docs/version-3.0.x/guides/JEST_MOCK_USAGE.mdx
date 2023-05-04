@@ -2,6 +2,7 @@
 id: jest-mock-usage
 title: Jest mock usage
 sidebar_label: Jest mock usage
+keywords: [react-native-avoid-softinput, Jest, mock, testing]
 ---
 
 To make testing with Jest easier, library provides mocked implementation that can be integrated in two ways:
@@ -16,7 +17,7 @@ const mock = require('react-native-avoid-softinput/jest/mock');
 
 /**
  * If needed, override mock like so:
- * 
+ *
  * module.exports = Object.assign(mock, { useSoftInputState: jest.fn(() => ({ isSoftInputShown: true, softInputHeight: 300 })) });
  */
 
@@ -34,10 +35,10 @@ jest.mock('react-native-avoid-softinput', () => {
 
   /**
    * If needed, override mock like so:
-   * 
+   *
    * return Object.assign(mock, { useSoftInputState: jest.fn(() => ({ isSoftInputShown: true, softInputHeight: 300 })) });
    */
-  
+
   return mock;
 });
 ```
