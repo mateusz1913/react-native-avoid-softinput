@@ -56,6 +56,10 @@ def reactNativeArchitectures() {
 android {
   compileSdkVersion getExtOrIntegerDefault('compileSdkVersion')
 
+  if (project.android.hasProperty("namespace")) {
+    namespace "com.reactnativeavoidsoftinput"
+  }
+
   defaultConfig {
     minSdkVersion 21
     targetSdkVersion getExtOrIntegerDefault('targetSdkVersion')
