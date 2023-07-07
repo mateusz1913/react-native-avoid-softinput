@@ -5,7 +5,7 @@ const sidebars = {
   docsSidebar: {
     'Guides': [
       'guides/installation',
-      'guides/migration_to_3_0_x',
+      'guides/migration_from_2_x_x',
       'guides/usage-module',
       'guides/usage-view',
       'guides/jest-mock-usage',

@@ -1,0 +1,107 @@
+---
+id: recipes-sticky-footer
+title: Sticky footer recipe
+sidebar_label: Sticky footer
+keywords: [react-native-avoid-softinput, sticky footer, recipe]
+---
+
+To handle complex layouts, where you want to make visible parts of UI inside and outside of scroll component (like scrollable text fields and fixed CTA button), you should manually handle parts that are not in the current focused input's container.
+
+One use case is handling "sticky" CTA button fixed at the bottom of the screen with text fields displayed inside `ScrollView`.
+
+To handle button manually, you can use `useSoftInputHeightChanged` or combination of `useSoftInputShown` and `useSoftInputHidden` hooks to apply additional padding for button's container.
+
+Check [StickyFooterExample](https://github.com/mateusz1913/react-native-avoid-softinput/blob/main/packages/app/src/screens/StickyFooterExample.tsx) for a showcase of "sticky" footer behavior
+
+```tsx title="packages/app/src/screens/StickyFooterExample.tsx"
+import { useFocusEffect } from '@react-navigation/native';
+import * as React from 'react';
+import { ScrollView, StyleSheet, View } from 'react-native';
+import { AvoidSoftInput, useSoftInputHeightChanged } from 'react-native-avoid-softinput';
+import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
+import { SafeAreaView } from 'react-native-safe-area-context';
+
+import Button from '../components/Button';
+import SingleInput from '../components/SingleInput';
+import { styles as commonStyles } from '../consts/styles';
+
+// eslint-disable-next-line @typescript-eslint/no-empty-function
+const NOOP = () => {};
+
+export const StickyFooterExample: React.FC = () => {
+  const buttonContainerPaddingValue = useSharedValue(0);
+
+  const buttonContainerAnimatedStyle = useAnimatedStyle(() => {
+    return {
+      paddingBottom: buttonContainerPaddingValue.value,
+    };
+  });
+
+  const onFocusEffect = React.useCallback(() => {
+    AvoidSoftInput.setShouldMimicIOSBehavior(true);
+
+    return () => {
+      AvoidSoftInput.setShouldMimicIOSBehavior(false);
+    };
+  }, []);
+
+  useFocusEffect(onFocusEffect);
+
+  /**
+   * You can also use `useSoftInputShown` & `useSoftInputHidden`
+   *
+   * useSoftInputShown(({ softInputHeight }) => {
+   *   buttonContainerPaddingValue.value = withTiming(softInputHeight);
+   * });
+   *
+   * useSoftInputHidden(() => {
+   *   buttonContainerPaddingValue.value = withTiming(0);
+   * });
+   */
+  useSoftInputHeightChanged(({ softInputHeight }) => {
+    buttonContainerPaddingValue.value = withTiming(softInputHeight);
+  });
+
+  return <SafeAreaView edges={[ 'left', 'right', 'bottom' ]} style={commonStyles.screenContainer}>
+    <View style={styles.scrollWrapper}>
+      <ScrollView
+        contentContainerStyle={styles.scrollContainer}
+        contentInsetAdjustmentBehavior="always"
+      >
+        <SingleInput />
+      </ScrollView>
+    </View>
+    <Animated.View style={[ buttonContainerAnimatedStyle, styles.ctaButtonWrapper ]}>
+      <View style={styles.ctaButtonContainer}>
+        <Button onPress={NOOP} title="Submit" />
+      </View>
+    </Animated.View>
+  </SafeAreaView>;
+};
+
+const styles = StyleSheet.create({
+  ctaButtonContainer: {
+    alignItems: 'center',
+    alignSelf: 'stretch',
+    borderRadius: 10,
+    borderWidth: 1,
+  },
+  ctaButtonWrapper: {
+    alignSelf: 'stretch',
+  },
+  scrollContainer: {
+    alignItems: 'center',
+    alignSelf: 'stretch',
+    borderRadius: 10,
+    borderWidth: 1,
+    flexGrow: 1,
+    justifyContent: 'center',
+    margin: 5,
+    padding: 10,
+  },
+  scrollWrapper: {
+    alignSelf: 'stretch',
+    flex: 1,
+  },
+});
+```
