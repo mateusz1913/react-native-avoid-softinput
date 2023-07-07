@@ -8,10 +8,10 @@ buildscript {
   }
 
   dependencies {
-    classpath("com.android.tools.build:gradle:4.2.2")
+    classpath("com.android.tools.build:gradle:8.0.2")
     // noinspection DifferentKotlinGradleVersion
     classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-    classpath "com.diffplug.spotless:spotless-plugin-gradle:6.11.0"
+    classpath "com.diffplug.spotless:spotless-plugin-gradle:6.13.0"
   }
 }
 
@@ -58,6 +58,10 @@ android {
 
   if (project.android.hasProperty("namespace")) {
     namespace "com.reactnativeavoidsoftinput"
+  }
+
+  buildFeatures {
+    buildConfig = true
   }
 
   defaultConfig {
