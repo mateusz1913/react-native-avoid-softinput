@@ -20,9 +20,15 @@ Native solution for common React Native problem of focused views being covered b
 
 Check package [documentation](https://mateusz1913.github.io/react-native-avoid-softinput/)
 
-## Installation
+## Support
 
-Version 3.x.x supports React Native 0.65+ (old architecture) and has support for Android API 21+ and iOS 11.0+. It also supports Fabric & TurboModules (new architecture) with React Native 0.70+.
+This library follows the React Native [releases support policy](https://github.com/reactwg/react-native-releases#releases-support-policy).
+It is supporting **the latest version**, and **the two previous minor series**.
+You may find it working correctly with some older React Native versions, but it'll be a "Use at your own risk" case.
+
+This library supports "New Architecture".
+
+## Installation
 
 Library supports Android & iOS, for out-of-tree platforms, `View` component is used as fallback.
 
