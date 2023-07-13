@@ -1,17 +1,17 @@
 ---
-id: migration_to_3_0_x
-title: Migration to 3.0.x
-sidebar_label: Migration to 3.0.x
+id: migration_from_2_x_x
+title: Migration from 2.x.x
+sidebar_label: Migration from 2.x.x
 keywords: [react-native-avoid-softinput, migration]
 ---
 
 ## WindowInsetsCompat API (BREAKING CHANGE)
 
-With version 3.0.x Android implementation starts using [WindowInsetsCompat](https://developer.android.com/reference/androidx/core/view/WindowInsetsCompat) API. This made library's Android implementation more predictible and less hacky.
+From version 3.x.x Android implementation starts using [WindowInsetsCompat](https://developer.android.com/reference/androidx/core/view/WindowInsetsCompat) API. This made library's Android implementation more predictible and less hacky.
 
-As a consequence with version 3.0.x library to handle padding/translation on Android needs to call new method `setShouldMimicIOSBehavior` instead of `setAdjustNothing`
+As a consequence, from version 3.x.x onwards library to handle padding/translation on Android needs to call new method `setShouldMimicIOSBehavior` instead of `setAdjustNothing`
 
-If you upgrade to version 3.0.x (and you don't use `setAdjustNothing` or `setDefaultAppSoftInputMode` intentionally to handle sth else then library's correct usage on Android), just replace all `setAdjustNothing` (and `setDefaultAppSoftInputMode`) calls with `setShouldMimicIOSBehavior(<boolean-value>)`.
+If you upgrade to version 3.x.x or newer (and you don't use `setAdjustNothing` or `setDefaultAppSoftInputMode` intentionally to handle sth else then library's correct usage on Android), just replace all `setAdjustNothing` (and `setDefaultAppSoftInputMode`) calls with `setShouldMimicIOSBehavior(<boolean-value>)`.
 
 #### Example
 
@@ -47,10 +47,19 @@ If you upgrade to version 3.0.x (and you don't use `setAdjustNothing` or `setDef
 
 ## Support for Fabric & TurboModules
 
-From version 3.0.x library supports RN's new architecture in projects with RN version >= 0.70. Autolinking of Fabric & TurboModule library version is handled automatically with projects using `@react-native-community/cli` version >= 9.0.0 ([support was implemented with this commit](https://github.com/react-native-community/cli/commit/86df104250608977130378b9b59d8a9e12d0212a))
+From version 3.x.x onwards library supports RN's new architecture in projects with RN version >= 0.70. Autolinking of Fabric & TurboModule library version is handled automatically with projects using `@react-native-community/cli` version >= 9.0.0 ([support was implemented with this commit](https://github.com/react-native-community/cli/commit/86df104250608977130378b9b59d8a9e12d0212a))
 
 ## Bumping minimal supported React Native and iOS versions (BREAKING CHANGE)
 
+### Version 4.x.x
+
+This library follows the React Native releases support policy.
+It is supporting **the latest version**, and **the two previous minor series**.
+
+You may find it working correctly with some older React Native versions, but it'll be a "Use at your own risk" case.
+
+### Version 3.x.x
+
 As a result of introducing support for Fabric & TurboModules library bumped its minimal supported RN version (on old architecture) to 0.65 and minimal supported iOS version to 11.0.
 
-If you use library on older project (RN version <= 0.64), you have to upgrade RN to version >= 0.65 or you can stay at 2.x.x, however be aware that it won't be developed (only critical bugs will be handled).
+If you use library on older project (RN version <= 0.64), you have to upgrade RN to version >= 0.65.

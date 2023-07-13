@@ -1,20 +1,21 @@
 const path = require('path');
 
+const { getDefaultConfig, mergeConfig } = require('@react-native/metro-config');
 const {
   getMetroAndroidAssetsResolutionFix,
 } = require('react-native-monorepo-tools');
 
 const androidAssetsResolutionFix = getMetroAndroidAssetsResolutionFix();
 
-module.exports = {
+/**
+ * Metro configuration
+ * https://facebook.github.io/metro/docs/configuration
+ *
+ * @type {import('metro-config').MetroConfig}
+ */
+const config = {
   transformer: {
     publicPath: androidAssetsResolutionFix.publicPath,
-    getTransformOptions: async () => ({
-      transform: {
-        experimentalImportSupport: false,
-        inlineRequires: true,
-      },
-    }),
   },
   server: {
     enhanceMiddleware: (middleware) => {
@@ -27,3 +28,5 @@ module.exports = {
     path.join(__dirname, '../react-native-avoid-softinput'),
   ],
 };
+
+module.exports = mergeConfig(getDefaultConfig(__dirname), config);

@@ -25,6 +25,11 @@ jobs:
           cache: "yarn"
           registry-url: "https://registry.npmjs.org"
           cache-dependency-path: "**/yarn.lock"
+      - name: Set Java version
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
       - run: yarn
       - name: Spotless/Ktlint
         run: yarn lint:android

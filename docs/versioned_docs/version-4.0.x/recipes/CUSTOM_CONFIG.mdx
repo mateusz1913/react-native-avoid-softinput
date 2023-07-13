@@ -1,0 +1,141 @@
+---
+id: recipes-custom-config
+title: Custom config recipe
+sidebar_label: Custom config
+keywords: [react-native-avoid-softinput, custom config, recipe]
+---
+
+Applied offset animation can be configured both when using `AvoidSoftInput` module and `AvoidSoftInputView` component.
+
+To check how `AvoidSoftInput` API can be customized, go to [CustomAnimationConfigModuleExample](https://github.com/mateusz1913/react-native-avoid-softinput/blob/main/packages/app/src/screens/CustomAnimationConfigModuleExample.tsx)
+
+```tsx title="packages/app/src/screens/CustomAnimationConfigModuleExample.tsx"
+import { useFocusEffect } from '@react-navigation/native';
+import * as React from 'react';
+import { StyleSheet, Text, View } from 'react-native';
+import { AvoidSoftInput, useSoftInputState } from 'react-native-avoid-softinput';
+import { SafeAreaView } from 'react-native-safe-area-context';
+
+import SingleInput from '../components/SingleInput';
+
+export const CustomAnimationConfigModuleExample: React.FC = () => {
+  const onFocusEffect = React.useCallback(() => {
+    AvoidSoftInput.setShouldMimicIOSBehavior(true);
+    AvoidSoftInput.setEnabled(true);
+    AvoidSoftInput.setEasing('easeOut');
+    AvoidSoftInput.setHideAnimationDelay(1000);
+    AvoidSoftInput.setHideAnimationDuration(600);
+    AvoidSoftInput.setShowAnimationDelay(1000);
+    AvoidSoftInput.setShowAnimationDuration(1200);
+    return () => {
+      AvoidSoftInput.setEasing('linear');
+      AvoidSoftInput.setHideAnimationDelay();
+      AvoidSoftInput.setHideAnimationDuration();
+      AvoidSoftInput.setShowAnimationDelay();
+      AvoidSoftInput.setShowAnimationDuration();
+      AvoidSoftInput.setEnabled(false);
+      AvoidSoftInput.setShouldMimicIOSBehavior(false);
+    };
+  }, []);
+
+  useFocusEffect(onFocusEffect);
+
+  const softInputState = useSoftInputState();
+
+  return <SafeAreaView edges={[ 'left', 'bottom', 'right' ]} style={styles.container}>
+    <View style={styles.contentContainer}>
+      <SingleInput placeholder="1" />
+      <View style={styles.spacer}>
+        <Text style={styles.label}>isVisible: {JSON.stringify(softInputState.isSoftInputShown)}</Text>
+        <Text style={styles.label}>height: {softInputState.softInputHeight}</Text>
+      </View>
+    </View>
+  </SafeAreaView>;
+};
+
+const styles = StyleSheet.create({
+  container: {
+    alignSelf: 'stretch',
+    flex: 1,
+  },
+  contentContainer: {
+    alignSelf: 'stretch',
+    flexDirection: 'column-reverse',
+    flexGrow: 1,
+  },
+  label: {
+    color: 'blue',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  spacer: {
+    alignItems: 'center',
+    backgroundColor: 'pink',
+    flex: 1,
+    justifyContent: 'center',
+  },
+});
+```
+
+To check how `AvoidSoftInputView` props can be used, go to [CustomAnimationConfigViewExample](https://github.com/mateusz1913/react-native-avoid-softinput/blob/main/packages/app/src/screens/CustomAnimationConfigViewExample.tsx)
+
+```tsx title="packages/app/src/screens/CustomAnimationConfigViewExample.tsx"
+import { useFocusEffect } from '@react-navigation/native';
+import * as React from 'react';
+import { StyleSheet, Text, View } from 'react-native';
+import { AvoidSoftInput, AvoidSoftInputView } from 'react-native-avoid-softinput';
+import { SafeAreaView } from 'react-native-safe-area-context';
+
+import SingleInput from '../components/SingleInput';
+
+export const CustomAnimationConfigViewExample: React.FC = () => {
+  const onFocusEffect = React.useCallback(() => {
+    AvoidSoftInput.setShouldMimicIOSBehavior(true);
+    AvoidSoftInput.setEnabled(true);
+    return () => {
+      AvoidSoftInput.setEnabled(false);
+      AvoidSoftInput.setShouldMimicIOSBehavior(false);
+    };
+  }, []);
+
+  useFocusEffect(onFocusEffect);
+
+  return <SafeAreaView edges={[ 'left', 'bottom', 'right' ]} style={styles.container}>
+    <AvoidSoftInputView
+      easing="easeOut"
+      hideAnimationDelay={1000}
+      hideAnimationDuration={600}
+      showAnimationDelay={1000}
+      showAnimationDuration={1200}
+      style={styles.contentContainer}>
+      <SingleInput placeholder="1" />
+      <View style={styles.spacer}>
+        <Text style={styles.label}>SPACER</Text>
+      </View>
+    </AvoidSoftInputView>
+  </SafeAreaView>;
+};
+
+const styles = StyleSheet.create({
+  container: {
+    alignSelf: 'stretch',
+    flex: 1,
+  },
+  contentContainer: {
+    alignSelf: 'stretch',
+    flexDirection: 'column-reverse',
+    flexGrow: 1,
+  },
+  label: {
+    color: 'blue',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  spacer: {
+    alignItems: 'center',
+    backgroundColor: 'pink',
+    flex: 1,
+    justifyContent: 'center',
+  },
+});
+```
