@@ -48,7 +48,7 @@ class AnimationHandlerImpl : AnimationHandler {
 
     val currentFocusedViewLocation = IntArray(2)
     currentFocusedView.getLocationOnScreen(currentFocusedViewLocation)
-    val currentFocusedViewDistanceToBottom = getViewDistanceToBottomEdge(scrollView)
+    val currentFocusedViewDistanceToBottom = getViewDistanceToBottomEdge(currentFocusedView)
 
     return min(max(softInputHeight - currentFocusedViewDistanceToBottom, 0), max(currentFocusedViewLocation[1] - scrollViewLocation[1], 0))
   }
