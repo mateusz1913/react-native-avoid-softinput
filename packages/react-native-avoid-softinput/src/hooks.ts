@@ -6,7 +6,7 @@ import { createAction, initialState, reducer } from './stateReducer';
 import type { SoftInputAppliedOffsetEventData, SoftInputEventData } from './types';
 
 export function useSoftInputAppliedOffsetChanged(
-  callback: ({ appliedOffset }: SoftInputAppliedOffsetEventData) => void
+  callback: ({ appliedOffset }: SoftInputAppliedOffsetEventData) => void,
 ) {
   useEffect(() => {
     const unsubscribeAppliedOffsetChanged = AvoidSoftInput.onSoftInputAppliedOffsetChange(callback);
@@ -14,11 +14,11 @@ export function useSoftInputAppliedOffsetChanged(
     return () => {
       unsubscribeAppliedOffsetChanged.remove();
     };
-  }, [ callback ]);
+  }, [callback]);
 }
 
 export function useSoftInputHeightChanged(
-  callback: ({ softInputHeight }: SoftInputEventData) => void
+  callback: ({ softInputHeight }: SoftInputEventData) => void,
 ) {
   useEffect(() => {
     const unsubscribeHeightChanged = AvoidSoftInput.onSoftInputHeightChange(callback);
@@ -26,7 +26,7 @@ export function useSoftInputHeightChanged(
     return () => {
       unsubscribeHeightChanged.remove();
     };
-  }, [ callback ]);
+  }, [callback]);
 }
 
 export function useSoftInputHidden(callback: ({ softInputHeight }: SoftInputEventData) => void) {
@@ -36,7 +36,7 @@ export function useSoftInputHidden(callback: ({ softInputHeight }: SoftInputEven
     return () => {
       unsubscribeHidden.remove();
     };
-  }, [ callback ]);
+  }, [callback]);
 }
 
 export function useSoftInputShown(callback: ({ softInputHeight }: SoftInputEventData) => void) {
@@ -46,11 +46,11 @@ export function useSoftInputShown(callback: ({ softInputHeight }: SoftInputEvent
     return () => {
       unsubscribeShown.remove();
     };
-  }, [ callback ]);
+  }, [callback]);
 }
 
 export function useSoftInputState(): State {
-  const [ state, dispatch ] = useReducer(reducer, initialState);
+  const [state, dispatch] = useReducer(reducer, initialState);
 
   useSoftInputHeightChanged(({ softInputHeight }) => {
     dispatch(createAction(softInputHeight));

@@ -29,7 +29,7 @@ export const ScreensNativeModalExample: React.FC = () => {
     navigation.goBack();
   }
 
-  return <SafeAreaView edges={[ 'left', 'right', 'bottom' ]} style={styles.modalContent}>
+  return <SafeAreaView edges={['left', 'right', 'bottom']} style={styles.modalContent}>
     <View style={styles.container}>
       <View style={styles.closeContainer}>
         <CloseButton onPress={closeModal} />

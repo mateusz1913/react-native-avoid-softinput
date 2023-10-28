@@ -3168,6 +3168,48 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@dprint/darwin-arm64@npm:0.42.3":
+  version: 0.42.3
+  resolution: "@dprint/darwin-arm64@npm:0.42.3"
+  conditions: os=darwin & cpu=arm64
+  languageName: node
+  linkType: hard
+
+"@dprint/darwin-x64@npm:0.42.3":
+  version: 0.42.3
+  resolution: "@dprint/darwin-x64@npm:0.42.3"
+  conditions: os=darwin & cpu=x64
+  languageName: node
+  linkType: hard
+
+"@dprint/linux-arm64-glibc@npm:0.42.3":
+  version: 0.42.3
+  resolution: "@dprint/linux-arm64-glibc@npm:0.42.3"
+  conditions: os=linux & cpu=arm64 & libc=glibc
+  languageName: node
+  linkType: hard
+
+"@dprint/linux-x64-glibc@npm:0.42.3":
+  version: 0.42.3
+  resolution: "@dprint/linux-x64-glibc@npm:0.42.3"
+  conditions: os=linux & cpu=x64 & libc=glibc
+  languageName: node
+  linkType: hard
+
+"@dprint/linux-x64-musl@npm:0.42.3":
+  version: 0.42.3
+  resolution: "@dprint/linux-x64-musl@npm:0.42.3"
+  conditions: os=linux & cpu=x64 & libc=musl
+  languageName: node
+  linkType: hard
+
+"@dprint/win32-x64@npm:0.42.3":
+  version: 0.42.3
+  resolution: "@dprint/win32-x64@npm:0.42.3"
+  conditions: os=win32 & cpu=x64
+  languageName: node
+  linkType: hard
+
 "@egjs/hammerjs@npm:^2.0.17":
   version: 2.0.17
   resolution: "@egjs/hammerjs@npm:2.0.17"
@@ -6957,6 +6999,35 @@ __metadata:
   dependencies:
     is-obj: ^2.0.0
   checksum: 0f47600a4b93e1dc37261da4e6909652c008832a5d3684b5bf9a9a0d3f4c67ea949a86dceed9b72f5733ed8e8e6383cc5958df3bbd0799ee317fd181f2ece700
+  languageName: node
+  linkType: hard
+
+"dprint@npm:^0.42.3":
+  version: 0.42.3
+  resolution: "dprint@npm:0.42.3"
+  dependencies:
+    "@dprint/darwin-arm64": 0.42.3
+    "@dprint/darwin-x64": 0.42.3
+    "@dprint/linux-arm64-glibc": 0.42.3
+    "@dprint/linux-x64-glibc": 0.42.3
+    "@dprint/linux-x64-musl": 0.42.3
+    "@dprint/win32-x64": 0.42.3
+  dependenciesMeta:
+    "@dprint/darwin-arm64":
+      optional: true
+    "@dprint/darwin-x64":
+      optional: true
+    "@dprint/linux-arm64-glibc":
+      optional: true
+    "@dprint/linux-x64-glibc":
+      optional: true
+    "@dprint/linux-x64-musl":
+      optional: true
+    "@dprint/win32-x64":
+      optional: true
+  bin:
+    dprint: bin.js
+  checksum: 336a480f9e41f46c2fffa4e3f383413dfac17edc4850cb706e32420a499cc8b65b4e7c673da2c8209a939ec0782ec48c45a2df850f9d01b03942e01123fd0f1f
   languageName: node
   linkType: hard
 
@@ -13124,6 +13195,7 @@ __metadata:
     "@typescript-eslint/eslint-plugin": 5.61.0
     "@typescript-eslint/parser": 5.61.0
     commitlint: 17.6.6
+    dprint: ^0.42.3
     eslint: 8.44.0
     eslint-config-react: 1.1.7
     eslint-plugin-import: 2.27.5
@@ -14302,11 +14374,11 @@ __metadata:
 
 "typescript@patch:typescript@5.1.6#~builtin<compat/typescript>, typescript@patch:typescript@^4.6.4 || ^5.0.0#~builtin<compat/typescript>":
   version: 5.1.6
-  resolution: "typescript@patch:typescript@npm%3A5.1.6#~builtin<compat/typescript>::version=5.1.6&hash=ad5954"
+  resolution: "typescript@patch:typescript@npm%3A5.1.6#~builtin<compat/typescript>::version=5.1.6&hash=5da071"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 21e88b0a0c0226f9cb9fd25b9626fb05b4c0f3fddac521844a13e1f30beb8f14e90bd409a9ac43c812c5946d714d6e0dee12d5d02dfc1c562c5aacfa1f49b606
+  checksum: f53bfe97f7c8b2b6d23cf572750d4e7d1e0c5fff1c36d859d0ec84556a827b8785077bc27676bf7e71fae538e517c3ecc0f37e7f593be913d884805d931bc8be
   languageName: node
   linkType: hard
 

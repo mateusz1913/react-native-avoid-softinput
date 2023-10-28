@@ -13,7 +13,7 @@ export function useSoftInputAppliedOffsetHandler<TContext extends Record<string,
   handlers: {
     onSoftInputAppliedOffsetChange?: (e: SoftInputAppliedOffsetEventData, context: TContext) => void;
   },
-  dependencies?: ReadonlyArray<unknown>
+  dependencies?: ReadonlyArray<unknown>,
 ) {
   const { context, doDependenciesDiffer } = useHandler(handlers, dependencies);
 
@@ -22,13 +22,15 @@ export function useSoftInputAppliedOffsetHandler<TContext extends Record<string,
       'worklet';
       const { onSoftInputAppliedOffsetChange } = handlers;
 
-      // eslint-disable-next-line no-extra-parens
-      if (onSoftInputAppliedOffsetChange && (event as CustomSoftInputAppliedOffsetEventData).eventName.endsWith('onSoftInputAppliedOffsetChange')) {
+      if (
+        onSoftInputAppliedOffsetChange
+        && (event as CustomSoftInputAppliedOffsetEventData).eventName.endsWith('onSoftInputAppliedOffsetChange')
+      ) {
         onSoftInputAppliedOffsetChange(event, context);
       }
     },
-    [ 'onSoftInputAppliedOffsetChange' ],
-    doDependenciesDiffer,  
+    ['onSoftInputAppliedOffsetChange'],
+    doDependenciesDiffer,
   );
 }
 
@@ -38,7 +40,7 @@ export function useSoftInputHandler<TContext extends Record<string, unknown>>(
     onSoftInputShown?: (e: SoftInputEventData, context: TContext) => void;
     onSoftInputHeightChange?: (e: SoftInputEventData, context: TContext) => void;
   },
-  dependencies?: ReadonlyArray<unknown>
+  dependencies?: ReadonlyArray<unknown>,
 ) {
   const { context, doDependenciesDiffer } = useHandler(handlers, dependencies);
 
@@ -47,22 +49,21 @@ export function useSoftInputHandler<TContext extends Record<string, unknown>>(
       'worklet';
       const { onSoftInputHidden, onSoftInputShown, onSoftInputHeightChange } = handlers;
 
-      // eslint-disable-next-line no-extra-parens
       if (onSoftInputHidden && (event as CustomSoftInputEventData).eventName.endsWith('onSoftInputHidden')) {
         onSoftInputHidden(event, context);
       }
 
-      // eslint-disable-next-line no-extra-parens
       if (onSoftInputShown && (event as CustomSoftInputEventData).eventName.endsWith('onSoftInputShown')) {
         onSoftInputShown(event, context);
       }
 
-      // eslint-disable-next-line no-extra-parens
-      if (onSoftInputHeightChange && (event as CustomSoftInputEventData).eventName.endsWith('onSoftInputHeightChange')) {
+      if (
+        onSoftInputHeightChange && (event as CustomSoftInputEventData).eventName.endsWith('onSoftInputHeightChange')
+      ) {
         onSoftInputHeightChange(event, context);
       }
     },
-    [ 'onSoftInputHidden', 'onSoftInputShown', 'onSoftInputHeightChange' ],
-    doDependenciesDiffer,  
+    ['onSoftInputHidden', 'onSoftInputShown', 'onSoftInputHeightChange'],
+    doDependenciesDiffer,
   );
 }

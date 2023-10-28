@@ -490,7 +490,7 @@ PODS:
     - React-jsi (= 0.72.1)
     - React-logger (= 0.72.1)
     - React-perflogger (= 0.72.1)
-  - ReactNativeAvoidSoftinput (3.1.6):
+  - ReactNativeAvoidSoftinput (4.0.1):
     - React-Core
   - RNBootSplash (4.7.4):
     - React-Core
@@ -769,7 +769,7 @@ SPEC CHECKSUMS:
   React-runtimescheduler: 67707a955b9ecc628cc38bdc721fbc498910f0fd
   React-utils: 0a70ea97d4e2749f336b450c082905be1d389435
   ReactCommon: e593d19c9e271a6da4d0bd7f13b28cfeae5d164b
-  ReactNativeAvoidSoftinput: 6af0bca4e89fc6fa560ef26a486eaf30414f09f0
+  ReactNativeAvoidSoftinput: a096aae8faf85c0f3225c2179bccdab00b8b6354
   RNBootSplash: 0a92fb6bd3d265e23cded61faf3e9fda441d0a6b
   RNGestureHandler: dec4645026e7401a0899f2846d864403478ff6a5
   RNReanimated: 11ef210bd11e80668ed3708f7a9dd846ae29e99c
@@ -781,4 +781,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 4eec6fb5627471810334ee931366021311d924b5
 
-COCOAPODS: 1.12.1
+COCOAPODS: 1.13.0

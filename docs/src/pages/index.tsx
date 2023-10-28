@@ -19,7 +19,8 @@ const HomepageHeader: React.FC = () => {
         <div className={styles.buttons}>
           <Link
             className="button button--secondary button--lg"
-            to="/docs/guides">
+            to="/docs/guides"
+          >
             Getting Started
           </Link>
         </div>
@@ -34,7 +35,8 @@ const Home: React.FC = () => {
   return (
     <Layout
       title={`Hello from ${siteConfig.title}`}
-      description="Description will go into a meta tag in <head />">
+      description="Description will go into a meta tag in <head />"
+    >
       <HomepageHeader />
       <main>
         <HomepageFeatures />

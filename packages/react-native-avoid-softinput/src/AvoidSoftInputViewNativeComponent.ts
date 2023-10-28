@@ -4,11 +4,11 @@ import codegenNativeComponent from 'react-native/Libraries/Utilities/codegenNati
 
 type SoftInputEventData = Readonly<{
   softInputHeight: Int32;
-}>
+}>;
 
 type SoftInputAppliedOffsetEventData = Readonly<{
   appliedOffset: Int32;
-}>
+}>;
 
 type SoftInputEasing = 'easeIn' | 'easeInOut' | 'easeOut' | 'linear';
 
@@ -47,4 +47,6 @@ interface AvoidSoftInputViewProps extends ViewProps {
   onSoftInputShown?: DirectEventHandler<SoftInputEventData>;
 }
 
-export default codegenNativeComponent<AvoidSoftInputViewProps>('AvoidSoftInputView') as HostComponent<AvoidSoftInputViewProps>;
+export default codegenNativeComponent<AvoidSoftInputViewProps>('AvoidSoftInputView') as HostComponent<
+  AvoidSoftInputViewProps
+>;

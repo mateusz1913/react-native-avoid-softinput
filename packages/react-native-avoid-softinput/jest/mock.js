@@ -1,6 +1,6 @@
 const avoidSoftInputMock = {
   AvoidSoftInput: {
-    onSoftInputAppliedOffsetChange: jest.fn(),   
+    onSoftInputAppliedOffsetChange: jest.fn(),
     onSoftInputHeightChange: jest.fn(),
     onSoftInputHidden: jest.fn(),
     onSoftInputShown: jest.fn(),
@@ -19,7 +19,7 @@ const avoidSoftInputMock = {
     setShowAnimationDuration: jest.fn(),
   },
   AvoidSoftInputView: jest.requireActual(
-    'react-native/Libraries/Components/View/View'
+    'react-native/Libraries/Components/View/View',
   ),
   useSoftInputAppliedOffsetChanged: jest.fn(),
   useSoftInputHeightChanged: jest.fn(),

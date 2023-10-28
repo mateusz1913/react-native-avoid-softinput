@@ -10,7 +10,7 @@ const eventEmitter = new NativeEventEmitter(Platform.OS !== 'ios' ? undefined : 
  * Fires event with current soft input height, when soft input is shown
  */
 function onSoftInputShown(
-  listener: ({ softInputHeight }: SoftInputEventData) => void
+  listener: ({ softInputHeight }: SoftInputEventData) => void,
 ): EmitterSubscription {
   return eventEmitter.addListener('softInputShown', listener);
 }
@@ -19,7 +19,7 @@ function onSoftInputShown(
  * Fires event when soft input is hidden
  */
 function onSoftInputHidden(
-  listener: ({ softInputHeight }: SoftInputEventData) => void
+  listener: ({ softInputHeight }: SoftInputEventData) => void,
 ) {
   return eventEmitter.addListener('softInputHidden', listener);
 }
@@ -28,7 +28,7 @@ function onSoftInputHidden(
  * Fires event when soft input height changed
  */
 function onSoftInputAppliedOffsetChange(
-  listener: ({ appliedOffset }: SoftInputAppliedOffsetEventData) => void
+  listener: ({ appliedOffset }: SoftInputAppliedOffsetEventData) => void,
 ) {
   return eventEmitter.addListener('softInputAppliedOffsetChanged', listener);
 }
@@ -37,7 +37,7 @@ function onSoftInputAppliedOffsetChange(
  * Fires event when soft input's height changes
  */
 function onSoftInputHeightChange(
-  listener: ({ softInputHeight }: SoftInputEventData) => void
+  listener: ({ softInputHeight }: SoftInputEventData) => void,
 ) {
   return eventEmitter.addListener('softInputHeightChanged', listener);
 }
@@ -51,7 +51,7 @@ function setEnabled(enabled: boolean) {
 
 /**
  * Set should mimic IOS ime behavior (true), or let Android OS handle (resize) window (false)
- * 
+ *
  * @platform `Android`
  */
 function setShouldMimicIOSBehavior(shouldMimic: boolean) {
@@ -64,7 +64,7 @@ function setShouldMimicIOSBehavior(shouldMimic: boolean) {
 
 /**
  * Sets additional offset that will be added to value applied to root view/scroll view
- * 
+ *
  * Can be negative (then final value will be smaller, so that some part of focused view will be covered by soft input frame)
  */
 function setAvoidOffset(offset: number) {
@@ -96,10 +96,12 @@ function setHideAnimationDuration(duration?: number) {
  * Sets show animation delay, takes value in milliseconds, if no value is provided, it will set default value which is `300` ms on iOS and `0` ms on Android
  */
 function setShowAnimationDelay(delay?: number) {
-  module.setShowAnimationDelay(delay ?? Platform.select({
-    default: 0,
-    ios: 300,
-  }));
+  module.setShowAnimationDelay(
+    delay ?? Platform.select({
+      default: 0,
+      ios: 300,
+    }),
+  );
 }
 
 /**

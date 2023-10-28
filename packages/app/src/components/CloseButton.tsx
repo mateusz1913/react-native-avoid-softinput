@@ -13,9 +13,10 @@ const CloseButton: React.FC<Props> = ({ onPress }) => {
         color: 'gray',
       }}
       onPress={onPress}
-      style={({ pressed }) => [ styles.container, pressed && styles.pressed ]}>
-      <View style={[ styles.line, styles.minusLine ]} />
-      <View style={[ styles.line, styles.plusLine ]} />
+      style={({ pressed }) => [styles.container, pressed && styles.pressed]}
+    >
+      <View style={[styles.line, styles.minusLine]} />
+      <View style={[styles.line, styles.plusLine]} />
     </Pressable>
   );
 };

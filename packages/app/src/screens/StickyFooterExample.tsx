@@ -33,11 +33,11 @@ export const StickyFooterExample: React.FC = () => {
 
   /**
    * You can also use `useSoftInputShown` & `useSoftInputHidden`
-   * 
+   *
    * useSoftInputShown(({ softInputHeight }) => {
    *   buttonContainerPaddingValue.value = withTiming(softInputHeight);
    * });
-   * 
+   *
    * useSoftInputHidden(() => {
    *   buttonContainerPaddingValue.value = withTiming(0);
    * });
@@ -46,7 +46,7 @@ export const StickyFooterExample: React.FC = () => {
     buttonContainerPaddingValue.value = withTiming(softInputHeight);
   });
 
-  return <SafeAreaView edges={[ 'left', 'right', 'bottom' ]} style={commonStyles.screenContainer}>
+  return <SafeAreaView edges={['left', 'right', 'bottom']} style={commonStyles.screenContainer}>
     <View style={styles.scrollWrapper}>
       <ScrollView
         contentContainerStyle={styles.scrollContainer}
@@ -55,7 +55,7 @@ export const StickyFooterExample: React.FC = () => {
         <SingleInput />
       </ScrollView>
     </View>
-    <Animated.View style={[ buttonContainerAnimatedStyle, styles.ctaButtonWrapper ]}>
+    <Animated.View style={[buttonContainerAnimatedStyle, styles.ctaButtonWrapper]}>
       <View style={styles.ctaButtonContainer}>
         <Button onPress={NOOP} title="Submit" />
       </View>

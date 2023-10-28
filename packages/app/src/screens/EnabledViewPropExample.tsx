@@ -13,7 +13,7 @@ const icon = require('../../assets/AppIconTransparent.png');
 
 export const EnabledViewPropExample: React.FC = () => {
   const inputRef = React.useRef<TextInput>(null);
-  const [ enabled, setEnabled ] = React.useState(false);
+  const [enabled, setEnabled] = React.useState(false);
 
   const onFocusEffect = React.useCallback(() => {
     AvoidSoftInput.setShouldMimicIOSBehavior(true);
@@ -32,7 +32,7 @@ export const EnabledViewPropExample: React.FC = () => {
     setEnabled((prev) => !prev);
   }
 
-  return <SafeAreaView edges={[ 'bottom', 'left', 'right' ]} style={commonStyles.screenContainer}>
+  return <SafeAreaView edges={['bottom', 'left', 'right']} style={commonStyles.screenContainer}>
     <AvoidSoftInputView enabled={enabled} style={commonStyles.screenContainer}>
       <ScrollView
         bounces={false}
@@ -41,7 +41,8 @@ export const EnabledViewPropExample: React.FC = () => {
         keyboardShouldPersistTaps="always"
         overScrollMode="always"
         showsVerticalScrollIndicator={true}
-        style={commonStyles.stretch}>
+        style={commonStyles.stretch}
+      >
         <View style={styles.logoContainer}>
           <Image
             resizeMode="contain"

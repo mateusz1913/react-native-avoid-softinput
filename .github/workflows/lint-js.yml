@@ -15,10 +15,10 @@ on:
       - "packages/react-native-avoid-softinput/package.json"
       - "packages/react-native-avoid-softinput/tsconfig.json"
       - ".eslintrc.js"
+      - "dprint.json"
       - "package.json"
       - "tsconfig.base.json"
       - "tsconfig.jest.json"
-      - "tsconfig.json"
       - ".github/workflows/lint-js.yml"
 
 jobs:
@@ -41,5 +41,7 @@ jobs:
       - run: yarn
       - name: ESLint
         run: yarn lint:js
+      - name: dprint
+        uses: dprint/check@v2.2
       - name: TypeScript
         run: yarn typescript

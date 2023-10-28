@@ -12,7 +12,7 @@ import { styles as commonStyles } from '../consts/styles';
 const icon = require('../../assets/AppIconTransparent.png');
 
 export const ModalFormSheetExample: React.FC = () => {
-  const [ formSheetModalVisible, setFormSheetModalVisible ] = React.useState(false);
+  const [formSheetModalVisible, setFormSheetModalVisible] = React.useState(false);
 
   const onFocusEffect = React.useCallback(() => {
     AvoidSoftInput.setShouldMimicIOSBehavior(true);
@@ -33,7 +33,7 @@ export const ModalFormSheetExample: React.FC = () => {
     setFormSheetModalVisible(true);
   }
 
-  return <SafeAreaView edges={[ 'left', 'right' ]} style={commonStyles.screenContainer}>
+  return <SafeAreaView edges={['left', 'right']} style={commonStyles.screenContainer}>
     <Button
       onPress={openFormSheetModal}
       title="Open formsheet modal"
@@ -44,9 +44,10 @@ export const ModalFormSheetExample: React.FC = () => {
       presentationStyle="formSheet"
       statusBarTranslucent={true}
       style={styles.modal}
-      supportedOrientations={[ 'landscape', 'portrait' ]}
-      visible={formSheetModalVisible}>
-      <SafeAreaView edges={[ 'left', 'right', 'bottom' ]} style={styles.modalContent}>
+      supportedOrientations={['landscape', 'portrait']}
+      visible={formSheetModalVisible}
+    >
+      <SafeAreaView edges={['left', 'right', 'bottom']} style={styles.modalContent}>
         <View style={styles.container}>
           <View style={styles.closeContainer}>
             <CloseButton onPress={closeFormSheetModal} />

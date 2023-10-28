@@ -88,7 +88,7 @@ const config = {
         copyright: `Copyright © ${new Date().getFullYear()} Mateusz Mędrek. Built with Docusaurus`,
       },
       prism: {
-        additionalLanguages: [ 'swift', 'java', 'kotlin' ],
+        additionalLanguages: ['swift', 'java', 'kotlin'],
         theme: lightCodeTheme,
         darkTheme: darkCodeTheme,
       },

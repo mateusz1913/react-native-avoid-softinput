@@ -14,31 +14,25 @@ const FeatureList: FeatureItem[] = [
   {
     title: 'Handles keyboard fully on native side',
     image: '/img/KeyboardAnimationSVG1.svg',
-    description: 
-      <>
-        Library applies padding or translation on native side and 
-        detects if currently focused input needs to be pushed above displayed keyboard.
-      </>
-    ,
+    description: <>
+      Library applies padding or translation on native side and detects if currently focused input needs to be pushed
+      above displayed keyboard.
+    </>,
   },
   {
     title: 'Easy to Use',
     image: '/img/KeyboardAnimationSVG2.svg',
-    description: 
-      <>
-        Enable AvoidSoftInput module or wrap your content in AvoidSoftInputView 
-        and have your text fields always displayed above the keyboard out-of-the-box.
-      </>
-    ,
+    description: <>
+      Enable AvoidSoftInput module or wrap your content in AvoidSoftInputView and have your text fields always displayed
+      above the keyboard out-of-the-box.
+    </>,
   },
   {
     title: 'Consistent behavior',
     image: '/img/KeyboardAnimationSVG3.svg',
-    description: 
-      <>
-        Library works in same fashion on Android and iOS.
-      </>
-    ,
+    description: <>
+      Library works in same fashion on Android and iOS.
+    </>,
   },
 ];
 
@@ -69,9 +63,7 @@ export const HomepageFeatures: React.FC = () => {
     <section className={styles.features}>
       <div className="container">
         <div className="row">
-          {FeatureList.map((props, idx) => 
-            <Feature key={idx} {...props} />
-          )}
+          {FeatureList.map((props, idx) => <Feature key={idx} {...props} />)}
         </div>
       </div>
     </section>

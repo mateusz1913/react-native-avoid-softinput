@@ -25,12 +25,12 @@ export const CustomAnimationConfigModuleExample: React.FC = () => {
       AvoidSoftInput.setShouldMimicIOSBehavior(false);
     };
   }, []);
-  
+
   useFocusEffect(onFocusEffect);
 
   const softInputState = useSoftInputState();
 
-  return <SafeAreaView edges={[ 'left', 'bottom', 'right' ]} style={styles.container}>
+  return <SafeAreaView edges={['left', 'bottom', 'right']} style={styles.container}>
     <View style={styles.contentContainer}>
       <SingleInput placeholder="1" />
       <View style={styles.spacer}>
