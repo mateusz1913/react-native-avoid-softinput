@@ -16,6 +16,6 @@ export type RootStackParamList = {
   [ROUTES.Reanimated]: undefined;
   [ROUTES.ScreensNativeModal]: undefined;
   [ROUTES.StickyFooter]: undefined;
-}
+};
 
 export type RootStackNavigationProp = NativeStackNavigationProp<RootStackParamList>;

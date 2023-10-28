@@ -13,7 +13,7 @@ import { styles as commonStyles } from '../consts/styles';
 const icon = require('../../assets/AppIconTransparent.png');
 
 export const ModalExample: React.FC = () => {
-  const [ modalVisible, setModalVisible ] = React.useState(false);
+  const [modalVisible, setModalVisible] = React.useState(false);
 
   const onFocusEffect = React.useCallback(() => {
     AvoidSoftInput.setShouldMimicIOSBehavior(true);
@@ -32,7 +32,7 @@ export const ModalExample: React.FC = () => {
     setModalVisible(true);
   }
 
-  return <SafeAreaView edges={[ 'left', 'right' ]} style={commonStyles.screenContainer}>
+  return <SafeAreaView edges={['left', 'right']} style={commonStyles.screenContainer}>
     <Button
       onPress={openModal}
       title="Open modal"
@@ -42,11 +42,11 @@ export const ModalExample: React.FC = () => {
       onRequestClose={closeModal}
       statusBarTranslucent={true}
       style={styles.modal}
-      supportedOrientations={[ 'landscape', 'portrait' ]}
+      supportedOrientations={['landscape', 'portrait']}
       transparent={true}
       visible={modalVisible}
     >
-      <SafeAreaView edges={[ 'left', 'right', 'bottom' ]} style={styles.modalContent}>
+      <SafeAreaView edges={['left', 'right', 'bottom']} style={styles.modalContent}>
         <View style={styles.container}>
           <View style={styles.closeContainer}>
             <CloseButton onPress={closeModal} />

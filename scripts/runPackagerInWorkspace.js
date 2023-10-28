@@ -23,7 +23,7 @@ async function isMetroPortInUse() {
   return new Promise((resolve, reject) => {
     const METRO_PORT = 8081;
     const server = net.createServer();
-  
+
     server.once('error', function(err) {
       if (err.code === 'EADDRINUSE') {
         reject(METRO_PORT_ALREADY_IN_USE_MESSAGE);
@@ -40,9 +40,9 @@ async function isMetroPortInUse() {
 
 /**
  * Based on @react-native-community/cli startServerInWindow
- * 
+ *
  * https://github.com/react-native-community/cli/blob/d351048dd6c6b2324eab3fff74ddbe48ca41d4d7/packages/cli-platform-android/src/commands/buildAndroid/startServerInNewWindow.ts
- * 
+ *
  * but it runs the command inside workspace (with correct path to metro config)
  */
 async function runPackagerInWorkspace() {
@@ -73,22 +73,22 @@ async function runPackagerInWorkspace() {
 
   if (process.platform === 'darwin') {
     try {
-      return execa.sync('open', [ '-a', 'Terminal', startPackagerScriptPath ], { cwd: process.cwd() });
+      return execa.sync('open', ['-a', 'Terminal', startPackagerScriptPath], { cwd: process.cwd() });
     } catch (error) {
-      return execa.sync('open', [ startPackagerScriptPath ], { cwd: process.cwd() });
+      return execa.sync('open', [startPackagerScriptPath], { cwd: process.cwd() });
     }
   }
 
   if (process.platform === 'linux') {
     try {
-      return execa.spawnSync(terminal, [ '-e', `sh ${startPackagerScriptPath}` ], { cwd: process.cwd(), detached: true });
+      return execa.spawnSync(terminal, ['-e', `sh ${startPackagerScriptPath}`], { cwd: process.cwd(), detached: true });
     } catch (error) {
-      return execa.spawnSync('sh', [ startPackagerScriptPath ], { cwd: process.cwd() });
+      return execa.spawnSync('sh', [startPackagerScriptPath], { cwd: process.cwd() });
     }
   }
 
   if (isWindows) {
-    return execa('cmd.exe', [ '/C', startPackagerScriptPath ], { cwd: process.cwd(), detached: true, stdio: 'ignore' });
+    return execa('cmd.exe', ['/C', startPackagerScriptPath], { cwd: process.cwd(), detached: true, stdio: 'ignore' });
   }
 
   throw new Error('Cannot run packager for unsupported platform');

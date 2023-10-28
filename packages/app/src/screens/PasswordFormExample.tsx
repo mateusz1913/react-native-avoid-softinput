@@ -25,14 +25,15 @@ export const PasswordFormExample: React.FC = () => {
 
   useFocusEffect(onFocusEffect);
 
-  return <SafeAreaView edges={[ 'bottom', 'left', 'right' ]} style={commonStyles.screenContainer}>
+  return <SafeAreaView edges={['bottom', 'left', 'right']} style={commonStyles.screenContainer}>
     <ScrollView
       bounces={false}
       contentContainerStyle={commonStyles.scrollContainer}
       contentInsetAdjustmentBehavior="always"
       overScrollMode="always"
       showsVerticalScrollIndicator={true}
-      style={commonStyles.stretch}>
+      style={commonStyles.stretch}
+    >
       <View style={styles.logoContainer}>
         <Image
           resizeMode="contain"

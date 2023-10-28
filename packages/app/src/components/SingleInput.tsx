@@ -3,7 +3,7 @@ import type { TextInputProps } from 'react-native';
 import { StyleSheet, TextInput } from 'react-native';
 
 const SingleInput = React.forwardRef<TextInput, TextInputProps>((props, ref) => {
-  return <TextInput placeholderTextColor="#2E8555" {...props} ref={ref} style={[ styles.input, props.style ]} />;
+  return <TextInput placeholderTextColor="#2E8555" {...props} ref={ref} style={[styles.input, props.style]} />;
 });
 
 const styles = StyleSheet.create({

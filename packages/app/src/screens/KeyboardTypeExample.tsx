@@ -10,13 +10,13 @@ import SingleInput from '../components/SingleInput';
 import { styles as commonStyles } from '../consts/styles';
 
 type InputsRef = {
-  plain: TextInput | null,
-  email: TextInput | null,
-  password: TextInput | null,
-  decimal: TextInput | null,
-  webSearch: TextInput | null,
-  numeric: TextInput | null,
-}
+  plain: TextInput | null;
+  email: TextInput | null;
+  password: TextInput | null;
+  decimal: TextInput | null;
+  webSearch: TextInput | null;
+  numeric: TextInput | null;
+};
 
 export const KeyboardTypeExample: React.FC = () => {
   const inputsRef = React.useRef<InputsRef>({
@@ -67,14 +67,15 @@ export const KeyboardTypeExample: React.FC = () => {
     inputsRef.current.numeric?.focus();
   }
 
-  return <SafeAreaView edges={[ 'bottom', 'left', 'right' ]} style={commonStyles.screenContainer}>
+  return <SafeAreaView edges={['bottom', 'left', 'right']} style={commonStyles.screenContainer}>
     <ScrollView
       bounces={false}
       contentContainerStyle={commonStyles.scrollContainer}
       contentInsetAdjustmentBehavior="always"
       overScrollMode="always"
       showsVerticalScrollIndicator={true}
-      style={commonStyles.stretch}>
+      style={commonStyles.stretch}
+    >
       <View style={styles.logoContainer}>
         <Image
           resizeMode="contain"

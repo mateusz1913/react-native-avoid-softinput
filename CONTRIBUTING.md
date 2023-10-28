@@ -59,7 +59,7 @@ To edit the Kotlin files:
 - if you have a command line launcher for Android Studio set up, you can run `yarn android:studio`
 - otherwise open `packages/mobile/android` in Android Studio and find the source files at `reactnativeavoidsoftinput` under `Android`.
 
-To run Docusaurus documentation locally, run the following: 
+To run Docusaurus documentation locally, run the following:
 
 ```sh
 yarn docs:start

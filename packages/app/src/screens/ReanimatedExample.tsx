@@ -2,7 +2,14 @@ import { useFocusEffect } from '@react-navigation/native';
 import * as React from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { AvoidSoftInput, AvoidSoftInputView } from 'react-native-avoid-softinput';
-import Animated, { Extrapolate, interpolate, interpolateColor, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
+import Animated, {
+  Extrapolate,
+  interpolate,
+  interpolateColor,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import SingleInput from '../components/SingleInput';
@@ -14,10 +21,10 @@ export const ReanimatedExample: React.FC = () => {
   const scaleProgress = useSharedValue(0);
   const colorProgress = useSharedValue(0);
   const animatedLoaderStyle = useAnimatedStyle(() => {
-    const backgroundColor = interpolateColor(colorProgress.value, [ 0, 200 ], [ 'green', 'lightgreen' ], 'RGB');
-    const scale = interpolate(scaleProgress.value, [ 0, 300 ], [ 1, 3 ], Extrapolate.CLAMP);
+    const backgroundColor = interpolateColor(colorProgress.value, [0, 200], ['green', 'lightgreen'], 'RGB');
+    const scale = interpolate(scaleProgress.value, [0, 300], [1, 3], Extrapolate.CLAMP);
 
-    return { backgroundColor, transform: [{ scale }]};
+    return { backgroundColor, transform: [{ scale }] };
   });
   const softInputAppliedOffsetHandler = useSoftInputAppliedOffsetHandler({
     onSoftInputAppliedOffsetChange: (e) => {
@@ -44,20 +51,20 @@ export const ReanimatedExample: React.FC = () => {
 
   useFocusEffect(onFocusEffect);
 
-  return <SafeAreaView edges={[ 'left', 'right', 'bottom' ]} style={styles.container}>
+  return <SafeAreaView edges={['left', 'right', 'bottom']} style={styles.container}>
     <AnimatedAvoidSoftInputView
       easing="easeIn"
       onSoftInputAppliedOffsetChange={softInputAppliedOffsetHandler}
       onSoftInputShown={softInputHandler}
       style={styles.softInputWrapper}
-      >
+    >
       <ScrollView
         contentContainerStyle={styles.scrollContainer}
         contentInsetAdjustmentBehavior="always"
       >
         <SingleInput />
         <View style={styles.loaderContainer}>
-          <Animated.View style={[ styles.loader, animatedLoaderStyle ]} />
+          <Animated.View style={[styles.loader, animatedLoaderStyle]} />
         </View>
       </ScrollView>
     </AnimatedAvoidSoftInputView>

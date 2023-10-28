@@ -10,7 +10,7 @@ import Button from '../components/Button';
 import SingleInput from '../components/SingleInput';
 import { styles as commonStyles } from '../consts/styles';
 
-const SNAP_POINTS = [ 'CONTENT_HEIGHT' ];
+const SNAP_POINTS = ['CONTENT_HEIGHT'];
 
 const Backdrop: React.FC = () => <View style={styles.backdrop} />;
 
@@ -46,7 +46,7 @@ export const BottomSheetExample: React.FC = () => {
 
   useFocusEffect(onFocusEffect);
 
-  return <SafeAreaView edges={[ 'left', 'right' ]} style={commonStyles.screenContainer}>
+  return <SafeAreaView edges={['left', 'right']} style={commonStyles.screenContainer}>
     <Button
       onPress={presentBottomSheet}
       title="Open bottom sheet"
@@ -62,7 +62,7 @@ export const BottomSheetExample: React.FC = () => {
       snapPoints={animatedSnapPoints}
     >
       <BottomSheetView onLayout={handleContentLayout} style={styles.bottomSheet}>
-        <SafeAreaView edges={[ 'bottom', 'left', 'right' ]} style={styles.bottomSheet}>
+        <SafeAreaView edges={['bottom', 'left', 'right']} style={styles.bottomSheet}>
           <Text style={styles.header}>Header</Text>
           <SingleInput style={styles.input} />
           <View style={styles.submitButtonContainer}>

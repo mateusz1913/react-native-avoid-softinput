@@ -13,7 +13,7 @@ const Button: React.FC<Props> = ({ onPress, title }) => {
     }
 
     return title;
-  }, [ title ]);
+  }, [title]);
 
   return (
     <Pressable
@@ -22,7 +22,8 @@ const Button: React.FC<Props> = ({ onPress, title }) => {
         color: '#2155FF',
       }}
       onPress={onPress}
-      style={({ pressed }) => [ styles.button, pressed && styles.pressedButton ]}>
+      style={({ pressed }) => [styles.button, pressed && styles.pressedButton]}
+    >
       <Text style={styles.text}>{formattedTitle}</Text>
     </Pressable>
   );

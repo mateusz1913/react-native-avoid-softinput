@@ -15,17 +15,18 @@ export const CustomAnimationConfigViewExample: React.FC = () => {
       AvoidSoftInput.setShouldMimicIOSBehavior(false);
     };
   }, []);
-  
+
   useFocusEffect(onFocusEffect);
 
-  return <SafeAreaView edges={[ 'left', 'bottom', 'right' ]} style={styles.container}>
+  return <SafeAreaView edges={['left', 'bottom', 'right']} style={styles.container}>
     <AvoidSoftInputView
       easing="easeOut"
       hideAnimationDelay={1000}
       hideAnimationDuration={600}
       showAnimationDelay={1000}
       showAnimationDuration={1200}
-      style={styles.contentContainer}>
+      style={styles.contentContainer}
+    >
       <SingleInput placeholder="1" />
       <View style={styles.spacer}>
         <Text style={styles.label}>SPACER</Text>

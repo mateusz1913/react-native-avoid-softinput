@@ -1,14 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import * as React from 'react';
 import type { ListRenderItem, PlatformOSType } from 'react-native';
-import {
-  FlatList,
-  Platform,
-  StatusBar,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import { FlatList, Platform, StatusBar, StyleSheet, Text, View } from 'react-native';
 import { AvoidSoftInput } from 'react-native-avoid-softinput';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -17,7 +10,7 @@ import { styles as commonStyles } from '../consts/styles';
 import { ROUTES } from '../navigation/routes';
 import type { RootStackNavigationProp } from '../navigation/types';
 
-type Example = { description: string, label: string, platform?: PlatformOSType, route: keyof typeof ROUTES }
+type Example = { description: string; label: string; platform?: PlatformOSType; route: keyof typeof ROUTES; };
 
 const DATA: Array<Example> = [
   {
@@ -36,12 +29,12 @@ const DATA: Array<Example> = [
     route: ROUTES.CustomAnimationConfigView,
   },
   {
-    description: 'Check how to make your form\'s text fields always displayed above the keyboard',
+    description: "Check how to make your form's text fields always displayed above the keyboard",
     label: 'Form',
     route: ROUTES.Form,
   },
   {
-    description: 'Check how to make classic username & password form\'s text fields always displayed above the keyboard',
+    description: "Check how to make classic username & password form's text fields always displayed above the keyboard",
     label: 'PasswordForm',
     route: ROUTES.PasswordForm,
   },
@@ -72,7 +65,8 @@ const DATA: Array<Example> = [
     route: ROUTES.ScreensNativeModal,
   },
   {
-    description: 'Learn how to handle seperate parts of a form - text field in scroll component and CTA button with fixed position at the bottom of the screen',
+    description:
+      'Learn how to handle seperate parts of a form - text field in scroll component and CTA button with fixed position at the bottom of the screen',
     label: 'Sticky footer',
     route: ROUTES.StickyFooter,
   },
@@ -94,11 +88,10 @@ export const HomeScreen: React.FC = () => {
       />
       <Text>{item.description}</Text>
     </View>;
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [navigation]);
 
   return (
-    <SafeAreaView edges={[ 'left', 'right', 'bottom' ]} style={commonStyles.screenContainer}>
+    <SafeAreaView edges={['left', 'right', 'bottom']} style={commonStyles.screenContainer}>
       <View style={commonStyles.screenContainer}>
         <FlatList
           data={DATA.filter((item) => typeof item.platform === 'undefined' || item.platform === Platform.OS)}
@@ -106,38 +99,40 @@ export const HomeScreen: React.FC = () => {
           renderItem={renderItem}
         />
       </View>
-      {Platform.OS === 'android' ? <View style={styles.adjustContainer}>
-        <View style={styles.adjustItem}>
-          <Button
-            onPress={() => AvoidSoftInput.setAdjustNothing()}
-            title="Adjust Nothing"
-          />
+      {Platform.OS === 'android'
+        ? <View style={styles.adjustContainer}>
+          <View style={styles.adjustItem}>
+            <Button
+              onPress={() => AvoidSoftInput.setAdjustNothing()}
+              title="Adjust Nothing"
+            />
+          </View>
+          <View style={styles.adjustItem}>
+            <Button
+              onPress={() => AvoidSoftInput.setAdjustPan()}
+              title="Adjust Pan"
+            />
+          </View>
+          <View style={styles.adjustItem}>
+            <Button
+              onPress={() => AvoidSoftInput.setAdjustResize()}
+              title="Adjust Resize"
+            />
+          </View>
+          <View style={styles.adjustItem}>
+            <Button
+              onPress={() => AvoidSoftInput.setAdjustUnspecified()}
+              title="Adjust Unspecified"
+            />
+          </View>
+          <View style={styles.adjustItem}>
+            <Button
+              onPress={() => AvoidSoftInput.setDefaultAppSoftInputMode()}
+              title="Default softinput mode"
+            />
+          </View>
         </View>
-        <View style={styles.adjustItem}>
-          <Button
-            onPress={() => AvoidSoftInput.setAdjustPan()}
-            title="Adjust Pan"
-          />
-        </View>
-        <View style={styles.adjustItem}>
-          <Button
-            onPress={() => AvoidSoftInput.setAdjustResize()}
-            title="Adjust Resize"
-          />
-        </View>
-        <View style={styles.adjustItem}>
-          <Button
-            onPress={() => AvoidSoftInput.setAdjustUnspecified()}
-            title="Adjust Unspecified"
-          />
-        </View>
-        <View style={styles.adjustItem}>
-          <Button
-            onPress={() => AvoidSoftInput.setDefaultAppSoftInputMode()}
-            title="Default softinput mode"
-          />
-        </View>
-      </View> : null}
+        : null}
       <StatusBar
         animated={true}
         backgroundColor={'transparent'}
