@@ -37,17 +37,19 @@ To run the example app on iOS:
 yarn ios:start
 ```
 
-Make sure your code passes TypeScript and ESLint. Run the following to verify:
+Make sure your code passes TypeScript, ESLint and dprint. Run the following to verify:
 
 ```sh
 yarn typescript
 yarn lint:js
+yarn dprint check
 ```
 
 To fix formatting errors, run the following:
 
 ```sh
 yarn lint:js --fix
+yarn format:js
 ```
 
 To edit the Swift and Objective-C files, run `yarn ios:xcode` and find the source files at `Pods > Development Pods > react-native-avoid-softinput`.
@@ -99,7 +101,8 @@ git branch chore/2-configuration
 
 ### Linting and tests
 
-- [ESLint](https://eslint.org/) - JS/TS linting and formatting
+- [ESLint](https://eslint.org/) - JS/TS linting
+- [dprint](https://dprint.dev/) - JS/TS formatting
 - [TypeScript](https://www.typescriptlang.org/) - TS type checking
 - [Spotless](https://github.com/diffplug/spotless) & [Ktlint](https://github.com/pinterest/ktlint) - Kotlin/Java linting and formatting
 - [SwiftFormat](https://github.com/nicklockwood/SwiftFormat) - Swift formatting
@@ -129,6 +132,7 @@ The `package.json` file contains various scripts for common tasks:
 - `yarn lint:ios:objc`: run linter (ClangFormat) for all ObjC/ObjC++ files within old arch project (install [ClangFormat](https://clang.llvm.org/) e.g. with Homebrew).
 - `yarn lint:fabric:ios:swift`: run linter (SwiftLint) for all Swift files within new arch project (install [SwiftLint](https://github.com/realm/SwiftLint) e.g. with Homebrew).
 - `yarn lint:fabric:ios:objc`: run linter (ClangFormat) for all ObjC/ObjC++ files within new arch project (install [ClangFormat](https://clang.llvm.org/) e.g. with Homebrew).
+- `yarn format:js`: format all JS/TS files with dprint.
 - `yarn format:android`: format (Spotless/Ktlint) all Kotlin/Java files.
 - `yarn format:ios:swift`: format (SwiftFormat) all Swift files within old arch project (install [SwiftFormat](https://github.com/nicklockwood/SwiftFormat) e.g. with Homebrew).
 - `yarn format:ios:objc`: format (ClangFormat) all ObjC/ObjC++ files within old arch project (install [ClangFormat](https://clang.llvm.org/) e.g. with Homebrew).
