@@ -7,9 +7,7 @@ import android.view.View
 import android.widget.ScrollView
 import com.facebook.react.bridge.UiThreadUtil
 import com.facebook.react.uimanager.PixelUtil
-import com.reactnativeavoidsoftinput.AvoidSoftInputView
 import com.reactnativeavoidsoftinput.convertFromPixelToDIP
-import com.reactnativeavoidsoftinput.getRootViewBottomInset
 import com.reactnativeavoidsoftinput.getViewDistanceToBottomEdge
 import kotlin.math.max
 import kotlin.math.min
@@ -202,10 +200,6 @@ class AnimationHandlerImpl : AnimationHandler {
     val currentFocusedViewDistanceToBottom = getViewDistanceToBottomEdge(focusedView)
 
     mBottomOffset = max(to - currentFocusedViewDistanceToBottom, 0).toFloat() + mAvoidOffset
-
-    if (rootView !is AvoidSoftInputView) {
-      mBottomOffset += getRootViewBottomInset(focusedView)
-    }
 
     if (mBottomOffset <= 0F) {
       return
