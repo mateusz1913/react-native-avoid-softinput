@@ -57,15 +57,15 @@
   },
   "devDependencies": {
     "@release-it/conventional-changelog": "6.0.0",
-    "@types/react": "18.2.14",
+    "@types/react": "18.2.42",
     "react": "18.2.0",
-    "react-native": "0.72.1",
+    "react-native": "patch:react-native@npm%3A0.73.1#~/.yarn/patches/react-native-npm-0.73.1-35751404af.patch",
     "react-native-builder-bob": "0.21.2",
     "release-it": "16.0.0"
   },
   "peerDependencies": {
     "react": ">=17.0.0",
-    "react-native": ">=0.65.0"
+    "react-native": ">=0.71.0"
   },
   "release-it": {
     "git": {
