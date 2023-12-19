@@ -104,7 +104,7 @@ git branch chore/2-configuration
 - [ESLint](https://eslint.org/) - JS/TS linting
 - [dprint](https://dprint.dev/) - JS/TS formatting
 - [TypeScript](https://www.typescriptlang.org/) - TS type checking
-- [Spotless](https://github.com/diffplug/spotless) & [Ktlint](https://github.com/pinterest/ktlint) - Kotlin/Java linting and formatting
+- [Spotless](https://github.com/diffplug/spotless) & [Ktfmt](https://github.com/facebook/ktfmt) - Kotlin/Java linting and formatting
 - [SwiftFormat](https://github.com/nicklockwood/SwiftFormat) - Swift formatting
 - [SwiftLint](https://github.com/realm/SwiftLint) - Swift linting
 - [ClangFormat](https://clang.llvm.org/) - ObjC/ObjC++ linting and formatting
@@ -127,13 +127,13 @@ The `package.json` file contains various scripts for common tasks:
 
 - `yarn typescript`: type-check files with TypeScript.
 - `yarn lint:js`: lint all JS/TS files with ESLint.
-- `yarn lint:android`: run linter (Spotless/Ktlint) for all Kotlin/Java files.
+- `yarn lint:android`: run linter (Spotless/Ktfmt) for all Kotlin/Java files.
 - `yarn lint:ios:swift`: run linter (SwiftLint) for all Swift files within old arch project (install [SwiftLint](https://github.com/realm/SwiftLint) e.g. with Homebrew).
 - `yarn lint:ios:objc`: run linter (ClangFormat) for all ObjC/ObjC++ files within old arch project (install [ClangFormat](https://clang.llvm.org/) e.g. with Homebrew).
 - `yarn lint:fabric:ios:swift`: run linter (SwiftLint) for all Swift files within new arch project (install [SwiftLint](https://github.com/realm/SwiftLint) e.g. with Homebrew).
 - `yarn lint:fabric:ios:objc`: run linter (ClangFormat) for all ObjC/ObjC++ files within new arch project (install [ClangFormat](https://clang.llvm.org/) e.g. with Homebrew).
 - `yarn format:js`: format all JS/TS files with dprint.
-- `yarn format:android`: format (Spotless/Ktlint) all Kotlin/Java files.
+- `yarn format:android`: format (Spotless/Ktfmt) all Kotlin/Java files.
 - `yarn format:ios:swift`: format (SwiftFormat) all Swift files within old arch project (install [SwiftFormat](https://github.com/nicklockwood/SwiftFormat) e.g. with Homebrew).
 - `yarn format:ios:objc`: format (ClangFormat) all ObjC/ObjC++ files within old arch project (install [ClangFormat](https://clang.llvm.org/) e.g. with Homebrew).
 - `yarn format:fabric:ios:swift`: format (SwiftFormat) all Swift files within new arch project (install [SwiftFormat](https://github.com/nicklockwood/SwiftFormat) e.g. with Homebrew).

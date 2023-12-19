@@ -2,21 +2,13 @@
 apply plugin: 'com.diffplug.spotless'
 
 spotless {
-  java {
-    target 'src/*/java/**/*.java'
-    googleJavaFormat()
-  }
   kotlin {
     target 'src/**/*.kt'
-    /**
-     * if some rule has to be disabled:
-     * ktlint()
-     *   .userData(["disabled_rules": "no-wildcard-imports"])
-     */
-    ktlint("0.47.1")
-      .editorConfigOverride(["indent_size": 2])
-    trimTrailingWhitespace()
-    indentWithSpaces()
-    endWithNewline()
+    targetExclude "$buildDir/**/*.kt"
+    ktfmt().kotlinlangStyle()
+  }
+  kotlinGradle {
+    target '*.gradle.kts'
+    ktfmt().kotlinlangStyle()
   }
 }

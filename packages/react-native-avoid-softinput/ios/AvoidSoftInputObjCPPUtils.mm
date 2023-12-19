@@ -3,7 +3,7 @@
 #import <React/RCTRootView.h>
 #import <React/RCTUtils.h>
 #ifdef RCT_NEW_ARCH_ENABLED
-#import <React/RCTFabricSurfaceHostingProxyRootView.h>
+#import <React/RCTSurfaceHostingProxyRootView.h>
 #endif
 
 @implementation AvoidSoftInputObjCPPUtils
@@ -28,7 +28,7 @@
     if ([
         presentedViewController.view isKindOfClass:[
 #ifdef RCT_NEW_ARCH_ENABLED
-        RCTFabricSurfaceHostingProxyRootView
+        RCTSurfaceHostingProxyRootView
 #else
         RCTRootView
 #endif

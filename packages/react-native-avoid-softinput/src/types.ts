@@ -8,6 +8,10 @@ export interface SoftInputAppliedOffsetEventData {
   appliedOffset: number;
 }
 
+export type SoftInputEvent = NativeSyntheticEvent<SoftInputEventData>;
+
+export type SoftInputAppliedOffsetEvent = NativeSyntheticEvent<SoftInputAppliedOffsetEventData>;
+
 export type SoftInputEasing = 'easeIn' | 'easeInOut' | 'easeOut' | 'linear';
 
 export interface AvoidSoftInputNativeModuleType {
@@ -57,8 +61,8 @@ export interface AvoidSoftInputViewProps extends Omit<ViewProps, 'pointerEvents'
    * @default 660 ms
    */
   showAnimationDuration?: number;
-  onSoftInputAppliedOffsetChange?: (e: NativeSyntheticEvent<SoftInputAppliedOffsetEventData>) => void;
-  onSoftInputHeightChange?: (e: NativeSyntheticEvent<SoftInputEventData>) => void;
-  onSoftInputHidden?: (e: NativeSyntheticEvent<SoftInputEventData>) => void;
-  onSoftInputShown?: (e: NativeSyntheticEvent<SoftInputEventData>) => void;
+  onSoftInputAppliedOffsetChange?: (e: SoftInputAppliedOffsetEvent) => void;
+  onSoftInputHeightChange?: (e: SoftInputEvent) => void;
+  onSoftInputHidden?: (e: SoftInputEvent) => void;
+  onSoftInputShown?: (e: SoftInputEvent) => void;
 }
