@@ -16,9 +16,6 @@ on:
 jobs:
   release:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [16.x]
     steps:
       - uses: actions/checkout@v3
       - uses: actions/cache@v3
@@ -26,9 +23,8 @@ jobs:
           path: "**/node_modules"
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
       - name: Install modules
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
           cache: "yarn"
           registry-url: "https://registry.npmjs.org"
           cache-dependency-path: "**/yarn.lock"
