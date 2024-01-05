@@ -12,10 +12,10 @@ Pod::Spec.new do |s|
   s.license      = package["license"]
   s.authors      = package["author"]
 
-  s.platforms    = { :ios => "11.0", :tvos => "11.0" }
+  s.platforms    = { :ios => "12.4" }
   s.source       = { :git => "https://github.com/mateusz1913/react-native-avoid-softinput.git", :tag => "#{s.version}" }
 
-  s.source_files = "ios/**/*.{h,m,mm,cpp,swift}"
+  s.source_files = "ios/**/*.{h,m,mm,cpp}"
 
   if new_arch_enabled
     s.pod_target_xcconfig    = {

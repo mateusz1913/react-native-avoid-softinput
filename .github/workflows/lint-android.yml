@@ -31,5 +31,5 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
       - run: yarn
-      - name: Spotless/Ktlint
+      - name: Spotless/Ktfmt
         run: yarn lint:android

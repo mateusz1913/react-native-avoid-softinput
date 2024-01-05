@@ -1,5 +1,4 @@
 import { BottomSheetModal, BottomSheetView } from '@gorhom/bottom-sheet';
-import { useBottomSheetDynamicSnapPoints } from '@gorhom/bottom-sheet';
 import { useFocusEffect } from '@react-navigation/native';
 import * as React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
@@ -9,8 +8,6 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import Button from '../components/Button';
 import SingleInput from '../components/SingleInput';
 import { styles as commonStyles } from '../consts/styles';
-
-const SNAP_POINTS = ['CONTENT_HEIGHT'];
 
 const Backdrop: React.FC = () => <View style={styles.backdrop} />;
 
@@ -24,13 +21,6 @@ export const BottomSheetExample: React.FC = () => {
   function presentBottomSheet() {
     bottomSheetModalRef.current?.present();
   }
-
-  const {
-    animatedContentHeight,
-    animatedHandleHeight,
-    animatedSnapPoints,
-    handleContentLayout,
-  } = useBottomSheetDynamicSnapPoints(SNAP_POINTS);
 
   const onFocusEffect = React.useCallback(() => {
     AvoidSoftInput.setShouldMimicIOSBehavior(true);
@@ -54,14 +44,12 @@ export const BottomSheetExample: React.FC = () => {
     <BottomSheetModal
       ref={bottomSheetModalRef}
       backdropComponent={Backdrop}
-      contentHeight={animatedContentHeight}
       enableDismissOnClose
+      enableDynamicSizing
       enablePanDownToClose
-      handleHeight={animatedHandleHeight}
       index={0}
-      snapPoints={animatedSnapPoints}
     >
-      <BottomSheetView onLayout={handleContentLayout} style={styles.bottomSheet}>
+      <BottomSheetView style={styles.bottomSheet}>
         <SafeAreaView edges={['bottom', 'left', 'right']} style={styles.bottomSheet}>
           <Text style={styles.header}>Header</Text>
           <SingleInput style={styles.input} />

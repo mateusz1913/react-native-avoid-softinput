@@ -10,13 +10,13 @@
     "typescript": "tsc --noEmit -p packages/app/tsconfig.json && tsc --noEmit -p packages/fabricMobile/tsconfig.json && tsc --noEmit -p packages/mobile/tsconfig.json && tsc --noEmit -p packages/react-native-avoid-softinput/tsconfig.json",
     "dprint": "dprint",
     "lint:js": "eslint \"**/*.{js,ts,tsx}\"",
-    "lint:android": "./packages/react-native-avoid-softinput/android/gradlew -p packages/react-native-avoid-softinput/android spotlessCheck --quiet",
+    "lint:android": "./packages/react-native-avoid-softinput/android/gradlew -p packages/react-native-avoid-softinput/android spotlessCheck --quiet && ./packages/mobile/android/gradlew -p packages/mobile/android spotlessCheck --quiet && ./packages/fabricMobile/android/gradlew -p packages/fabricMobile/android spotlessCheck --quiet",
     "lint:ios:swift": "swiftlint lint --config ./packages/mobile/ios/.swiftlint.yml --quiet",
     "lint:ios:objc": "clang-format --dry-run -i ./packages/react-native-avoid-softinput/ios/*.{h,mm} ./packages/mobile/ios/AvoidSoftinputExample/*.{h,mm}",
     "lint:fabric:ios:swift": "swiftlint lint --config ./packages/fabricMobile/ios/.swiftlint.yml --quiet",
     "lint:fabric:ios:objc": "clang-format --dry-run -i ./packages/react-native-avoid-softinput/ios/*.{h,mm} ./packages/fabricMobile/ios/FabricAvoidSoftinputExample/*.{h,mm}",
     "format:js": "dprint fmt",
-    "format:android": "./packages/react-native-avoid-softinput/android/gradlew -p packages/react-native-avoid-softinput/android spotlessApply",
+    "format:android": "./packages/react-native-avoid-softinput/android/gradlew -p packages/react-native-avoid-softinput/android spotlessApply && ./packages/mobile/android/gradlew -p packages/mobile/android spotlessApply && ./packages/fabricMobile/android/gradlew -p packages/fabricMobile/android spotlessApply",
     "format:ios:swift": "swiftformat ./packages/react-native-avoid-softinput/ios ./packages/mobile/ios --config ./packages/mobile/ios/.swiftformat",
     "format:ios:objc": "clang-format -i ./packages/react-native-avoid-softinput/ios/*.{h,mm} ./packages/mobile/ios/AvoidSoftinputExample/*.{h,mm} -Werror",
     "format:fabric:ios:swift": "swiftformat ./packages/react-native-avoid-softinput/ios ./packages/fabricMobile/ios --config ./packages/fabricMobile/ios/.swiftformat",
@@ -72,5 +72,5 @@
       "@commitlint/config-conventional"
     ]
   },
-  "packageManager": "yarn@3.6.4"
+  "packageManager": "yarn@4.0.2"
 }

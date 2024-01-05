@@ -3,19 +3,13 @@
 #import "AvoidSoftInputAppliedOffsetChangedEvent.h"
 #import "AvoidSoftInputHeightChangedEvent.h"
 #import "AvoidSoftInputHiddenEvent.h"
+#import "AvoidSoftInputManager.h"
 #import "AvoidSoftInputShownEvent.h"
 #import "AvoidSoftInputView.h"
 
 #import <React/RCTConvert.h>
 #import <React/UIView+React.h>
 #import "RCTConvert+UIViewAnimationOptions.h"
-
-// MARK: Swift classes in ObjC++
-#if __has_include("ReactNativeAvoidSoftinput/ReactNativeAvoidSoftinput-Swift.h")
-#import "ReactNativeAvoidSoftinput/ReactNativeAvoidSoftinput-Swift.h"
-#else
-#import "ReactNativeAvoidSoftinput-Swift.h"
-#endif
 
 @interface AvoidSoftInputViewManager () <AvoidSoftInputViewDelegate>
 

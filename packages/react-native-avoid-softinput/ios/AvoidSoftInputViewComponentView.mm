@@ -11,16 +11,10 @@
 #import <React/RCTConversions.h>
 #import <React/RCTFabricComponentsPlugins.h>
 
+#import "AvoidSoftInputManager.h"
 #import "AvoidSoftInputView.h"
 
 #import "RCTConvert+UIViewAnimationOptions.h"
-
-// MARK: Swift classes in ObjC++
-#if __has_include("ReactNativeAvoidSoftinput/ReactNativeAvoidSoftinput-Swift.h")
-#import "ReactNativeAvoidSoftinput/ReactNativeAvoidSoftinput-Swift.h"
-#else
-#import "ReactNativeAvoidSoftinput-Swift.h"
-#endif
 
 using namespace facebook::react;
 

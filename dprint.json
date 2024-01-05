@@ -14,6 +14,8 @@
   "excludes": [
     ".yarn",
     "**/build",
+    "**/.cxx",
+    "**/Pods",
     "**/lib",
     "**/node_modules",
     "**/vendor",
