@@ -10,33 +10,35 @@ import com.facebook.react.turbomodule.core.interfaces.TurboModule
 import com.facebook.react.uimanager.ViewManager
 
 class AvoidSoftInputPackage : TurboReactPackage() {
-  override fun getModule(name: String, reactContext: ReactApplicationContext): NativeModule? {
-    return when (name) {
-      AvoidSoftInputModuleImpl.NAME -> AvoidSoftInputModule(reactContext)
-      else -> null
+    override fun getModule(name: String, reactContext: ReactApplicationContext): NativeModule? {
+        return when (name) {
+            AvoidSoftInputModuleImpl.NAME -> AvoidSoftInputModule(reactContext)
+            else -> null
+        }
     }
-  }
 
-  override fun getReactModuleInfoProvider(): ReactModuleInfoProvider {
-    val moduleList: Array<Class<out NativeModule?>> = arrayOf(AvoidSoftInputModule::class.java)
-    val reactModuleInfoMap: MutableMap<String, ReactModuleInfo> = HashMap()
-    for (moduleClass in moduleList) {
-      val reactModule = moduleClass.getAnnotation(ReactModule::class.java) ?: continue
-      reactModuleInfoMap[reactModule.name] =
-        ReactModuleInfo(
-          reactModule.name,
-          moduleClass.name,
-          true,
-          reactModule.needsEagerInit,
-          reactModule.hasConstants,
-          reactModule.isCxxModule,
-          TurboModule::class.java.isAssignableFrom(moduleClass)
-        )
+    override fun getReactModuleInfoProvider(): ReactModuleInfoProvider {
+        val moduleList: Array<Class<out NativeModule?>> = arrayOf(AvoidSoftInputModule::class.java)
+        val reactModuleInfoMap: MutableMap<String, ReactModuleInfo> = HashMap()
+        for (moduleClass in moduleList) {
+            val reactModule = moduleClass.getAnnotation(ReactModule::class.java) ?: continue
+            reactModuleInfoMap[reactModule.name] =
+                ReactModuleInfo(
+                    reactModule.name,
+                    moduleClass.name,
+                    true,
+                    reactModule.needsEagerInit,
+                    reactModule.hasConstants,
+                    reactModule.isCxxModule,
+                    TurboModule::class.java.isAssignableFrom(moduleClass)
+                )
+        }
+        return ReactModuleInfoProvider { reactModuleInfoMap }
     }
-    return ReactModuleInfoProvider { reactModuleInfoMap }
-  }
 
-  override fun createViewManagers(reactContext: ReactApplicationContext): List<ViewManager<*, *>> {
-    return listOf(AvoidSoftInputViewManager())
-  }
+    override fun createViewManagers(
+        reactContext: ReactApplicationContext
+    ): List<ViewManager<*, *>> {
+        return listOf(AvoidSoftInputViewManager())
+    }
 }

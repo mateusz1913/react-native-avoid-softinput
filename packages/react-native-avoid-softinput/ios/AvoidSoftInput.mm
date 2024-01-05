@@ -1,6 +1,6 @@
 #import "AvoidSoftInput.h"
-
-#import "AvoidSoftInputObjCPPUtils.h"
+#import "AvoidSoftInputConstants.h"
+#import "AvoidSoftInputManager.h"
 #import "RCTConvert+UIViewAnimationOptions.h"
 
 #ifdef RCT_NEW_ARCH_ENABLED
@@ -8,13 +8,6 @@
 
 @interface AvoidSoftInput () <NativeAvoidSoftInputModuleSpec>
 @end
-#endif
-
-// MARK: Swift classes in ObjC++
-#if __has_include("ReactNativeAvoidSoftinput/ReactNativeAvoidSoftinput-Swift.h")
-#import "ReactNativeAvoidSoftinput/ReactNativeAvoidSoftinput-Swift.h"
-#else
-#import "ReactNativeAvoidSoftinput-Swift.h"
 #endif
 
 @interface AvoidSoftInput () <AvoidSoftInputManagerDelegate>

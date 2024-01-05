@@ -86,7 +86,7 @@ export const HomeScreen: React.FC = () => {
         onPress={() => navigation.navigate(item.route)}
         title={item.label}
       />
-      <Text>{item.description}</Text>
+      <Text style={styles.description}>{item.description}</Text>
     </View>;
   }, [navigation]);
 
@@ -154,6 +154,9 @@ const styles = StyleSheet.create({
   },
   adjustItem: {
     marginVertical: 10,
+  },
+  description: {
+    color: 'black',
   },
   item: {
     borderBottomWidth: StyleSheet.hairlineWidth,

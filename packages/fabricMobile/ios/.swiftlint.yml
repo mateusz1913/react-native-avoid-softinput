@@ -2,7 +2,7 @@ reporter: xcode
 
 included:
   - FabricAvoidSoftinputExample/
-  - ../../react-native-avoid-softinput/ios/
+  # - ../../react-native-avoid-softinput/ios/
 
 excluded:
   - Pods/
