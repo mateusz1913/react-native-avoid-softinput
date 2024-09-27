@@ -12518,6 +12518,7 @@ __metadata:
     react-native: "npm:0.75.3"
     react-native-builder-bob: "npm:0.30.2"
     release-it: "npm:17.6.0"
+    typescript: "npm:5.0.4"
   peerDependencies:
     react: ">=18.2.0"
     react-native: ">=0.73.0"

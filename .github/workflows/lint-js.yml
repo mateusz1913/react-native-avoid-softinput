@@ -42,3 +42,5 @@ jobs:
         run: yarn lint:js
       - name: TypeScript
         run: yarn typescript
+      - name: Prepare library
+        run: yarn prepare
