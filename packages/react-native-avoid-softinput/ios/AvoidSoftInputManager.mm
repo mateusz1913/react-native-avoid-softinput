@@ -20,6 +20,14 @@
     return self;
 }
 
+- (void)dealloc
+{
+    animationHandler.delegate = nil;
+    animationHandler = nil;
+    listener.delegate = nil;
+    listener = nil;
+}
+
 // MARK: Public setters
 - (void)setCustomView:(UIView *)customView
 {

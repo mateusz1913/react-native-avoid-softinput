@@ -17,9 +17,7 @@ export function useSoftInputAppliedOffsetChanged(
   }, [callback]);
 }
 
-export function useSoftInputHeightChanged(
-  callback: ({ softInputHeight }: SoftInputEventData) => void,
-) {
+export function useSoftInputHeightChanged(callback: ({ softInputHeight }: SoftInputEventData) => void) {
   useEffect(() => {
     const unsubscribeHeightChanged = AvoidSoftInput.onSoftInputHeightChange(callback);
 

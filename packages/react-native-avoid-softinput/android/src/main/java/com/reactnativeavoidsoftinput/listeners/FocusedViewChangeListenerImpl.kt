@@ -4,26 +4,26 @@ import android.view.View
 import android.view.ViewTreeObserver
 
 class FocusedViewChangeListenerImpl : FocusedViewChangeListener {
-    private var mCurrentFocusedView: View? = null
-    private var mPreviousFocusedView: View? = null
-    private var mOnFocusListener: ((oldView: View?, newView: View?) -> Unit)? = null
+    private var currentView: View? = null
+    private var previousView: View? = null
+    private var onFocusListener: ((oldView: View?, newView: View?) -> Unit)? = null
 
     private val mOnGlobalFocusChangeListener =
         ViewTreeObserver.OnGlobalFocusChangeListener { oldView, newView ->
-            mCurrentFocusedView = newView
-            mPreviousFocusedView = oldView
+            currentView = newView
+            previousView = oldView
 
-            mOnFocusListener?.invoke(oldView, newView)
+            onFocusListener?.invoke(oldView, newView)
         }
 
     override val currentFocusedView: View?
-        get() = mCurrentFocusedView
+        get() = currentView
 
     override val previousFocusedView: View?
-        get() = mPreviousFocusedView
+        get() = previousView
 
     override fun setOnFocusListener(listener: ((oldView: View?, newView: View?) -> Unit)?) {
-        mOnFocusListener = listener
+        onFocusListener = listener
     }
 
     override fun registerFocusedViewChangeListener(rootView: View) {

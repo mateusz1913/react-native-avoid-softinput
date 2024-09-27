@@ -6,6 +6,7 @@
 @implementation AvoidSoftInputListener {
     CGFloat previousSoftInputHeight;
     CGFloat previousScreenHeight;
+    BOOL isInitialized;
 }
 
 - (instancetype)init
@@ -21,6 +22,10 @@
 // MARK: Public methods
 - (void)initializeHandlers
 {
+    if (isInitialized) {
+        return;
+    }
+
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(softInputWillShow:)
                                                  name:UIKeyboardWillShowNotification
@@ -33,11 +38,13 @@
                                              selector:@selector(softInputHeightWillChange:)
                                                  name:UIKeyboardWillChangeFrameNotification
                                                object:nil];
+    isInitialized = YES;
 }
 
 - (void)cleanupHandlers
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+    isInitialized = NO;
 }
 
 // MARK: Private methods

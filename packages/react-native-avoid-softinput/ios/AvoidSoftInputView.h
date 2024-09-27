@@ -1,3 +1,5 @@
+#if RCT_NEW_ARCH_ENABLED
+#else
 #import <React/RCTView.h>
 
 @class AvoidSoftInputManager;
@@ -24,7 +26,12 @@
 @property (nonatomic, copy) NSNumber *_Nullable hideAnimationDuration;
 @property (nonatomic, copy) NSNumber *_Nullable showAnimationDelay;
 @property (nonatomic, copy) NSNumber *_Nullable showAnimationDuration;
+@property (nonatomic, copy) RCTDirectEventBlock onSoftInputAppliedOffsetChange;
+@property (nonatomic, copy) RCTDirectEventBlock onSoftInputHeightChange;
+@property (nonatomic, copy) RCTDirectEventBlock onSoftInputHidden;
+@property (nonatomic, copy) RCTDirectEventBlock onSoftInputShown;
 
 - (nonnull instancetype)initWithFrame:(CGRect)frame;
 
 @end
+#endif

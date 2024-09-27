@@ -6,69 +6,75 @@ import com.facebook.react.module.annotations.ReactModule
 @ReactModule(name = AvoidSoftInputModuleImpl.NAME)
 class AvoidSoftInputModule(reactContext: ReactApplicationContext) :
     NativeAvoidSoftInputModuleSpec(reactContext) {
-    private var mModuleImpl = AvoidSoftInputModuleImpl(reactContext)
+    private var moduleImpl = AvoidSoftInputModuleImpl(reactContext)
 
     override fun getName(): String = AvoidSoftInputModuleImpl.NAME
 
     override fun initialize() {
         super.initialize()
 
-        mModuleImpl.onInitialize()
+        moduleImpl.onInitialize()
+    }
+
+    override fun invalidate() {
+        moduleImpl.onInvalidate()
+
+        super.invalidate()
     }
 
     override fun setShouldMimicIOSBehavior(shouldMimic: Boolean) {
-        mModuleImpl.setShouldMimicIOSBehavior(shouldMimic)
+        moduleImpl.setShouldMimicIOSBehavior(shouldMimic)
     }
 
     override fun setEnabled(isEnabled: Boolean) {
-        mModuleImpl.setEnabled(isEnabled)
+        moduleImpl.setEnabled(isEnabled)
     }
 
     override fun setAvoidOffset(avoidOffset: Double) {
-        mModuleImpl.setAvoidOffset(avoidOffset.toFloat())
+        moduleImpl.setAvoidOffset(avoidOffset.toFloat())
     }
 
     override fun setEasing(easing: String) {
-        mModuleImpl.setEasing(easing)
+        moduleImpl.setEasing(easing)
     }
 
     override fun setHideAnimationDelay(delay: Double?) {
-        mModuleImpl.setHideAnimationDelay(delay?.toInt())
+        moduleImpl.setHideAnimationDelay(delay?.toInt())
     }
 
     override fun setHideAnimationDuration(duration: Double?) {
-        mModuleImpl.setHideAnimationDuration(duration?.toInt())
+        moduleImpl.setHideAnimationDuration(duration?.toInt())
     }
 
     override fun setShowAnimationDelay(delay: Double?) {
-        mModuleImpl.setShowAnimationDelay(delay?.toInt())
+        moduleImpl.setShowAnimationDelay(delay?.toInt())
     }
 
     override fun setShowAnimationDuration(duration: Double?) {
-        mModuleImpl.setShowAnimationDuration(duration?.toInt())
+        moduleImpl.setShowAnimationDuration(duration?.toInt())
     }
 
-    override fun addListener(eventName: String) {}
+    override fun addListener(@Suppress("UNUSED_PARAMETER") eventName: String) {}
 
-    override fun removeListeners(count: Double) {}
+    override fun removeListeners(@Suppress("UNUSED_PARAMETER") count: Double) {}
 
     override fun setAdjustNothing() {
-        mModuleImpl.setAdjustNothing()
+        moduleImpl.setAdjustNothing()
     }
 
     override fun setAdjustPan() {
-        mModuleImpl.setAdjustPan()
+        moduleImpl.setAdjustPan()
     }
 
     override fun setAdjustResize() {
-        mModuleImpl.setAdjustResize()
+        moduleImpl.setAdjustResize()
     }
 
     override fun setAdjustUnspecified() {
-        mModuleImpl.setAdjustUnspecified()
+        moduleImpl.setAdjustUnspecified()
     }
 
     override fun setDefaultAppSoftInputMode() {
-        mModuleImpl.setDefaultAppSoftInputMode()
+        moduleImpl.setDefaultAppSoftInputMode()
     }
 }

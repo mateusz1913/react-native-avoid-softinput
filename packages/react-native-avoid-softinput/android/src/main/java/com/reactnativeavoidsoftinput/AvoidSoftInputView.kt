@@ -12,52 +12,69 @@ import com.reactnativeavoidsoftinput.listeners.SoftInputListener
 @SuppressLint("ViewConstructor")
 class AvoidSoftInputView(private val reactContext: ThemedReactContext) :
     ReactViewGroup(reactContext), SoftInputListener {
-    private val mManager =
-        AvoidSoftInputManager(reactContext.reactApplicationContext).apply {
-            setIsEnabled(true)
-            setRootView(this@AvoidSoftInputView)
-            setOnOffsetChangedListener { offset: Int -> sendAppliedOffsetChangedEvent(offset) }
-            setOnSoftInputEventsListener(this@AvoidSoftInputView)
+    private var managerInstance: AvoidSoftInputManager? = null
+    private val manager: AvoidSoftInputManager
+        get() {
+            synchronized(this) {
+                val instance =
+                    managerInstance
+                        ?: return AvoidSoftInputManager(reactContext.reactApplicationContext)
+                            .apply {
+                                setIsEnabled(true)
+                                setRootView(this@AvoidSoftInputView)
+                                setOnOffsetChangedListener { offset: Int ->
+                                    sendAppliedOffsetChangedEvent(offset)
+                                }
+                                setOnSoftInputEventsListener(this@AvoidSoftInputView)
+                                managerInstance = this
+                            }
+                return instance
+            }
         }
 
     private fun getEventDispatcher() = getEventDispatcher(reactContext, this)
 
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
-        mManager.initializeHandlers()
+        manager.initializeHandlers()
     }
 
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
-        mManager.cleanupHandlers()
+        cleanup()
+    }
+
+    fun cleanup() {
+        manager.cleanupHandlers()
+        managerInstance = null
     }
 
     fun setAvoidOffset(avoidOffset: Float) {
-        mManager.setAvoidOffset(avoidOffset)
+        manager.setAvoidOffset(avoidOffset)
     }
 
     fun setEasing(easing: String?) {
-        mManager.setEasing(easing)
+        manager.setEasing(easing)
     }
 
     fun setIsEnabled(enabled: Boolean) {
-        mManager.setIsEnabled(enabled)
+        manager.setIsEnabled(enabled)
     }
 
     fun setHideAnimationDelay(delay: Int?) {
-        mManager.setHideAnimationDelay(delay)
+        manager.setHideAnimationDelay(delay)
     }
 
     fun setHideAnimationDuration(duration: Int?) {
-        mManager.setHideAnimationDuration(duration)
+        manager.setHideAnimationDuration(duration)
     }
 
     fun setShowAnimationDelay(delay: Int?) {
-        mManager.setShowAnimationDelay(delay)
+        manager.setShowAnimationDelay(delay)
     }
 
     fun setShowAnimationDuration(duration: Int?) {
-        mManager.setShowAnimationDuration(duration)
+        manager.setShowAnimationDuration(duration)
     }
 
     override fun onSoftInputShown(from: Int, to: Int) {

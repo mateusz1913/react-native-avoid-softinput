@@ -1,4 +1,4 @@
-#ifdef RCT_NEW_ARCH_ENABLED
+#if RCT_NEW_ARCH_ENABLED
 
 #import <React/RCTViewComponentView.h>
 #import <UIKit/UIKit.h>

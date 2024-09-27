@@ -1,5 +1,16 @@
+#if RCT_NEW_ARCH_ENABLED
+#include <React/RCTSurfaceHostingProxyRootView.h>
+#else
+#include <React/RCTRootView.h>
+#endif
+
 #import "AvoidSoftInputUtils.h"
+
+#if RCT_NEW_ARCH_ENABLED
+#import "AvoidSoftInputViewComponentView.h"
+#else
 #import "AvoidSoftInputView.h"
+#endif
 
 @implementation UIViewController (AvoidSoftInputUtils)
 
@@ -14,17 +25,14 @@
  */
 - (UIView *)getReactRootView
 {
-    /**
-     * Importing `RCTSurfaceHostingProxyRootView` conditionally depending on if new arch is enabled
-     * or not is troublesome. Moreover that class is not used apart from that if check,
-     * so instead let's just use `NSClassFromString` to perform checks
-     */
-    Class newArchRootViewClazz = NSClassFromString(@"RCTSurfaceHostingProxyRootView");
-    Class oldArchRootViewClazz = NSClassFromString(@"RCTRootView");
-    BOOL isNewArchRootView = newArchRootViewClazz != nil && [self.view isKindOfClass:newArchRootViewClazz];
-    BOOL isOldArchRootView = oldArchRootViewClazz != nil && [self.view isKindOfClass:oldArchRootViewClazz];
+    BOOL isRootView = NO;
+#if RCT_NEW_ARCH_ENABLED
+    isRootView = [self.view isKindOfClass:[RCTSurfaceHostingProxyRootView class]];
+#else
+    isRootView = [self.view isKindOfClass:[RCTRootView class]];
+#endif
 
-    if ((isNewArchRootView || isOldArchRootView) && self.view.subviews.count > 0) {
+    if (isRootView && self.view.subviews.count > 0) {
         return self.view.subviews[0];
     }
 
@@ -41,7 +49,13 @@
         return false;
     }
 
-    if ([self.superview isKindOfClass:[AvoidSoftInputView class]]) {
+    if ([self.superview
+#if RCT_NEW_ARCH_ENABLED
+            isKindOfClass:[AvoidSoftInputViewComponentView class]
+#else
+            isKindOfClass:[AvoidSoftInputView class]
+#endif
+    ]) {
         return true;
     }
 

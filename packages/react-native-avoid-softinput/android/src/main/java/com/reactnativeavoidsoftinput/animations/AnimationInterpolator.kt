@@ -7,16 +7,11 @@ import android.view.animation.PathInterpolator
 class AnimationInterpolator : TimeInterpolator {
     private val linearInterpolator = LinearInterpolator()
     private val pathInterpolator = PathInterpolator(0.42F, 0F, 1F, 1F)
-    private var mMode = MODE.LINEAR
 
-    var mode: MODE
-        get() = mMode
-        set(newValue) {
-            mMode = newValue
-        }
+    var mode = MODE.LINEAR
 
     override fun getInterpolation(input: Float): Float {
-        return when (mMode) {
+        return when (mode) {
             MODE.EASE_IN -> {
                 pathInterpolator.getInterpolation(input)
             }

@@ -1,4 +1,4 @@
-#ifdef RCT_NEW_ARCH_ENABLED
+#if RCT_NEW_ARCH_ENABLED
 
 #import "AvoidSoftInputViewComponentView.h"
 
@@ -12,7 +12,6 @@
 #import <React/RCTFabricComponentsPlugins.h>
 
 #import "AvoidSoftInputManager.h"
-#import "AvoidSoftInputView.h"
 
 #import "RCTConvert+UIViewAnimationOptions.h"
 
@@ -22,13 +21,28 @@ using namespace facebook::react;
 
 @end
 
-@interface AvoidSoftInputViewComponentView () <AvoidSoftInputViewDelegate>
+// MARK: Manager delegate
+
+@interface AvoidSoftInputViewComponentView () <AvoidSoftInputManagerDelegate>
 
 @end
 
 // MARK: Implementation
 
-@implementation AvoidSoftInputViewComponentView
+@implementation AvoidSoftInputViewComponentView {
+    AvoidSoftInputManager *managerInstance;
+}
+
+- (AvoidSoftInputManager *)manager
+{
+    @synchronized(self) {
+        if (managerInstance == nil) {
+            managerInstance = [AvoidSoftInputManager new];
+        }
+
+        return managerInstance;
+    }
+}
 
 // MARK: Init
 
@@ -38,16 +52,34 @@ using namespace facebook::react;
     if (self) {
         static const auto defaultProps = std::make_shared<const AvoidSoftInputViewProps>();
         _props = defaultProps;
-        AvoidSoftInputView *view = [AvoidSoftInputView new];
-        view.delegate = self;
-        self.contentView = view;
     }
     return self;
 }
 
-// MARK: AvoidSoftInputViewDelegate
+// Needed because of this: https://github.com/facebook/react-native/pull/37274
++ (void)load
+{
+    [super load];
+}
 
-- (void)onAppliedOffsetChangedEvent:(AvoidSoftInputView *)sender offset:(CGFloat)offset
+- (void)willMoveToSuperview:(UIView *)newSuperview
+{
+    [super willMoveToSuperview:newSuperview];
+    if (self.superview == nil && newSuperview != nil) {
+        [self setupManager];
+    } else if (self.superview != nil && newSuperview == nil) {
+        [self cleanupManager];
+    }
+}
+
+- (void)prepareForRecycle
+{
+    [self cleanupManager];
+}
+
+// MARK: Manager delegate implementation
+
+- (void)onOffsetChanged:(CGFloat)offset
 {
     if (_eventEmitter != nil) {
         std::dynamic_pointer_cast<const AvoidSoftInputViewEventEmitter>(_eventEmitter)
@@ -56,7 +88,7 @@ using namespace facebook::react;
     }
 }
 
-- (void)onHeightChangedEvent:(AvoidSoftInputView *)sender height:(CGFloat)height
+- (void)onHeightChanged:(CGFloat)height
 {
     if (_eventEmitter != nil) {
         std::dynamic_pointer_cast<const AvoidSoftInputViewEventEmitter>(_eventEmitter)
@@ -65,7 +97,7 @@ using namespace facebook::react;
     }
 }
 
-- (void)onHiddenEvent:(AvoidSoftInputView *)sender height:(CGFloat)height
+- (void)onHide:(CGFloat)height
 {
     if (_eventEmitter != nil) {
         std::dynamic_pointer_cast<const AvoidSoftInputViewEventEmitter>(_eventEmitter)
@@ -74,7 +106,7 @@ using namespace facebook::react;
     }
 }
 
-- (void)onShownEvent:(AvoidSoftInputView *)sender height:(CGFloat)height
+- (void)onShow:(CGFloat)height
 {
     if (_eventEmitter != nil) {
         std::dynamic_pointer_cast<const AvoidSoftInputViewEventEmitter>(_eventEmitter)
@@ -83,58 +115,76 @@ using namespace facebook::react;
     }
 }
 
+// MARK: Private methods
+
+- (void)setupManager
+{
+    RCTAssertMainQueue();
+    self.manager.delegate = self;
+    self.manager.customView = self;
+    [self.manager setIsEnabled:true];
+    [self.manager initializeHandlers];
+}
+
+- (void)cleanupManager
+{
+    [self.manager cleanupHandlers];
+    self.manager.customView = nil;
+    self.manager.delegate = nil;
+    managerInstance = nil;
+}
+
 // MARK: Props
 - (void)updateProps:(Props::Shared const &)props oldProps:(Props::Shared const &)oldProps
 {
     const auto &oldViewProps = *std::static_pointer_cast<const AvoidSoftInputViewProps>(_props);
     const auto &newViewProps = *std::static_pointer_cast<const AvoidSoftInputViewProps>(props);
 
-    AvoidSoftInputView *view = (AvoidSoftInputView *)self.contentView;
     if (oldViewProps.avoidOffset != newViewProps.avoidOffset) {
-        [view.manager setAvoidOffset:newViewProps.avoidOffset];
+        dispatch_async(dispatch_get_main_queue(), ^{
+          [self.manager setAvoidOffset:newViewProps.avoidOffset];
+        });
     }
 
     if (oldViewProps.easing != newViewProps.easing) {
         NSString *easingString = RCTNSStringFromStringNilIfEmpty(toString(newViewProps.easing));
         UIViewAnimationOptions easing = [RCTConvert UIViewAnimationOptions:easingString];
-        [view.manager setEasing:easing];
+        dispatch_async(dispatch_get_main_queue(), ^{
+          [self.manager setEasing:easing];
+        });
     }
 
     if (oldViewProps.enabled != newViewProps.enabled) {
-        [view.manager setIsEnabled:newViewProps.enabled];
+        dispatch_async(dispatch_get_main_queue(), ^{
+          [self.manager setIsEnabled:newViewProps.enabled];
+        });
     }
 
     if (oldViewProps.hideAnimationDelay != newViewProps.hideAnimationDelay) {
-        [view.manager setHideAnimationDelay:[NSNumber numberWithInt:newViewProps.hideAnimationDelay]];
+        dispatch_async(dispatch_get_main_queue(), ^{
+          [self.manager setHideAnimationDelay:[NSNumber numberWithInt:newViewProps.hideAnimationDelay]];
+        });
     }
 
     if (oldViewProps.hideAnimationDuration != newViewProps.hideAnimationDuration) {
-        [view.manager setHideAnimationDuration:[NSNumber numberWithInt:newViewProps.hideAnimationDuration]];
+        dispatch_async(dispatch_get_main_queue(), ^{
+          [self.manager setHideAnimationDuration:[NSNumber numberWithInt:newViewProps.hideAnimationDuration]];
+        });
     }
 
     if (oldViewProps.showAnimationDelay != newViewProps.showAnimationDelay) {
-        [view.manager setShowAnimationDelay:[NSNumber numberWithInt:newViewProps.showAnimationDelay]];
+        dispatch_async(dispatch_get_main_queue(), ^{
+          [self.manager setShowAnimationDelay:[NSNumber numberWithInt:newViewProps.showAnimationDelay]];
+        });
     }
 
     if (oldViewProps.showAnimationDuration != newViewProps.showAnimationDuration) {
-        [view.manager setShowAnimationDuration:[NSNumber numberWithInt:newViewProps.showAnimationDuration]];
+        dispatch_async(dispatch_get_main_queue(), ^{
+          [self.manager setShowAnimationDuration:[NSNumber numberWithInt:newViewProps.showAnimationDuration]];
+        });
     }
 
     [super updateProps:props oldProps:oldProps];
-}
-
-// MARK: RCTComponentViewProtocol
-
-// adding/removing subviews must be forwarded to self.contentView, thus those 2 methods must be overriden;
-
-- (void)mountChildComponentView:(UIView<RCTComponentViewProtocol> *)childComponentView index:(NSInteger)index
-{
-    [self.contentView insertSubview:childComponentView atIndex:index];
-}
-
-- (void)unmountChildComponentView:(UIView<RCTComponentViewProtocol> *)childComponentView index:(NSInteger)index
-{
-    [childComponentView removeFromSuperview];
 }
 
 + (ComponentDescriptorProvider)componentDescriptorProvider

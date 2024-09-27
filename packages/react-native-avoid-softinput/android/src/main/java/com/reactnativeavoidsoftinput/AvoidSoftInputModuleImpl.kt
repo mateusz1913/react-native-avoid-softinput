@@ -12,54 +12,73 @@ import com.reactnativeavoidsoftinput.listeners.SoftInputListener
 
 class AvoidSoftInputModuleImpl(private val reactContext: ReactApplicationContext) :
     LifecycleEventListener, SoftInputListener {
-    private var mDefaultSoftInputMode: Int =
+    private var defaultSoftInputMode: Int =
         reactContext.currentActivity?.window?.attributes?.softInputMode
             ?: WindowManager.LayoutParams.SOFT_INPUT_STATE_UNSPECIFIED
 
-    private var mManager: AvoidSoftInputManager =
-        AvoidSoftInputManager(reactContext).apply {
-            setIsEnabled(false)
-            setOnOffsetChangedListener { offset: Int -> sendAppliedOffsetChangedEvent(offset) }
-            setOnSoftInputEventsListener(this@AvoidSoftInputModuleImpl)
+    private var managerInstance: AvoidSoftInputManager? = null
+    private val manager: AvoidSoftInputManager
+        get() {
+            synchronized(this) {
+                val instance =
+                    managerInstance
+                        ?: return AvoidSoftInputManager(reactContext).apply {
+                            setIsEnabled(false)
+                            setRootView(getReactRootView(reactContext) as View?)
+                            setOnOffsetChangedListener { offset: Int ->
+                                sendAppliedOffsetChangedEvent(offset)
+                            }
+                            setOnSoftInputEventsListener(this@AvoidSoftInputModuleImpl)
+                            managerInstance = this
+                        }
+                return instance
+            }
         }
 
     fun onInitialize() {
-        mDefaultSoftInputMode =
+        defaultSoftInputMode =
             reactContext.currentActivity?.window?.attributes?.softInputMode
                 ?: WindowManager.LayoutParams.SOFT_INPUT_STATE_UNSPECIFIED
         reactContext.addLifecycleEventListener(this)
     }
 
+    fun onInvalidate() {
+        if (managerInstance != null) {
+            manager.cleanupHandlers()
+            managerInstance = null
+        }
+    }
+
     fun setShouldMimicIOSBehavior(shouldMimic: Boolean) {
-        mManager.setShouldMimicIOSBehavior(shouldMimic)
+        manager.setShouldMimicIOSBehavior(shouldMimic)
     }
 
     fun setEnabled(isEnabled: Boolean) {
-        mManager.setIsEnabled(isEnabled)
+        manager.setIsEnabled(isEnabled)
     }
 
     fun setAvoidOffset(avoidOffset: Float) {
-        mManager.setAvoidOffset(avoidOffset)
+        manager.setAvoidOffset(avoidOffset)
     }
 
     fun setEasing(easing: String) {
-        mManager.setEasing(easing)
+        manager.setEasing(easing)
     }
 
     fun setHideAnimationDelay(delay: Int?) {
-        mManager.setHideAnimationDelay(delay)
+        manager.setHideAnimationDelay(delay)
     }
 
     fun setHideAnimationDuration(duration: Int?) {
-        mManager.setHideAnimationDuration(duration)
+        manager.setHideAnimationDuration(duration)
     }
 
     fun setShowAnimationDelay(delay: Int?) {
-        mManager.setShowAnimationDelay(delay)
+        manager.setShowAnimationDelay(delay)
     }
 
     fun setShowAnimationDuration(duration: Int?) {
-        mManager.setShowAnimationDuration(duration)
+        manager.setShowAnimationDuration(duration)
     }
 
     fun setAdjustNothing() {
@@ -71,6 +90,7 @@ class AvoidSoftInputModuleImpl(private val reactContext: ReactApplicationContext
     }
 
     fun setAdjustResize() {
+        @Suppress("DEPRECATION")
         setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
     }
 
@@ -79,7 +99,7 @@ class AvoidSoftInputModuleImpl(private val reactContext: ReactApplicationContext
     }
 
     fun setDefaultAppSoftInputMode() {
-        setSoftInputMode(mDefaultSoftInputMode)
+        setSoftInputMode(defaultSoftInputMode)
     }
 
     private fun setSoftInputMode(mode: Int) {
@@ -135,14 +155,13 @@ class AvoidSoftInputModuleImpl(private val reactContext: ReactApplicationContext
     }
 
     override fun onHostResume() {
-        mManager.setRootView(getReactRootView(reactContext) as View?)
-        mManager.initializeHandlers()
+        manager.initializeHandlers()
     }
 
     override fun onHostPause() {}
 
     override fun onHostDestroy() {
-        mManager.cleanupHandlers()
+        onInvalidate()
     }
 
     companion object {

@@ -26,6 +26,12 @@
     return self;
 }
 
+- (void)dealloc
+{
+    animationTimer = nil;
+    fakeAnimationView = nil;
+}
+
 // MARK: Public getters
 - (BOOL)isAnimationRunning
 {

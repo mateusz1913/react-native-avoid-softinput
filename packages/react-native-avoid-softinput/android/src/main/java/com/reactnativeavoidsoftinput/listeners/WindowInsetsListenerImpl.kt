@@ -13,53 +13,57 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class WindowInsetsListenerImpl : WindowInsetsListener {
-    private var mDebounceShowJob: Job? = null
-    private var mDebounceHideJob: Job? = null
-    private var mDebounceHeightChangeJob: Job? = null
-    private var mListener: SoftInputListener? = null
-    private var mPreviousHeight: Int = 0
-    private var mPreviousScreenHeight: Int =
+    private var debounceShowJob: Job? = null
+    private var debounceHideJob: Job? = null
+    private var debounceHeightChangeJob: Job? = null
+    private var softInputListener: SoftInputListener? = null
+    private var previousHeight: Int = 0
+    private var previousScreenHeight: Int =
         DisplayMetricsHolder.getScreenDisplayMetrics().heightPixels
-    private var mPersistedFrom: Int? = null
+    private var persistedFrom: Int? = null
 
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
-    private val mMinSoftInputHeightToDetect = PixelUtil.toPixelFromDIP(60f).toInt()
+    private val minSoftInputHeightToDetect = PixelUtil.toPixelFromDIP(60f).toInt()
 
     private fun onShow(from: Int, to: Int) {
-        mDebounceShowJob?.cancel()
-        mDebounceHideJob?.cancel()
-        mDebounceShowJob =
+        debounceShowJob?.cancel()
+        debounceHideJob?.cancel()
+        debounceShowJob =
             coroutineScope.launch {
                 delay(DEBOUNCE_DELAY_IN_MS)
-                mListener?.onSoftInputShown(from, to)
-                mDebounceShowJob = null
+                softInputListener?.onSoftInputShown(from, to)
+                debounceShowJob = null
             }
     }
 
     private fun onHide(from: Int, to: Int) {
-        mDebounceHideJob?.cancel()
-        mDebounceShowJob?.cancel()
-        mDebounceHideJob =
+        debounceHideJob?.cancel()
+        debounceShowJob?.cancel()
+        debounceHideJob =
             coroutineScope.launch {
                 delay(DEBOUNCE_DELAY_IN_MS)
-                mListener?.onSoftInputHidden(from, to)
-                mDebounceHideJob = null
+                softInputListener?.onSoftInputHidden(from, to)
+                debounceHideJob = null
             }
     }
 
     private fun onHeightChange(from: Int, to: Int) {
-        mDebounceHeightChangeJob?.cancel()
-        mDebounceHeightChangeJob =
+        debounceHeightChangeJob?.cancel()
+        debounceHeightChangeJob =
             coroutineScope.launch {
                 delay(DEBOUNCE_DELAY_IN_MS)
 
                 val screenHeight = DisplayMetricsHolder.getScreenDisplayMetrics().heightPixels
 
-                mListener?.onSoftInputHeightChange(from, to, screenHeight != mPreviousScreenHeight)
-                mPreviousScreenHeight = screenHeight
-                mPersistedFrom = null
-                mPreviousHeight = to
-                mDebounceHeightChangeJob = null
+                softInputListener?.onSoftInputHeightChange(
+                    from,
+                    to,
+                    screenHeight != previousScreenHeight
+                )
+                previousScreenHeight = screenHeight
+                persistedFrom = null
+                previousHeight = to
+                debounceHeightChangeJob = null
             }
     }
 
@@ -68,25 +72,25 @@ class WindowInsetsListenerImpl : WindowInsetsListener {
         val imeInsets = rootViewInsets.getInsets(WindowInsetsCompat.Type.ime())
         val systemBarsInsets = rootViewInsets.getInsets(WindowInsetsCompat.Type.systemBars())
 
-        if (mPersistedFrom == null) {
-            mPersistedFrom = mPreviousHeight
+        if (persistedFrom == null) {
+            persistedFrom = previousHeight
         }
 
         val imeHeight = max(imeInsets.bottom - systemBarsInsets.bottom, 0)
 
-        onHeightChange(mPersistedFrom ?: mPreviousHeight, imeHeight)
+        onHeightChange(persistedFrom ?: previousHeight, imeHeight)
 
-        if (mPreviousHeight != imeHeight && imeHeight > mMinSoftInputHeightToDetect) {
-            onShow(mPreviousHeight, imeHeight)
-        } else if (mPreviousHeight != 0 && imeHeight <= mMinSoftInputHeightToDetect) {
-            onHide(mPreviousHeight, 0)
+        if (previousHeight != imeHeight && imeHeight > minSoftInputHeightToDetect) {
+            onShow(previousHeight, imeHeight)
+        } else if (previousHeight != 0 && imeHeight <= minSoftInputHeightToDetect) {
+            onHide(previousHeight, 0)
         } else {
-            mDebounceHideJob?.cancel()
+            debounceHideJob?.cancel()
         }
     }
 
     override fun setSoftInputListener(listener: SoftInputListener?) {
-        mListener = listener
+        softInputListener = listener
     }
 
     override fun registerWindowInsetsListener(view: View) {
