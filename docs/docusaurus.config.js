@@ -1,7 +1,9 @@
 // @ts-check
 
-const darkCodeTheme = require('prism-react-renderer/themes/dracula');
-const lightCodeTheme = require('prism-react-renderer/themes/github');
+import { themes } from 'prism-react-renderer';
+
+const lightCodeTheme = themes.github;
+const darkCodeTheme = themes.dracula;
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -52,7 +54,7 @@ const config = {
             position: 'left',
           },
           {
-            href: 'https://github.com/mateusz1913/react-native-avoid-softinput/tree/main/packages/mobile',
+            href: 'https://github.com/mateusz1913/react-native-avoid-softinput/tree/main/packages/example',
             label: 'Example App',
             position: 'left',
           },
@@ -88,11 +90,11 @@ const config = {
         copyright: `Copyright © ${new Date().getFullYear()} Mateusz Mędrek. Built with Docusaurus`,
       },
       prism: {
-        additionalLanguages: ['swift', 'java', 'kotlin'],
+        additionalLanguages: ['bash', 'diff', 'json', 'swift', 'java', 'kotlin'],
         theme: lightCodeTheme,
         darkTheme: darkCodeTheme,
       },
     },
 };
 
-module.exports = config;
+export default config;

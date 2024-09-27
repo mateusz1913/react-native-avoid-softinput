@@ -1,0 +1,75 @@
+---
+id: usage-view
+title: Usage - view
+sidebar_label: Usage - view
+keywords: [react-native-avoid-softinput, view, usage]
+---
+
+Depending on the navigation setup you have, check the navigation's library documentation for correct way to run some actions when the screen gains/loses focus.
+
+The following example assumes `react-navigation` is used as a navigation:
+
+```tsx
+import * as React from "react";
+import { Button, Modal, ScrollView, TextInput, View } from "react-native";
+import { AvoidSoftInputView } from "react-native-avoid-softinput";
+import { useFocusEffect } from "@react-navigation/native";
+
+export const ModalExample: React.FC = () => {
+  const [ modalVisible, setModalVisible ] = React.useState(false);
+
+// highlight-start
+  const onFocusEffect = React.useCallback(() => {
+    // This should be run when screen gains focus - enable the module where it's needed
+    AvoidSoftInput.setShouldMimicIOSBehavior(true);
+    return () => {
+      // This should be run when screen loses focus - disable the module where it's not needed, to make a cleanup
+      AvoidSoftInput.setShouldMimicIOSBehavior(false);
+    };
+  }, []);
+
+  useFocusEffect(onFocusEffect); // register callback to focus events
+// highlight-end
+
+  function closeModal() {
+    setModalVisible(false);
+  }
+
+  function openModal() {
+    setModalVisible(true);
+  }
+
+  return <View>
+    <Button
+      onPress={openModal}
+      title="Open modal"
+    />
+    <Modal
+      onRequestClose={closeModal}
+      visible={modalVisible}
+    >
+      <View>
+        <View>
+          <View>
+            <Button onPress={closeModal} title="X" />
+          </View>
+// highlight-start
+          <AvoidSoftInputView>
+            <ScrollView>
+              <View>
+                <TextInput placeholder="Single line" />
+                <TextInput placeholder="Multiline" />
+                <Button
+                  onPress={closeModal}
+                  title="Submit"
+                />
+              </View>
+            </ScrollView>
+          </AvoidSoftInputView>
+// highlight-end
+        </View>
+      </View>
+    </Modal>
+  </View>;
+};
+```
