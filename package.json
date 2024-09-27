@@ -33,11 +33,11 @@
     "registry": "https://registry.npmjs.org/"
   },
   "devDependencies": {
-    "@commitlint/config-conventional": "17.6.6",
+    "@commitlint/config-conventional": "19.5.0",
     "@evilmartians/lefthook": "1.4.3",
     "@react-native/eslint-config": "0.75.3",
     "@react-native/typescript-config": "0.75.3",
-    "commitlint": "17.6.6",
+    "commitlint": "19.5.0",
     "eslint": "^8.19.0",
     "jest": "29.7.0",
     "pod-install": "0.1.38",
