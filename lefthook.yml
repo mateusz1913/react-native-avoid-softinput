@@ -7,7 +7,6 @@ pre-commit:
       glob: "*.{js,ts,jsx,tsx}"
       run: |
         yarn lint:js
-        yarn dprint check
     typescript:
       # Run type-checking for TS files if any of them are staged
       files: git diff --name-only --cached
@@ -18,19 +17,6 @@ pre-commit:
       files: git diff --name-only --cached
       glob: "*.{kt,java}"
       run: yarn lint:android
-    lint-swift:
-      # if any Swift file changed, run Swift linter
-      files: git diff --name-only --cached
-      glob: "*.swift"
-      run: |
-        #!/bin/bash
-        if command -v swiftlint &> /dev/null
-        then
-          yarn lint:ios:swift --strict
-          yarn lint:fabric:ios:swift --strict
-        else
-          echo "SwiftLint is not installed. Skipping"
-        fi
     lint-objc:
       # if any ObjC/ObjC++ file changed, run ObjC linter
       files: git diff --name-only --cached
@@ -40,7 +26,6 @@ pre-commit:
         if command -v clang-format &> /dev/null
         then
           yarn lint:ios:objc --Werror
-          yarn lint:fabric:ios:objc --Werror
         else
           echo "ClangFormat is not installed. Skipping"
         fi

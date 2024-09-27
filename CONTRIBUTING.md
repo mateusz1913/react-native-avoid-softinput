@@ -7,8 +7,7 @@ We want this community to be friendly and respectful to each other. Please follo
 This project is a monorepo, which uses [yarn workspaces](https://classic.yarnpkg.com/lang/en/docs/workspaces/) and is divided into:
 
 - `docs` - contains library's Docusaurus documentation
-- `packages/app` - contains shared JS code for example app
-- `packages/mobile` - contains mobile app example
+- `packages/example` - contains mobile app example
 - `packages/react-native-avoid-softinput` - contains library code
 
 ## Development workflow
@@ -21,48 +20,58 @@ To get started with the project, run `yarn` in the root directory to install the
 yarn
 ```
 
-While developing, you can run the [example app](/packages/mobile/) to test your changes. Any changes you make in your library's JavaScript code will be reflected in the example app without a rebuild. If you change any native code, then you'll need to rebuild the example app.
+While developing, you can run the [example app](/packages/example/) to test your changes. Any changes you make in your library's JavaScript code will be reflected in the example app without a rebuild. If you change any native code, then you'll need to rebuild the example app.
 
-To start the packager, run `yarn android:metro` or `yarn ios:metro`
+To start the packager, run `cd packages/example` and then run `yarn start`
 
 To run the example app on Android:
 
 ```sh
-yarn android:start
+cd packages/example
+yarn android
 ```
 
 To run the example app on iOS:
 
 ```sh
-yarn ios:start
+cd packages/example
+yarn ios
 ```
 
-Make sure your code passes TypeScript, ESLint and dprint. Run the following to verify:
+Make sure your code passes TypeScript, ESLint and Prettier. Run the following to verify:
 
 ```sh
 yarn typescript
 yarn lint:js
-yarn dprint check
 ```
 
 To fix formatting errors, run the following:
 
 ```sh
-yarn lint:js --fix
 yarn format:js
 ```
 
-To edit the Swift and Objective-C files, run `yarn ios:xcode` and find the source files at `Pods > Development Pods > react-native-avoid-softinput`.
+To edit the Objective-C files
+
+- install Pods with `yarn install:pods`
+- open XCode with
+
+```sh
+cd packages/example
+xed ios
+```
+
+- find the source files in XCode at `Pods > Development Pods > ReactNativeAvoidSoftinput`.
 
 To edit the Kotlin files:
 
-- if you have a command line launcher for Android Studio set up, you can run `yarn android:studio`
-- otherwise open `packages/mobile/android` in Android Studio and find the source files at `reactnativeavoidsoftinput` under `Android`.
+- open `packages/example/android` in Android Studio and find the source files at `react-native-avoid-softinput` under `Android`.
 
 To run Docusaurus documentation locally, run the following:
 
 ```sh
-yarn docs:start
+cd docs
+yarn start
 ```
 
 ### Commit message & branch convention
@@ -102,11 +111,9 @@ git branch chore/2-configuration
 ### Linting and tests
 
 - [ESLint](https://eslint.org/) - JS/TS linting
-- [dprint](https://dprint.dev/) - JS/TS formatting
+- [Prettier](https://prettier.io/) - JS/TS formatting
 - [TypeScript](https://www.typescriptlang.org/) - TS type checking
 - [Spotless](https://github.com/diffplug/spotless) & [Ktfmt](https://github.com/facebook/ktfmt) - Kotlin/Java linting and formatting
-- [SwiftFormat](https://github.com/nicklockwood/SwiftFormat) - Swift formatting
-- [SwiftLint](https://github.com/realm/SwiftLint) - Swift linting
 - [ClangFormat](https://clang.llvm.org/) - ObjC/ObjC++ linting and formatting
 
 Our pre-commit hooks verify that the linter and type checks pass when committing.
@@ -126,41 +133,18 @@ yarn release
 The `package.json` file contains various scripts for common tasks:
 
 - `yarn typescript`: type-check files with TypeScript.
-- `yarn lint:js`: lint all JS/TS files with ESLint.
+- `yarn lint:js`: lint all JS/TS files with ESLint & Prettier.
 - `yarn lint:android`: run linter (Spotless/Ktfmt) for all Kotlin/Java files.
-- `yarn lint:ios:swift`: run linter (SwiftLint) for all Swift files within old arch project (install [SwiftLint](https://github.com/realm/SwiftLint) e.g. with Homebrew).
-- `yarn lint:ios:objc`: run linter (ClangFormat) for all ObjC/ObjC++ files within old arch project (install [ClangFormat](https://clang.llvm.org/) e.g. with Homebrew).
-- `yarn lint:fabric:ios:swift`: run linter (SwiftLint) for all Swift files within new arch project (install [SwiftLint](https://github.com/realm/SwiftLint) e.g. with Homebrew).
-- `yarn lint:fabric:ios:objc`: run linter (ClangFormat) for all ObjC/ObjC++ files within new arch project (install [ClangFormat](https://clang.llvm.org/) e.g. with Homebrew).
-- `yarn format:js`: format all JS/TS files with dprint.
+- `yarn lint:ios:objc`: run linter (ClangFormat) for all ObjC/ObjC++ files (install [ClangFormat](https://clang.llvm.org/) e.g. with Homebrew).
+- `yarn format:js`: format all JS/TS files with ESLint & Prettier.
 - `yarn format:android`: format (Spotless/Ktfmt) all Kotlin/Java files.
-- `yarn format:ios:swift`: format (SwiftFormat) all Swift files within old arch project (install [SwiftFormat](https://github.com/nicklockwood/SwiftFormat) e.g. with Homebrew).
-- `yarn format:ios:objc`: format (ClangFormat) all ObjC/ObjC++ files within old arch project (install [ClangFormat](https://clang.llvm.org/) e.g. with Homebrew).
-- `yarn format:fabric:ios:swift`: format (SwiftFormat) all Swift files within new arch project (install [SwiftFormat](https://github.com/nicklockwood/SwiftFormat) e.g. with Homebrew).
-- `yarn format:fabric:ios:objc`: format (ClangFormat) all ObjC/ObjC++ files within new arch project (install [ClangFormat](https://clang.llvm.org/) e.g. with Homebrew).
+- `yarn format:ios:objc`: format (ClangFormat) all ObjC/ObjC++ files (install [ClangFormat](https://clang.llvm.org/) e.g. with Homebrew).
 - `yarn release` release library to npm.
-- `yarn bootstrap`: setup projects (old and new arch) by installing all dependencies and pods.
-- `yarn bootstrap:mobile`: setup old arch project by installing all dependencies and pods.
-- `yarn bootstrap:fabricMobile`: setup new arch project by installing all dependencies and pods.
-- `yarn pods`: setup project's pods.
+- `yarn install:pods`: setup project's pods.
+- `yarn install:pods:fabric`: setup project's pods with new arch.
 - `yarn reset`: clean all project's dependencies and pods.
 - `yarn reset:node_modules`: clean all project's dependencies.
 - `yarn reset:pods`: clean all project's pods.
-- `yarn android:metro`: start the Metro server for the old arch example app.
-- `yarn android:start`: run the old arch example app on Android.
-- `yarn android:studio`: open old arch Android project in Android Studio.
-- `yarn ios:metro`: start the Metro server for the old arch example app.
-- `yarn ios:start`: run the old arch example app on iOS.
-- `yarn ios:xcode`: open old arch iOS project in XCode.
-- `yarn fabric:android:metro`: start the Metro server for the new arch example app.
-- `yarn fabric:android:start`: run the new arch example app on Android.
-- `yarn fabric:android:studio`: open new arch Android project in Android Studio.
-- `yarn fabric:ios:metro`: start the Metro server for the new arch example app.
-- `yarn fabric:ios:start`: run the new arch example app on iOS.
-- `yarn fabric:ios:xcode`: open new arch iOS project in XCode.
-- `yarn docs:start`: run Docusaurus documentation locally.
-- `yarn docs:build`: build Docusaurus documentation.
-- `yarn docs:clear`: clear Docusaurus project.
 
 ### Sending a pull request
 

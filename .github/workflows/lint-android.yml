@@ -4,7 +4,6 @@ on:
   pull_request:
     branches: [main]
     paths:
-      - "packages/mobile/android/**"
       - "packages/react-native-avoid-softinput/android/**"
       - ".github/workflows/lint-android.yml"
 
