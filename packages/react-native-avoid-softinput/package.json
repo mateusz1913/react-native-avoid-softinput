@@ -56,16 +56,16 @@
     "release-library": "release-it"
   },
   "devDependencies": {
-    "@release-it/conventional-changelog": "6.0.0",
-    "@types/react": "18.2.42",
-    "react": "18.2.0",
-    "react-native": "0.73.1",
-    "react-native-builder-bob": "0.21.2",
-    "release-it": "16.0.0"
+    "@release-it/conventional-changelog": "8.0.2",
+    "@types/react": "18.3.9",
+    "react": "18.3.1",
+    "react-native": "0.75.3",
+    "react-native-builder-bob": "0.30.2",
+    "release-it": "17.6.0"
   },
   "peerDependencies": {
     "react": ">=18.2.0",
-    "react-native": ">=0.71.0"
+    "react-native": ">=0.73.0"
   },
   "release-it": {
     "git": {

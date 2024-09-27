@@ -1,0 +1,50 @@
+---
+id: usage-module
+title: Usage - module
+sidebar_label: Usage - module
+keywords: [react-native-avoid-softinput, module, usage]
+---
+
+The preferrable usage of the module is to enable it where it's actually needed.
+
+Depending on the navigation setup you have, check the navigation's library documentation for correct way to run some actions when the screen gains/loses focus.
+
+The following example assumes `react-navigation` is used as a navigation:
+
+```ts
+import * as React from "react";
+import { Button, ScrollView, TextInput, View } from "react-native";
+import { AvoidSoftInput } from "react-native-avoid-softinput";
+import { useFocusEffect } from "@react-navigation/native";
+
+export const FormExample: React.FC = () => {
+// highlight-start
+  const onFocusEffect = React.useCallback(() => {
+    // This should be run when screen gains focus - enable the module where it's needed
+    AvoidSoftInput.setShouldMimicIOSBehavior(true);
+    AvoidSoftInput.setEnabled(true);
+    return () => {
+      // This should be run when screen loses focus - disable the module where it's not needed, to make a cleanup
+      AvoidSoftInput.setEnabled(false);
+      AvoidSoftInput.setShouldMimicIOSBehavior(false);
+    };
+  }, []);
+
+  useFocusEffect(onFocusEffect); // register callback to focus events
+// highlight-end
+
+  return <ScrollView>
+    <View>
+      <TextInput placeholder="Single line input" />
+      <TextInput placeholder="Multiline input" />
+      <TextInput placeholder="Large multiline input" />
+    </View>
+    <View>
+      <Button
+        onPress={NOOP}
+        title="Submit"
+      />
+    </View>
+  </ScrollView>;
+};
+```

@@ -1,0 +1,184 @@
+---
+id: installation
+title: Getting Started
+sidebar_label: Getting Started
+slug: /guides
+keywords: [react-native-avoid-softinput, installation, setup, keyboard handling, troubleshooting]
+---
+
+import oneDoesNotSimplyKeyboard from '/img/OneDoesNotSimplyKeyboard.jpg';
+
+## 1. Installation & Requirements
+
+This library follows the React Native releases support policy.
+It is supporting **the latest version**, and **the two previous minor series**.
+You may find it working correctly with some older React Native versions, but it'll be a "Use at your own risk" case.
+
+This library supports "New Architecture".
+
+Library supports Android & iOS, for out-of-tree platforms, `View` component is used as fallback.
+
+**Install library with your package manager:**
+
+```sh
+yarn add react-native-avoid-softinput
+```
+
+or
+
+```sh
+npm i --save react-native-avoid-softinput
+```
+
+**(iOS-only) Install pods:**
+
+```sh
+npx pod-install
+```
+
+#### Expo
+
+- ✅ You can use this library with [Development Builds](https://docs.expo.dev/development/introduction/). No config plugin is required.
+- ❌ This library can't be used in the "Expo Go" app because it [requires custom native code](https://docs.expo.dev/workflow/customizing/).
+
+## 2. App's setup
+
+### Setting Kotlin version
+
+The library uses Kotlin language to implement Android part.
+Depending on the version of React Native or Expo SDK and 3rd party libraries that are used in your project, you might (or might not) need to explicitly specify the version of Kotlin used in the app.
+
+- **Expo project after [prebuild](https://docs.expo.dev/workflow/prebuild/) / bare RN project**
+
+Go to `<projectDir>/android/build.gradle` inside your android folder to specify your `kotlinVersion`
+
+```java
+buildscript {
+    ext {
+        kotlinVersion = "1.7.22"  // <-- add a version here for resolution, version can be newer depending on the React Native version used in the project
+    }
+}
+```
+
+- **Expo project before [prebuild](https://docs.expo.dev/workflow/prebuild/) / Expo managed project**
+
+Use `expo-build-properties` plugin to modify `kotlinVersion` value
+
+```sh
+npx expo install expo-build-properties
+```
+
+Add plugin inside of your `app.json` or `app.config.js`
+
+```json
+{
+  "expo": {
+    "plugins": [
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "kotlinVersion": "1.7.22" // <-- add a version here for resolution, version can be newer depending on the Expo SDK version used in the project
+          }
+        }
+      ]
+    ]
+  }
+}
+```
+
+
+### Keyboard handling on Android
+
+To make the keyboard handled **only** by `react-native-avoid-softinput` (and not by Android OS), you have to additionally make sure that default keyboard handling on Android is switched off (for iOS nothing to be done 🚀).
+To do that, you need to make 2 steps:
+
+#### Modify your Android's project `AndroidManifest.xml`
+
+- **Expo project after [prebuild](https://docs.expo.dev/workflow/prebuild/) / bare RN project**
+
+Go to `<projectDir>/android/app/src/main/AndroidManifest.xml` and search for [`android:windowSoftInputMode`](https://developer.android.com/guide/topics/manifest/activity-element#wsoft) attribute in the `<activity>` element.
+To make `react-native-avoid-softinput` responsible for managing the available space when keyboard is popped up, that attribute needs to be set to `adjustResize` (in a new RN project it should be the default).
+
+```xml
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+      android:name=".MainApplication">
+      <activity
+        android:name=".MainActivity"
+// highlight-next-line
+        android:windowSoftInputMode="adjustResize"
+        android:launchMode="singleTask"
+        android:exported="true">
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+      </activity>
+    </application>
+
+</manifest>
+```
+
+- **Expo project before [prebuild](https://docs.expo.dev/workflow/prebuild/) / Expo managed project**
+
+Go to Expo's `app.json`/`app.config.js` and modify [`softwareKeyboardLayoutMode`](https://docs.expo.dev/versions/latest/config/app/#softwarekeyboardlayoutmode), so that it has `resize` value (in a new Expo project it should be the default).
+
+#### Use `AvoidSoftInput.setShouldMimicIOSBehavior(true)` later on in your app's code
+
+Remember to call `AvoidSoftInput.setShouldMimicIOSBehavior(true)` somewhere in the project's code (either in some root component, if you use the library globally or in specific screen, if you use the library only in some places).
+
+## 3. Define your use case
+
+<div style={{ display: 'flex', flexDirection: 'column', alignSelf: 'stretch', margin: 20 }}>
+  <img src={oneDoesNotSimplyKeyboard} alt="One does not simply handle the keyboard globally in the app with 99 different form layouts" width="50%" style={{ display: 'flex', alignSelf: 'center' }} />
+</div>
+
+There're many possible ways to implement a form with some text fields. Depending on the ideas of the UX team and the imagination of the client/product owner,
+you may need to implement some complex layouts, that not only have to be accessible, but should behave in a consistent way when the interaction with text fields/keyboard takes place.
+
+Creating some generic components (like KeyboardAvoidingView) that can magically wrap _any_ form layout in your app **is an anti-pattern**.
+Especially, when there are many variables that may change the expected behavior like:
+
+- whether Android OS default keyboard handling is switched on or off
+- whether the form layout is in the scrollable container or not
+- are elements like modals/bottomsheets used and are these implemented in the JS layer or use some native primitives
+- how complex those inputs are, how many text fields there are
+- should some elements in the form be sticky
+- etc.
+
+Instead, you should think how the keyboard interaction with the app should look, what elements should be visible when the keyboard pops up.
+
+In a basic case where you have a fullscreen scrollable form without a need to have submit button always visible, you might use [`AvoidSoftInput`](./guides/usage-module) module which pushes the whole root view above the keyboard, or detects the nearest scrollable ancestor and tries to scroll to covered text field element.
+
+In a more advanced case where you have a form inside a modal layout with text field inside, you may use [`AvoidSoftInputView`](./guides/usage-view) component which pushes itself above the keyboard, or detects the nearest scrollable ancestor and tries to scroll to covered text field element.
+
+In other case you have a task to make a form footer with submit buttons always visible even when the keyboard slides in (effectively making that footer sticky).
+Then, you have to think how to make that footer separated from the rest of the text fields that are probably in some scrollable container.
+At the end, you'll end up in a need to manually apply padding to the footer container.
+Luckily, you might try [`useSoftInputShown`](./api/hooks/use-soft-input-shown), [`useSoftInputHidden`](./api/hooks/use-soft-input-hidden) & [`useSoftInputHeightChanged`](./api/hooks/use-soft-input-height-changed) hooks to detect when the keyboard is displayed and the height value it has.
+
+The point is, before blindly using the library, you should define what is the expected behavior and which tools you should use to achieve it.
+If you don't know, which APIs from the library you should use for your use case, check [the example app](https://github.com/mateusz1913/react-native-avoid-softinput/tree/main/packages/mobile) and try to play with available APIs.
+
+## Troubleshooting
+
+### Incorrect `kotlinVersion`
+
+For more context, check [GH issue 88](https://github.com/mateusz1913/react-native-avoid-softinput/issues/88).
+
+Sometimes when using this library you may find that your build fails due to incorrect `kotlinVersion` in your native project.
+To catch this you **need** to follow [Setting Kotlin version](#setting-kotlin-version) section.
+
+### Doubled padding on Android when form has many inputs, works as expected on iOS
+
+For more context, check [GH issue 155](https://github.com/mateusz1913/react-native-avoid-softinput/issues/155).
+
+The problem may appear if you didn't follow [Keyboard handling on Android](#keyboard-handling-on-android) section and you have e.g. [`adjustPan` behavior](https://developer.android.com/guide/topics/manifest/activity-element#wsoft) set for your app.
+
+To fix it, follow the section to disable default keyboard handling on Android.
+
+If, for some reason, you need to keep `adjustPan` behavior for other parts of the app (where library does not need to handle the keyboard), you might check [`AvoidSoftInput.setAdjust(Pan|Resize|Nothing|Unspecified)`](./api/module/set-adjust-pan) functions.

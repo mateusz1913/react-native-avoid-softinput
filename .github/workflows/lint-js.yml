@@ -4,21 +4,21 @@ on:
   pull_request:
     branches: [main]
     paths:
-      - "packages/app/src/**"
-      - "packages/app/package.json"
-      - "packages/app/tsconfig.json"
-      - "packages/mobile/babel.config.js"
-      - "packages/mobile/index.tsx"
-      - "packages/mobile/metro.config.js"
-      - "packages/mobile/package.json"
+      - "packages/exanple/src/**"
+      - "packages/example/App.tsx"
+      - "packages/example/babel.config.js"
+      - "packages/example/index.js"
+      - "packages/example/metro.config.js"
+      - "packages/example/package.json"
+      - "packages/example/react-native.config.js"
+      - "packages/example/tsconfig.json"
+      - "packages/react-native-avoid-softinput/jest/**"
       - "packages/react-native-avoid-softinput/src/**"
       - "packages/react-native-avoid-softinput/package.json"
       - "packages/react-native-avoid-softinput/tsconfig.json"
       - ".eslintrc.js"
-      - "dprint.json"
+      - ".prettierrc.js"
       - "package.json"
-      - "tsconfig.base.json"
-      - "tsconfig.jest.json"
       - ".github/workflows/lint-js.yml"
 
 jobs:
@@ -38,9 +38,7 @@ jobs:
           registry-url: "https://registry.npmjs.org"
           cache-dependency-path: "**/yarn.lock"
       - run: yarn
-      - name: ESLint
+      - name: Lint JS/TS
         run: yarn lint:js
-      - name: dprint
-        uses: dprint/check@v2.2
       - name: TypeScript
         run: yarn typescript

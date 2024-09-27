@@ -68,6 +68,3 @@ android/keystores/debug.keystore
 packages/react-native-avoid-softinput/lib/
 
 .npmrc
-
-startCommand.bat
-startCommand.command

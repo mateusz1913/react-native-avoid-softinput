@@ -50,8 +50,6 @@ npm i --save react-native-avoid-softinput
 npx pod-install
 ```
 
-3. (iOS-only) Create and configure bridging header in your iOS project, if it doesn't exist (the easiest way is to create empty .swift file in XCode)
-
 For reference, you can visit [Getting started](https://mateusz1913.github.io/react-native-avoid-softinput/docs/guides/) section
 
 ## Expo

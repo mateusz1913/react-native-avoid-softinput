@@ -20,44 +20,44 @@ class AvoidSoftInputManager(private val reactContext: ReactApplicationContext) :
     FocusedViewChangeListener by FocusedViewChangeListenerImpl(),
     AnimationHandler by AnimationHandlerImpl() {
     // MARK: Variables
-    private var mCompleteSoftInputHeight = 0
-    private var mIsEnabled = true
-    private var mIsInitialized: Boolean = false
-    private var mOnSoftInputEventsListener: SoftInputListener? = null
-    private var mPreviousRootView: View? = null
-    private var mPreviousScrollView: ScrollView? = null
-    private var mRootView: View? = null
-    private var mScrollY: Int = 0
-    private var mSoftInputVisible: Boolean = false
+    private var completeSoftInputHeight = 0
+    private var isEnabled = true
+    private var isInitialized: Boolean = false
+    private var onSoftInputEventsListener: SoftInputListener? = null
+    private var previousRootView: View? = null
+    private var previousScrollView: ScrollView? = null
+    private var currentRootView: View? = null
+    private var scrollY: Int = 0
+    private var softInputVisible: Boolean = false
 
     private val isCustomRootView: Boolean
         get() {
-            return mRootView is AvoidSoftInputView
+            return currentRootView is AvoidSoftInputView
         }
 
-    private val mOnSoftInputListener =
+    private val onSoftInputListener =
         object : SoftInputListener {
             override fun onSoftInputHeightChange(
                 from: Int,
                 to: Int,
                 isOrientationChanged: Boolean
             ) {
-                mOnSoftInputEventsListener?.onSoftInputHeightChange(from, to, isOrientationChanged)
+                onSoftInputEventsListener?.onSoftInputHeightChange(from, to, isOrientationChanged)
                 handleSoftInputHeightChange(from, to)
             }
 
             override fun onSoftInputHidden(from: Int, to: Int) {
-                mOnSoftInputEventsListener?.onSoftInputHidden(from, to)
+                onSoftInputEventsListener?.onSoftInputHidden(from, to)
             }
 
             override fun onSoftInputShown(from: Int, to: Int) {
-                mOnSoftInputEventsListener?.onSoftInputShown(from, to)
+                onSoftInputEventsListener?.onSoftInputShown(from, to)
             }
         }
 
     // MARK: Private methods
-    private fun onFocus(oldView: View?, newView: View?) {
-        if (!mIsEnabled) {
+    private fun onFocus(@Suppress("UNUSED_PARAMETER") oldView: View?, newView: View?) {
+        if (!isEnabled) {
             return
         }
         val reactRootView = getNearestParentReactRootView(newView)
@@ -65,19 +65,19 @@ class AvoidSoftInputManager(private val reactContext: ReactApplicationContext) :
             return
         }
         val scrollView = getScrollViewParent(newView, reactRootView) ?: return
-        mScrollY = scrollView.scrollY
-        if (!mSoftInputVisible) {
+        scrollY = scrollView.scrollY
+        if (!softInputVisible) {
             return
         }
 
         setScrollListenerCompat(scrollView) {
             if (currentFocusedView != null) {
-                mScrollY = it
+                scrollY = it
             }
         }
         val currentFocusedViewDistanceToBottom = getViewDistanceToBottomEdge(newView)
 
-        val scrollToOffset = max(mCompleteSoftInputHeight - currentFocusedViewDistanceToBottom, 0)
+        val scrollToOffset = max(completeSoftInputHeight - currentFocusedViewDistanceToBottom, 0)
 
         scrollView.smoothScrollTo(0, scrollView.scrollY + scrollToOffset)
     }
@@ -93,31 +93,31 @@ class AvoidSoftInputManager(private val reactContext: ReactApplicationContext) :
 
     // MARK: Public methods
     fun cleanupHandlers() {
-        if (mIsInitialized) {
+        if (isInitialized) {
             setSoftInputListener(null)
-            mRootView?.let { unregisterWindowInsetsListener(it) }
+            currentRootView?.let { unregisterWindowInsetsListener(it) }
             setOnFocusListener(null)
-            mRootView?.let { unregisterFocusedViewChangeListener(it) }
-            mIsInitialized = false
+            currentRootView?.let { unregisterFocusedViewChangeListener(it) }
+            isInitialized = false
         }
     }
 
     fun initializeHandlers() {
-        if (!mIsInitialized) {
-            setSoftInputListener(mOnSoftInputListener)
-            mRootView?.let { registerWindowInsetsListener(it) }
+        if (!isInitialized) {
+            setSoftInputListener(onSoftInputListener)
+            currentRootView?.let { registerWindowInsetsListener(it) }
             setOnFocusListener(::onFocus)
-            mRootView?.let { registerFocusedViewChangeListener(it) }
-            mIsInitialized = true
+            currentRootView?.let { registerFocusedViewChangeListener(it) }
+            isInitialized = true
         }
     }
 
-    fun setRootView(rootView: View?) {
-        mRootView = rootView
+    fun setRootView(view: View?) {
+        currentRootView = view
     }
 
-    fun setIsEnabled(isEnabled: Boolean) {
-        mIsEnabled = isEnabled
+    fun setIsEnabled(enabled: Boolean) {
+        isEnabled = enabled
     }
 
     fun setShouldMimicIOSBehavior(shouldMimic: Boolean) {
@@ -125,31 +125,31 @@ class AvoidSoftInputManager(private val reactContext: ReactApplicationContext) :
     }
 
     fun setOnSoftInputEventsListener(listener: SoftInputListener?) {
-        mOnSoftInputEventsListener = listener
+        onSoftInputEventsListener = listener
     }
 
     private fun handleSoftInputHeightChange(from: Int, to: Int) {
-        mCompleteSoftInputHeight = to
+        completeSoftInputHeight = to
         val focusedView = currentFocusedView ?: previousFocusedView
 
         if (focusedView == null) {
-            if (mSoftInputVisible && to == 0) {
+            if (softInputVisible && to == 0) {
                 // Handle case when padding was applied but focused view was unmounted,
                 // or screen was dismissed from navigation stack and internal values were not reset
                 clearOffsets()
-                mScrollY = 0
-                mPreviousRootView = null
-                mPreviousScrollView = null
-                mSoftInputVisible = false
+                scrollY = 0
+                previousRootView = null
+                previousScrollView = null
+                softInputVisible = false
             }
             return
         }
 
         if (isCustomRootView) {
-            setOffset(from, to, focusedView, mRootView!!)
+            setOffset(from, to, focusedView, currentRootView!!)
         } else {
             val rootView =
-                getNearestParentReactRootView(focusedView) ?: (mPreviousRootView as RootView?)
+                getNearestParentReactRootView(focusedView) ?: (previousRootView as RootView?)
 
             if (rootView !is View || checkIfNestedInAvoidSoftInputView(focusedView, rootView)) {
                 return
@@ -160,12 +160,12 @@ class AvoidSoftInputManager(private val reactContext: ReactApplicationContext) :
     }
 
     private fun setOffset(from: Int, to: Int, focusedView: View, rootView: View) {
-        val scrollView = getScrollViewParent(focusedView, rootView) ?: mPreviousScrollView
+        val scrollView = getScrollViewParent(focusedView, rootView) ?: previousScrollView
 
         if (scrollView != null) {
             setScrollListenerCompat(scrollView) {
                 if (currentFocusedView != null) {
-                    mScrollY = it
+                    scrollY = it
                 }
             }
             setOffsetInScrollView(from, to, focusedView, scrollView)
@@ -185,27 +185,27 @@ class AvoidSoftInputManager(private val reactContext: ReactApplicationContext) :
             // Run remove offset method no matter if manager is enabled (in case applied offset is
             // 0, it will be no-op)
             removeOffsetInRootView(rootView) {
-                mPreviousRootView = null
-                mSoftInputVisible = false
+                previousRootView = null
+                softInputVisible = false
             }
-        } else if (to - from > 0 && (!mSoftInputVisible || from == 0)) {
+        } else if (to - from > 0 && (!softInputVisible || from == 0)) {
             // SHOW
-            if (!mIsEnabled) {
+            if (!isEnabled) {
                 return
             }
             addOffsetInRootView(to, rootView, focusedView) {
-                mPreviousRootView = rootView
-                mSoftInputVisible = true
+                previousRootView = rootView
+                softInputVisible = true
             }
         } else if (to - from > 0) {
             // INCREASE
-            if (!mIsEnabled) {
+            if (!isEnabled) {
                 return
             }
             increaseOffsetInRootView(from, to, rootView)
         } else if (to - from < 0) {
             // DECREASE
-            if (!mIsEnabled) {
+            if (!isEnabled) {
                 return
             }
             decreaseOffsetInRootView(from, to, rootView)
@@ -227,30 +227,30 @@ class AvoidSoftInputManager(private val reactContext: ReactApplicationContext) :
             // HIDE
             // Run remove offset method no matter if manager is enabled (in case applied offset is
             // 0, it will be no-op)
-            removeOffsetInScrollView(scrollView, mScrollY) {
-                mScrollY = 0
-                mPreviousScrollView = null
-                mSoftInputVisible = false
+            removeOffsetInScrollView(scrollView, scrollY) {
+                scrollY = 0
+                previousScrollView = null
+                softInputVisible = false
             }
-        } else if (to - from > 0 && (!mSoftInputVisible || from == 0)) {
+        } else if (to - from > 0 && (!softInputVisible || from == 0)) {
             // SHOW
-            if (!mIsEnabled) {
+            if (!isEnabled) {
                 return
             }
             addOffsetInScrollView(to, scrollView, focusedView) {
-                mScrollY = scrollView.scrollY
-                mPreviousScrollView = scrollView
-                mSoftInputVisible = true
+                scrollY = scrollView.scrollY
+                previousScrollView = scrollView
+                softInputVisible = true
             }
         } else if (to - from > 0) {
             // INCREASE
-            if (!mIsEnabled) {
+            if (!isEnabled) {
                 return
             }
             increaseOffsetInScrollView(from, to, scrollView, focusedView)
         } else if (to - from < 0) {
             // DECREASE
-            if (!mIsEnabled) {
+            if (!isEnabled) {
                 return
             }
             decreaseOffsetInScrollView(from, to, scrollView, focusedView)

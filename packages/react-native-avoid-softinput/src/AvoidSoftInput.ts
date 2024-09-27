@@ -9,36 +9,28 @@ const eventEmitter = new NativeEventEmitter(Platform.OS !== 'ios' ? undefined : 
 /**
  * Fires event with current soft input height, when soft input is shown
  */
-function onSoftInputShown(
-  listener: ({ softInputHeight }: SoftInputEventData) => void,
-): EmitterSubscription {
+function onSoftInputShown(listener: ({ softInputHeight }: SoftInputEventData) => void): EmitterSubscription {
   return eventEmitter.addListener('softInputShown', listener);
 }
 
 /**
  * Fires event when soft input is hidden
  */
-function onSoftInputHidden(
-  listener: ({ softInputHeight }: SoftInputEventData) => void,
-) {
+function onSoftInputHidden(listener: ({ softInputHeight }: SoftInputEventData) => void) {
   return eventEmitter.addListener('softInputHidden', listener);
 }
 
 /**
  * Fires event when soft input height changed
  */
-function onSoftInputAppliedOffsetChange(
-  listener: ({ appliedOffset }: SoftInputAppliedOffsetEventData) => void,
-) {
+function onSoftInputAppliedOffsetChange(listener: ({ appliedOffset }: SoftInputAppliedOffsetEventData) => void) {
   return eventEmitter.addListener('softInputAppliedOffsetChanged', listener);
 }
 
 /**
  * Fires event when soft input's height changes
  */
-function onSoftInputHeightChange(
-  listener: ({ softInputHeight }: SoftInputEventData) => void,
-) {
+function onSoftInputHeightChange(listener: ({ softInputHeight }: SoftInputEventData) => void) {
   return eventEmitter.addListener('softInputHeightChanged', listener);
 }
 
@@ -97,10 +89,11 @@ function setHideAnimationDuration(duration?: number) {
  */
 function setShowAnimationDelay(delay?: number) {
   module.setShowAnimationDelay(
-    delay ?? Platform.select({
-      default: 0,
-      ios: 300,
-    }),
+    delay ??
+      Platform.select({
+        default: 0,
+        ios: 300,
+      }),
   );
 }
 

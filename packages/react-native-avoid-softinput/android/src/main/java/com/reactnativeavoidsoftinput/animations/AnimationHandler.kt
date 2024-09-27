@@ -39,7 +39,7 @@ interface AnimationHandler {
         onOffsetAnimationEnd: () -> Unit
     )
 
-    fun setAvoidOffset(avoidOffset: Float)
+    fun setAvoidOffset(offset: Float)
 
     fun setEasing(easing: String?)
 

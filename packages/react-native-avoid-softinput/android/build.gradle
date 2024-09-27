@@ -8,10 +8,10 @@ buildscript {
   }
 
   dependencies {
-    classpath("com.android.tools.build:gradle:8.0.2")
+    classpath("com.android.tools.build:gradle:8.5.0")
     // noinspection DifferentKotlinGradleVersion
     classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-    classpath "com.diffplug.spotless:spotless-plugin-gradle:6.22.0"
+    classpath "com.diffplug.spotless:spotless-plugin-gradle:6.25.0"
   }
 }
 
@@ -26,8 +26,6 @@ if (project == rootProject) {
 
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-
-apply from: "$projectDir/react-native-helpers.gradle"
 
 if (isNewArchitectureEnabled()) {
   apply plugin: "com.facebook.react"
@@ -123,12 +121,7 @@ def kotlin_coroutines_version = getExtOrDefault('kotlinCoroutinesVersion')
 def androidX_core_ktx_version = getExtOrDefault('androidXCoreKtxVersion')
 
 dependencies {
-  if (project.ext.shouldConsumeReactNativeFromMavenCentral()) {
-    implementation "com.facebook.react:react-android" // Set by the React Native Gradle Plugin
-  } else {
-    // noinspection GradleDynamicVersion
-    implementation 'com.facebook.react:react-native:+' // From node_modules
-  }
+  implementation "com.facebook.react:react-android" // Set by the React Native Gradle Plugin
   implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
   implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlin_coroutines_version"
   implementation "androidx.core:core-ktx:$androidX_core_ktx_version"

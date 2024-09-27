@@ -27,6 +27,14 @@ class AvoidSoftInputViewManager :
         return AvoidSoftInputView(reactContext)
     }
 
+    override fun prepareToRecycleView(
+        reactContext: ThemedReactContext,
+        view: ReactViewGroup
+    ): ReactViewGroup {
+        (view as AvoidSoftInputView).cleanup()
+        return super.prepareToRecycleView(reactContext, view)
+    }
+
     @ReactProp(name = "avoidOffset")
     override fun setAvoidOffset(view: AvoidSoftInputView, avoidOffset: Float) {
         view.setAvoidOffset(avoidOffset)

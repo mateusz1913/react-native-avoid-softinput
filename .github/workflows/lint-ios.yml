@@ -4,14 +4,12 @@ on:
   pull_request:
     branches: [main]
     paths:
-      - "packages/mobile/ios/**"
-      - "packages/fabricMobile/ios/**"
       - "packages/react-native-avoid-softinput/ios/**"
       - ".github/workflows/lint-ios.yml"
 
 jobs:
   lint-ios:
-    name: Lint Swift & ObjC
+    name: Lint ObjC
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v3
@@ -26,16 +24,7 @@ jobs:
           registry-url: "https://registry.npmjs.org"
           cache-dependency-path: "**/yarn.lock"
       - run: yarn
-      - name: SwiftLint
-        run: |
-          #!/bin/bash
-          if ! command -v swiftlint &> /dev/null
-          then
-            echo "SwiftLint is not installed. Installing"
-            brew install swiftlint
-          fi
-          yarn lint:ios:swift
-          yarn lint:fabric:ios:swift
+      - run: yarn install:pods
       - name: ClangFormat
         run: |
           #!/bin/bash
@@ -45,4 +34,3 @@ jobs:
             brew install clang-format
           fi
           yarn format:ios:objc
-          yarn format:fabric:ios:objc

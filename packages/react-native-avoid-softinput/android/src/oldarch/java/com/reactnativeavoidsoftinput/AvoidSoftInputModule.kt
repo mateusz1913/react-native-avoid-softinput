@@ -6,84 +6,90 @@ import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.module.annotations.ReactModule
 
 @ReactModule(name = AvoidSoftInputModuleImpl.NAME)
-class AvoidSoftInputModule(private val reactContext: ReactApplicationContext) :
+class AvoidSoftInputModule(reactContext: ReactApplicationContext) :
     ReactContextBaseJavaModule(reactContext) {
-    private var mModuleImpl = AvoidSoftInputModuleImpl(reactContext)
+    private var moduleImpl = AvoidSoftInputModuleImpl(reactContext)
 
     override fun getName(): String = AvoidSoftInputModuleImpl.NAME
 
     override fun initialize() {
         super.initialize()
 
-        mModuleImpl.onInitialize()
+        moduleImpl.onInitialize()
+    }
+
+    override fun invalidate() {
+        moduleImpl.onInvalidate()
+
+        super.invalidate()
     }
 
     @ReactMethod
     fun setShouldMimicIOSBehavior(shouldMimic: Boolean) {
-        mModuleImpl.setShouldMimicIOSBehavior(shouldMimic)
+        moduleImpl.setShouldMimicIOSBehavior(shouldMimic)
     }
 
     @ReactMethod
     fun setEnabled(isEnabled: Boolean) {
-        mModuleImpl.setEnabled(isEnabled)
+        moduleImpl.setEnabled(isEnabled)
     }
 
     @ReactMethod
     fun setAvoidOffset(avoidOffset: Float) {
-        mModuleImpl.setAvoidOffset(avoidOffset)
+        moduleImpl.setAvoidOffset(avoidOffset)
     }
 
     @ReactMethod
     fun setEasing(easing: String) {
-        mModuleImpl.setEasing(easing)
+        moduleImpl.setEasing(easing)
     }
 
     @ReactMethod
     fun setHideAnimationDelay(delay: Int?) {
-        mModuleImpl.setHideAnimationDelay(delay)
+        moduleImpl.setHideAnimationDelay(delay)
     }
 
     @ReactMethod
     fun setHideAnimationDuration(duration: Int?) {
-        mModuleImpl.setHideAnimationDuration(duration)
+        moduleImpl.setHideAnimationDuration(duration)
     }
 
     @ReactMethod
     fun setShowAnimationDelay(delay: Int?) {
-        mModuleImpl.setShowAnimationDelay(delay)
+        moduleImpl.setShowAnimationDelay(delay)
     }
 
     @ReactMethod
     fun setShowAnimationDuration(duration: Int?) {
-        mModuleImpl.setShowAnimationDuration(duration)
+        moduleImpl.setShowAnimationDuration(duration)
     }
 
-    @ReactMethod fun addListener(eventName: String) {}
+    @ReactMethod fun addListener(@Suppress("UNUSED_PARAMETER") eventName: String) {}
 
-    @ReactMethod fun removeListeners(count: Int) {}
+    @ReactMethod fun removeListeners(@Suppress("UNUSED_PARAMETER") count: Int) {}
 
     @ReactMethod
     fun setAdjustNothing() {
-        mModuleImpl.setAdjustNothing()
+        moduleImpl.setAdjustNothing()
     }
 
     @ReactMethod
     fun setAdjustPan() {
-        mModuleImpl.setAdjustPan()
+        moduleImpl.setAdjustPan()
     }
 
     @ReactMethod
     fun setAdjustResize() {
-        mModuleImpl.setAdjustResize()
+        moduleImpl.setAdjustResize()
     }
 
     @ReactMethod
     fun setAdjustUnspecified() {
-        mModuleImpl.setAdjustUnspecified()
+        moduleImpl.setAdjustUnspecified()
     }
 
     @ReactMethod
     fun setDefaultAppSoftInputMode() {
-        mModuleImpl.setDefaultAppSoftInputMode()
+        moduleImpl.setDefaultAppSoftInputMode()
     }
 }

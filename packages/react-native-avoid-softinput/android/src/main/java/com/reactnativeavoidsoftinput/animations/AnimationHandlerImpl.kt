@@ -14,25 +14,25 @@ import kotlin.math.min
 
 class AnimationHandlerImpl : AnimationHandler {
     // MARK: variables
-    private var mAvoidOffset: Float = 0F
-    private var mAnimationInterpolator = AnimationInterpolator()
-    private var mBottomOffset: Float = 0F
-    private var mHideAnimationDelay: Long = 0
-    private var mHideAnimationDuration: Long = DECREASE_PADDING_DURATION_IN_MS
-    private var mHideValueAnimator: ValueAnimator? = null
-    private var mInitialScrollViewBottomPadding: Int = 0
-    private var mIsHideAnimationCancelled: Boolean = false
-    private var mIsHideAnimationRunning: Boolean = false
-    private var mIsShowAnimationCancelled: Boolean = false
-    private var mIsShowAnimationRunning: Boolean = false
-    private var mOnOffsetChangedListener: ((offset: Int) -> Unit)? = null
-    private var mShowAnimationDelay: Long = 0
-    private var mShowAnimationDuration: Long = INCREASE_PADDING_DURATION_IN_MS
-    private var mShowValueAnimator: ValueAnimator? = null
+    private var avoidOffset: Float = 0F
+    private var animationInterpolator = AnimationInterpolator()
+    private var bottomOffset: Float = 0F
+    private var hideAnimationDelay: Long = 0
+    private var hideAnimationDuration: Long = DECREASE_PADDING_DURATION_IN_MS
+    private var hideValueAnimator: ValueAnimator? = null
+    private var initialScrollViewBottomPadding: Int = 0
+    private var isHideAnimationCancelled: Boolean = false
+    private var isHideAnimationRunning: Boolean = false
+    private var isShowAnimationCancelled: Boolean = false
+    private var isShowAnimationRunning: Boolean = false
+    private var onOffsetChangedListener: ((offset: Int) -> Unit)? = null
+    private var showAnimationDelay: Long = 0
+    private var showAnimationDuration: Long = INCREASE_PADDING_DURATION_IN_MS
+    private var showValueAnimator: ValueAnimator? = null
 
     // MARK: private methods
     private fun onOffsetChanged(offset: Int) {
-        mOnOffsetChangedListener?.let { it(offset) }
+        onOffsetChangedListener?.let { it(offset) }
     }
 
     private fun onRootViewAnimationUpdate(rootView: View, animatedOffset: Float) {
@@ -64,7 +64,7 @@ class AnimationHandlerImpl : AnimationHandler {
             scrollView.paddingLeft,
             scrollView.paddingTop,
             scrollView.paddingRight,
-            mInitialScrollViewBottomPadding + animatedOffset.toInt()
+            initialScrollViewBottomPadding + animatedOffset.toInt()
         )
     }
 
@@ -75,36 +75,35 @@ class AnimationHandlerImpl : AnimationHandler {
         onAnimatorEventListener: OnAnimatorEventListener
     ) {
         UiThreadUtil.runOnUiThread {
-            mIsHideAnimationCancelled = isShowAnimation
-            mIsShowAnimationCancelled = !isShowAnimation
+            isHideAnimationCancelled = isShowAnimation
+            isShowAnimationCancelled = !isShowAnimation
             if (isShowAnimation) {
-                mHideValueAnimator?.cancel()
+                hideValueAnimator?.cancel()
             } else {
-                mShowValueAnimator?.cancel()
+                showValueAnimator?.cancel()
             }
             onAnimatorEventListener.onBeforeStart()
             val animator =
                 ValueAnimator.ofFloat(animationStart, animationEnd).apply {
-                    duration =
-                        if (isShowAnimation) mShowAnimationDuration else mHideAnimationDuration
-                    startDelay = if (isShowAnimation) mShowAnimationDelay else mHideAnimationDelay
-                    interpolator = mAnimationInterpolator
+                    duration = if (isShowAnimation) showAnimationDuration else hideAnimationDuration
+                    startDelay = if (isShowAnimation) showAnimationDelay else hideAnimationDelay
+                    interpolator = animationInterpolator
                     addListener(
                         object : AnimatorListenerAdapter() {
                             override fun onAnimationEnd(animation: Animator) {
                                 super.onAnimationEnd(animation)
                                 if (isShowAnimation) {
-                                    mIsShowAnimationRunning = false
-                                    mShowValueAnimator = null
-                                    if (mIsShowAnimationCancelled) {
+                                    isShowAnimationRunning = false
+                                    showValueAnimator = null
+                                    if (isShowAnimationCancelled) {
                                         onAnimatorEventListener.onCancel()
                                     } else {
                                         onAnimatorEventListener.onEnd()
                                     }
                                 } else {
-                                    mIsHideAnimationRunning = false
-                                    mHideValueAnimator = null
-                                    if (mIsHideAnimationCancelled) {
+                                    isHideAnimationRunning = false
+                                    hideValueAnimator = null
+                                    if (isHideAnimationCancelled) {
                                         onAnimatorEventListener.onCancel()
                                     } else {
                                         onAnimatorEventListener.onEnd()
@@ -119,33 +118,33 @@ class AnimationHandlerImpl : AnimationHandler {
                     start()
                 }
             if (isShowAnimation) {
-                mShowValueAnimator = animator
+                showValueAnimator = animator
             } else {
-                mHideValueAnimator = animator
+                hideValueAnimator = animator
             }
         }
     }
 
     // MARK: public methods
     override fun decreaseOffsetInRootView(from: Int, to: Int, rootView: View) {
-        mIsHideAnimationRunning = true
+        isHideAnimationRunning = true
 
         val addedOffset = (to - from).toFloat()
         val newBottomOffset =
-            if (mIsShowAnimationRunning) {
-                mBottomOffset
+            if (isShowAnimationRunning) {
+                bottomOffset
             } else {
-                mBottomOffset + addedOffset
+                bottomOffset + addedOffset
             }
 
         runAnimator(
             false,
-            mBottomOffset,
+            bottomOffset,
             newBottomOffset,
             object : OnAnimatorEventListener {
                 override fun onEnd() {
                     onOffsetChanged(convertFromPixelToDIP(newBottomOffset.toInt()))
-                    mBottomOffset = newBottomOffset
+                    bottomOffset = newBottomOffset
                 }
 
                 override fun onUpdate(animatedValue: Float) {
@@ -156,24 +155,24 @@ class AnimationHandlerImpl : AnimationHandler {
     }
 
     override fun increaseOffsetInRootView(from: Int, to: Int, rootView: View) {
-        mIsShowAnimationRunning = true
+        isShowAnimationRunning = true
 
         val addedOffset = (to - from).toFloat()
         val newBottomOffset =
-            if (mIsHideAnimationRunning) {
-                mBottomOffset
+            if (isHideAnimationRunning) {
+                bottomOffset
             } else {
-                mBottomOffset + addedOffset
+                bottomOffset + addedOffset
             }
 
         runAnimator(
             true,
-            mBottomOffset,
+            bottomOffset,
             newBottomOffset,
             object : OnAnimatorEventListener {
                 override fun onEnd() {
                     onOffsetChanged(convertFromPixelToDIP(newBottomOffset.toInt()))
-                    mBottomOffset = newBottomOffset
+                    bottomOffset = newBottomOffset
                 }
 
                 override fun onUpdate(animatedValue: Float) {
@@ -184,20 +183,20 @@ class AnimationHandlerImpl : AnimationHandler {
     }
 
     override fun removeOffsetInRootView(rootView: View, onOffsetAnimationEnd: () -> Unit) {
-        mIsHideAnimationRunning = true
+        isHideAnimationRunning = true
 
         runAnimator(
             false,
-            mBottomOffset,
+            bottomOffset,
             0F,
             object : OnAnimatorEventListener {
                 override fun onBeforeStart() {
-                    onOffsetChanged(convertFromPixelToDIP(mBottomOffset.toInt()))
+                    onOffsetChanged(convertFromPixelToDIP(bottomOffset.toInt()))
                 }
 
                 override fun onEnd() {
                     onOffsetChanged(0)
-                    mBottomOffset = 0F
+                    bottomOffset = 0F
                     onOffsetAnimationEnd()
                 }
 
@@ -214,26 +213,26 @@ class AnimationHandlerImpl : AnimationHandler {
         focusedView: View,
         onOffsetAnimationEnd: () -> Unit
     ) {
-        mIsShowAnimationRunning = true
+        isShowAnimationRunning = true
         val currentFocusedViewDistanceToBottom = getViewDistanceToBottomEdge(focusedView)
 
-        mBottomOffset = max(to - currentFocusedViewDistanceToBottom, 0).toFloat() + mAvoidOffset
+        bottomOffset = max(to - currentFocusedViewDistanceToBottom, 0).toFloat() + avoidOffset
 
-        if (mBottomOffset <= 0F) {
+        if (bottomOffset <= 0F) {
             return
         }
 
         runAnimator(
             true,
             0F,
-            mBottomOffset,
+            bottomOffset,
             object : OnAnimatorEventListener {
                 override fun onBeforeStart() {
                     onOffsetChanged(convertFromPixelToDIP(0))
                 }
 
                 override fun onEnd() {
-                    onOffsetChanged(convertFromPixelToDIP(mBottomOffset.toInt()))
+                    onOffsetChanged(convertFromPixelToDIP(bottomOffset.toInt()))
                     onOffsetAnimationEnd()
                 }
 
@@ -250,26 +249,26 @@ class AnimationHandlerImpl : AnimationHandler {
         scrollView: ScrollView,
         focusedView: View
     ) {
-        mIsHideAnimationRunning = true
+        isHideAnimationRunning = true
 
         val addedOffset = (to - from).toFloat()
         val newBottomOffset =
-            if (mIsShowAnimationRunning) {
-                mBottomOffset
+            if (isShowAnimationRunning) {
+                bottomOffset
             } else {
-                mBottomOffset + addedOffset
+                bottomOffset + addedOffset
             }
         val scrollToOffset = getScrollToOffset(to, scrollView, focusedView)
 
         runAnimator(
             false,
-            mBottomOffset,
+            bottomOffset,
             newBottomOffset,
             object : OnAnimatorEventListener {
                 override fun onEnd() {
                     onOffsetChanged(convertFromPixelToDIP(newBottomOffset.toInt()))
                     scrollView.smoothScrollTo(0, scrollView.scrollY + scrollToOffset)
-                    mBottomOffset = newBottomOffset
+                    bottomOffset = newBottomOffset
                 }
 
                 override fun onUpdate(animatedValue: Float) {
@@ -285,26 +284,26 @@ class AnimationHandlerImpl : AnimationHandler {
         scrollView: ScrollView,
         currentFocusedView: View
     ) {
-        mIsShowAnimationRunning = true
+        isShowAnimationRunning = true
 
         val addedOffset = (to - from).toFloat()
         val newBottomOffset =
-            if (mIsHideAnimationRunning) {
-                mBottomOffset
+            if (isHideAnimationRunning) {
+                bottomOffset
             } else {
-                mBottomOffset + addedOffset
+                bottomOffset + addedOffset
             }
         val scrollToOffset = getScrollToOffset(to, scrollView, currentFocusedView)
 
         runAnimator(
             true,
-            mBottomOffset,
+            bottomOffset,
             newBottomOffset,
             object : OnAnimatorEventListener {
                 override fun onEnd() {
                     onOffsetChanged(convertFromPixelToDIP(newBottomOffset.toInt()))
                     scrollView.smoothScrollTo(0, scrollView.scrollY + scrollToOffset)
-                    mBottomOffset = newBottomOffset
+                    bottomOffset = newBottomOffset
                 }
 
                 override fun onUpdate(animatedValue: Float) {
@@ -319,15 +318,15 @@ class AnimationHandlerImpl : AnimationHandler {
         initialScrollValue: Int,
         onOffsetAnimationEnd: () -> Unit
     ) {
-        mIsHideAnimationRunning = true
+        isHideAnimationRunning = true
 
         runAnimator(
             false,
-            mBottomOffset,
+            bottomOffset,
             0F,
             object : OnAnimatorEventListener {
                 override fun onBeforeStart() {
-                    onOffsetChanged(convertFromPixelToDIP(mBottomOffset.toInt()))
+                    onOffsetChanged(convertFromPixelToDIP(bottomOffset.toInt()))
                 }
 
                 override fun onCancel() {
@@ -341,8 +340,8 @@ class AnimationHandlerImpl : AnimationHandler {
 
                 override fun onEnd() {
                     onOffsetChanged(0)
-                    mInitialScrollViewBottomPadding = 0
-                    mBottomOffset = 0F
+                    initialScrollViewBottomPadding = 0
+                    bottomOffset = 0F
                     scrollView.smoothScrollTo(0, initialScrollValue)
                     onOffsetAnimationEnd()
                 }
@@ -360,30 +359,29 @@ class AnimationHandlerImpl : AnimationHandler {
         currentFocusedView: View,
         onOffsetAnimationEnd: () -> Unit
     ) {
-        mIsShowAnimationRunning = true
+        isShowAnimationRunning = true
         val scrollViewDistanceToBottom = getViewDistanceToBottomEdge(scrollView)
 
-        mBottomOffset =
-            max(softInputHeight - scrollViewDistanceToBottom, 0).toFloat() + mAvoidOffset
+        bottomOffset = max(softInputHeight - scrollViewDistanceToBottom, 0).toFloat() + avoidOffset
 
         val scrollToOffset = getScrollToOffset(softInputHeight, scrollView, currentFocusedView)
 
-        if (mBottomOffset <= 0F) {
+        if (bottomOffset <= 0F) {
             return
         }
 
         runAnimator(
             true,
             0F,
-            mBottomOffset,
+            bottomOffset,
             object : OnAnimatorEventListener {
                 override fun onBeforeStart() {
                     onOffsetChanged(convertFromPixelToDIP(0))
-                    mInitialScrollViewBottomPadding = scrollView.paddingBottom
+                    initialScrollViewBottomPadding = scrollView.paddingBottom
                 }
 
                 override fun onEnd() {
-                    onOffsetChanged(convertFromPixelToDIP(mBottomOffset.toInt()))
+                    onOffsetChanged(convertFromPixelToDIP(bottomOffset.toInt()))
                     onOffsetAnimationEnd()
                     scrollView.smoothScrollTo(0, scrollView.scrollY + scrollToOffset)
                 }
@@ -395,12 +393,12 @@ class AnimationHandlerImpl : AnimationHandler {
         )
     }
 
-    override fun setAvoidOffset(avoidOffset: Float) {
-        mAvoidOffset = PixelUtil.toPixelFromDIP(avoidOffset)
+    override fun setAvoidOffset(offset: Float) {
+        avoidOffset = PixelUtil.toPixelFromDIP(offset)
     }
 
     override fun setEasing(easing: String?) {
-        mAnimationInterpolator.mode =
+        animationInterpolator.mode =
             when (easing) {
                 "easeIn" -> AnimationInterpolator.Companion.MODE.EASE_IN
                 "easeInOut" -> AnimationInterpolator.Companion.MODE.EASE_IN_OUT
@@ -410,28 +408,28 @@ class AnimationHandlerImpl : AnimationHandler {
     }
 
     override fun setHideAnimationDelay(delay: Int?) {
-        mHideAnimationDelay = delay?.toLong() ?: 0
+        hideAnimationDelay = delay?.toLong() ?: 0
     }
 
     override fun setHideAnimationDuration(duration: Int?) {
-        mHideAnimationDuration = duration?.toLong() ?: DECREASE_PADDING_DURATION_IN_MS
+        hideAnimationDuration = duration?.toLong() ?: DECREASE_PADDING_DURATION_IN_MS
     }
 
     override fun setOnOffsetChangedListener(listener: ((offset: Int) -> Unit)?) {
-        mOnOffsetChangedListener = listener
+        onOffsetChangedListener = listener
     }
 
     override fun setShowAnimationDelay(delay: Int?) {
-        mShowAnimationDelay = delay?.toLong() ?: 0
+        showAnimationDelay = delay?.toLong() ?: 0
     }
 
     override fun setShowAnimationDuration(duration: Int?) {
-        mShowAnimationDuration = duration?.toLong() ?: INCREASE_PADDING_DURATION_IN_MS
+        showAnimationDuration = duration?.toLong() ?: INCREASE_PADDING_DURATION_IN_MS
     }
 
     override fun clearOffsets() {
-        mBottomOffset = 0F
-        mInitialScrollViewBottomPadding = 0
+        bottomOffset = 0F
+        initialScrollViewBottomPadding = 0
     }
 
     private interface OnAnimatorEventListener {

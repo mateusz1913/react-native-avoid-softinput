@@ -1,0 +1,22 @@
+---
+id: set-hide-animation-delay
+title: setHideAnimationDelay
+sidebar_label: setHideAnimationDelay
+keywords: [react-native-avoid-softinput, setHideAnimationDelay, module]
+---
+
+Use `setHideAnimationDelay` method, to customize delay of hide offset animation with delay value in ms.
+
+### Parameters
+
+| Type   | Required                                     | Description                 |
+| ------ | -------------------------------------------- | --------------------------- |
+| number | no (defaults to 0 on Android and 300 on iOS) | hide offset animation delay |
+
+### Example
+
+```ts
+import { AvoidSoftInput } from "react-native-avoid-softinput";
+
+AvoidSoftInput.setHideAnimationDelay(100);
+```

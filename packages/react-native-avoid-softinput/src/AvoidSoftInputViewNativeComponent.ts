@@ -47,6 +47,6 @@ interface AvoidSoftInputViewProps extends ViewProps {
   onSoftInputShown?: DirectEventHandler<SoftInputEventData>;
 }
 
-export default codegenNativeComponent<AvoidSoftInputViewProps>('AvoidSoftInputView') as HostComponent<
-  AvoidSoftInputViewProps
->;
+export default codegenNativeComponent<AvoidSoftInputViewProps>(
+  'AvoidSoftInputView',
+) as HostComponent<AvoidSoftInputViewProps>;

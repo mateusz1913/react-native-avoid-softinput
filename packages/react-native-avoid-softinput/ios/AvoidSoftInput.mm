@@ -3,7 +3,7 @@
 #import "AvoidSoftInputManager.h"
 #import "RCTConvert+UIViewAnimationOptions.h"
 
-#ifdef RCT_NEW_ARCH_ENABLED
+#if RCT_NEW_ARCH_ENABLED
 #import "rnavoidsoftinput.h"
 
 @interface AvoidSoftInput () <NativeAvoidSoftInputModuleSpec>
@@ -24,7 +24,7 @@ RCT_EXPORT_MODULE(AvoidSoftInput)
 
 + (BOOL)requiresMainQueueSetup
 {
-    return YES;
+    return NO;
 }
 
 // MARK: RCTEventEmitter
@@ -51,11 +51,13 @@ RCT_EXPORT_MODULE(AvoidSoftInput)
 
 - (AvoidSoftInputManager *)manager
 {
-    if (managerInstance == nil) {
-        managerInstance = [AvoidSoftInputManager new];
-    }
+    @synchronized(self) {
+        if (managerInstance == nil) {
+            managerInstance = [AvoidSoftInputManager new];
+        }
 
-    return managerInstance;
+        return managerInstance;
+    }
 }
 
 // MARK: Init
@@ -63,8 +65,10 @@ RCT_EXPORT_MODULE(AvoidSoftInput)
 - (instancetype)init
 {
     if (self = [super init]) {
-        self.manager.delegate = self;
-        [self.manager initializeHandlers];
+        dispatch_async(dispatch_get_main_queue(), ^{
+          self.manager.delegate = self;
+          [self.manager initializeHandlers];
+        });
     }
     return self;
 }
@@ -72,6 +76,8 @@ RCT_EXPORT_MODULE(AvoidSoftInput)
 - (void)dealloc
 {
     [self.manager cleanupHandlers];
+    self.manager.delegate = nil;
+    managerInstance = nil;
 }
 
 // MARK: AvoidSoftInputManagerDelegate
@@ -120,37 +126,51 @@ RCT_EXPORT_MODULE(AvoidSoftInput)
 
 RCT_EXPORT_METHOD(setEnabled : (BOOL)enabled)
 {
-    [self.manager setIsEnabled:enabled];
+    dispatch_async(dispatch_get_main_queue(), ^{
+      [self.manager setIsEnabled:enabled];
+    });
 }
 
 RCT_EXPORT_METHOD(setAvoidOffset : (double)offset)
 {
-    [self.manager setAvoidOffset:offset];
+    dispatch_async(dispatch_get_main_queue(), ^{
+      [self.manager setAvoidOffset:offset];
+    });
 }
 
 RCT_EXPORT_METHOD(setEasing : (nonnull NSString *)easing)
 {
-    [self.manager setEasing:[RCTConvert UIViewAnimationOptions:easing]];
+    dispatch_async(dispatch_get_main_queue(), ^{
+      [self.manager setEasing:[RCTConvert UIViewAnimationOptions:easing]];
+    });
 }
 
 RCT_EXPORT_METHOD(setHideAnimationDelay : (nonnull NSNumber *)delay)
 {
-    [self.manager setHideAnimationDelay:delay];
+    dispatch_async(dispatch_get_main_queue(), ^{
+      [self.manager setHideAnimationDelay:delay];
+    });
 }
 
 RCT_EXPORT_METHOD(setHideAnimationDuration : (nonnull NSNumber *)duration)
 {
-    [self.manager setHideAnimationDuration:duration];
+    dispatch_async(dispatch_get_main_queue(), ^{
+      [self.manager setHideAnimationDuration:duration];
+    });
 }
 
 RCT_EXPORT_METHOD(setShowAnimationDelay : (nonnull NSNumber *)delay)
 {
-    [self.manager setShowAnimationDelay:delay];
+    dispatch_async(dispatch_get_main_queue(), ^{
+      [self.manager setShowAnimationDelay:delay];
+    });
 }
 
 RCT_EXPORT_METHOD(setShowAnimationDuration : (nonnull NSNumber *)duration)
 {
-    [self.manager setShowAnimationDuration:duration];
+    dispatch_async(dispatch_get_main_queue(), ^{
+      [self.manager setShowAnimationDuration:duration];
+    });
 }
 
 - (void)setAdjustNothing
@@ -183,7 +203,7 @@ RCT_EXPORT_METHOD(setShowAnimationDuration : (nonnull NSNumber *)duration)
     // NOOP - Android-only
 }
 
-#ifdef RCT_NEW_ARCH_ENABLED
+#if RCT_NEW_ARCH_ENABLED
 - (std::shared_ptr<facebook::react::TurboModule>)getTurboModule:
     (const facebook::react::ObjCTurboModule::InitParams &)params
 {

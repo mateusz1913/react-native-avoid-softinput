@@ -3,6 +3,7 @@ package com.reactnativeavoidsoftinput
 import com.facebook.react.common.MapBuilder
 import com.facebook.react.uimanager.ThemedReactContext
 import com.facebook.react.uimanager.annotations.ReactProp
+import com.facebook.react.views.view.ReactViewGroup
 import com.facebook.react.views.view.ReactViewManager
 import com.reactnativeavoidsoftinput.events.AvoidSoftInputAppliedOffsetChangedEvent
 import com.reactnativeavoidsoftinput.events.AvoidSoftInputHeightChangedEvent
@@ -16,6 +17,14 @@ class AvoidSoftInputViewManager : ReactViewManager() {
 
     override fun createViewInstance(reactContext: ThemedReactContext): AvoidSoftInputView {
         return AvoidSoftInputView(reactContext)
+    }
+
+    override fun prepareToRecycleView(
+        reactContext: ThemedReactContext,
+        view: ReactViewGroup
+    ): ReactViewGroup {
+        (view as AvoidSoftInputView).cleanup()
+        return super.prepareToRecycleView(reactContext, view)
     }
 
     @ReactProp(name = "avoidOffset")
