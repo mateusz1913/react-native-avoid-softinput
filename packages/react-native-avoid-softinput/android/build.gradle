@@ -27,10 +27,36 @@ if (project == rootProject) {
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
+def safeAppExtGet(prop, fallback) {
+  def appProject = rootProject.allprojects.find { it.plugins.hasPlugin('com.android.application') }
+  appProject?.ext?.has(prop) ? appProject.ext.get(prop) : fallback
+}
+
+def resolveReactNativeDirectory() {
+  def reactNativeLocation = safeAppExtGet("REACT_NATIVE_NODE_MODULES_DIR", null)
+  if (reactNativeLocation != null) {
+    return file(reactNativeLocation)
+  }
+
+  def reactNativeFromAppNodeModules = file("${projectDir}/../../react-native")
+  if (reactNativeFromAppNodeModules.exists()) {
+    return reactNativeFromAppNodeModules
+  }
+
+  def reactNativeFromProjectNodeModules = file("${rootProject.projectDir}/../node_modules/react-native")
+  if (reactNativeFromProjectNodeModules.exists()) {
+    return reactNativeFromProjectNodeModules
+  }
+
+  throw new GradleException(
+    "[RNAvoidSoftInput] Unable to resolve react-native location in node_modules. You should add project extension property (in `app/build.gradle`) `REACT_NATIVE_NODE_MODULES_DIR` with path to react-native."
+  )
+}
+
 if (isNewArchitectureEnabled()) {
   apply plugin: "com.facebook.react"
 
-  def reactNativeDirectory = project.ext.resolveReactNativeDirectory()
+  def reactNativeDirectory = resolveReactNativeDirectory()
 
   react {
     reactNativeDir = file(reactNativeDirectory)
