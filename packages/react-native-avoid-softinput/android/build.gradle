@@ -48,6 +48,11 @@ def resolveReactNativeDirectory() {
     return reactNativeFromProjectNodeModules
   }
 
+  def reactNativeFromRootWorkspaceNodeModules = file("${rootProject.projectDir}/../../../node_modules/react-native")
+  if (reactNativeFromRootWorkspaceNodeModules.exists()) {
+    return reactNativeFromRootWorkspaceNodeModules
+  }
+
   throw new GradleException(
     "[RNAvoidSoftInput] Unable to resolve react-native location in node_modules. You should add project extension property (in `app/build.gradle`) `REACT_NATIVE_NODE_MODULES_DIR` with path to react-native."
   )
