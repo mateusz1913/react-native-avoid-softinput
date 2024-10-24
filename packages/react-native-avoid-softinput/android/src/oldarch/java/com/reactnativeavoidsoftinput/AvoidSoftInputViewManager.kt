@@ -22,7 +22,7 @@ class AvoidSoftInputViewManager : ReactViewManager() {
     override fun prepareToRecycleView(
         reactContext: ThemedReactContext,
         view: ReactViewGroup
-    ): ReactViewGroup {
+    ): ReactViewGroup? {
         (view as AvoidSoftInputView).cleanup()
         return super.prepareToRecycleView(reactContext, view)
     }
