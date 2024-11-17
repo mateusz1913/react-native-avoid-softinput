@@ -53,13 +53,12 @@ function setShouldMimicIOSBehavior(shouldMimic: boolean) {
   if (Platform.OS !== 'android') {
     return;
   }
-
   if (__DEV__) {
-    // Will print "setShouldMimicIOSBehavior value is ignored when using react-native-edge-to-edge"
-    controlEdgeToEdgeValues({ setShouldMimicIOSBehavior: shouldMimic });
+    controlEdgeToEdgeValues({ shouldMimic });
   }
-
-  module.setShouldMimicIOSBehavior(EDGE_TO_EDGE || shouldMimic);
+  if (!EDGE_TO_EDGE) {
+    module.setShouldMimicIOSBehavior(shouldMimic);
+  }
 }
 
 /**
