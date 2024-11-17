@@ -1,8 +1,11 @@
 import type { EmitterSubscription } from 'react-native';
 import { NativeEventEmitter, Platform } from 'react-native';
+import { controlEdgeToEdgeValues, isEdgeToEdge } from 'react-native-is-edge-to-edge';
 
 import module from './AvoidSoftInputModule';
 import type { SoftInputAppliedOffsetEventData, SoftInputEasing, SoftInputEventData } from './types';
+
+const EDGE_TO_EDGE = isEdgeToEdge();
 
 const eventEmitter = new NativeEventEmitter(Platform.OS !== 'ios' ? undefined : module);
 
@@ -51,7 +54,12 @@ function setShouldMimicIOSBehavior(shouldMimic: boolean) {
     return;
   }
 
-  module.setShouldMimicIOSBehavior(shouldMimic);
+  if (__DEV__) {
+    // Will print "setShouldMimicIOSBehavior value is ignored when using react-native-edge-to-edge"
+    controlEdgeToEdgeValues({ setShouldMimicIOSBehavior: shouldMimic });
+  }
+
+  module.setShouldMimicIOSBehavior(EDGE_TO_EDGE || shouldMimic);
 }
 
 /**

@@ -55,6 +55,9 @@
     "build-library": "bob build",
     "release-library": "release-it"
   },
+  "dependencies": {
+    "react-native-is-edge-to-edge": "^1.1.6"
+  },
   "devDependencies": {
     "@release-it/conventional-changelog": "8.0.2",
     "@types/react": "18.3.12",
