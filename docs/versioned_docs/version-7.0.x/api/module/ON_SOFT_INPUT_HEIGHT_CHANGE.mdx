@@ -1,0 +1,28 @@
+---
+id: on-soft-input-height-change
+title: onSoftInputHeightChange
+sidebar_label: onSoftInputHeightChange
+keywords: [react-native-avoid-softinput, onSoftInputHeightChange, module]
+---
+
+Use `onSoftInputHeightChange` method, if you want to listen to events when soft input's height changes.
+
+### Parameters
+
+| Type                                                           | Required | Description                                                                 |
+| -------------------------------------------------------------- | -------- | --------------------------------------------------------------------------- |
+| (\{ softInputHeight \}: \{ softInputHeight: number \}) => void | yes      | function called with current soft input height when soft input is displayed |
+
+### Example
+
+```ts
+import { AvoidSoftInput } from "react-native-avoid-softinput";
+
+const unsubscribe = AvoidSoftInput.onSoftInputHeightChange(
+  ({ softInputHeight }) => {
+    // Do sth
+  }
+);
+
+// later invoke unsubscribe.remove()
+```

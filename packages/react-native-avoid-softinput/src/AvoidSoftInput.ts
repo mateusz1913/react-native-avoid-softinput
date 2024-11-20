@@ -48,6 +48,7 @@ function setEnabled(enabled: boolean) {
  * Set should mimic IOS ime behavior (true), or let Android OS handle (resize) window (false)
  *
  * @platform `Android`
+ * @deprecated Since v7 use `react-native-edge-to-edge` to control "edge to edge" mode on Android
  */
 function setShouldMimicIOSBehavior(shouldMimic: boolean) {
   if (Platform.OS !== 'android') {

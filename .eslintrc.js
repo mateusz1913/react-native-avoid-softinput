@@ -8,6 +8,7 @@ module.exports = {
       configFile: path.resolve(__dirname, 'packages', 'example', 'babel.config.js'),
     },
   },
+  ignorePatterns: ['**/react-native-avoid-softinput/lib/**/*'],
   overrides: [
     {
       files: ['**/jest/*'],
