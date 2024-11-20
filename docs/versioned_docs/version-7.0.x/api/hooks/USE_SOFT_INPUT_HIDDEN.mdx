@@ -1,0 +1,24 @@
+---
+id: use-soft-input-hidden
+title: useSoftInputHidden
+sidebar_label: useSoftInputHidden
+keywords: [react-native-avoid-softinput, useSoftInputHidden, react hooks]
+---
+
+`useSoftInputHidden` is a shortcut for using `AvoidSoftInput.onSoftInputHidden` method inside `useEffect`.
+
+### Parameters
+
+| Type       | Required | Description                               |
+| ---------- | -------- | ----------------------------------------- |
+| () => void | yes      | function called when soft input is hidden |
+
+### Example
+
+```ts
+import { useSoftInputHidden } from "react-native-avoid-softinput";
+
+useSoftInputHidden(() => {
+  // Do sth
+});
+```
