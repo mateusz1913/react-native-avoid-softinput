@@ -37,6 +37,7 @@ export const ModalExample: React.FC = () => {
       <Button onPress={openModal} title="Open modal" />
       <Modal
         animationType="slide"
+        navigationBarTranslucent={true}
         onRequestClose={closeModal}
         statusBarTranslucent={true}
         style={styles.modal}

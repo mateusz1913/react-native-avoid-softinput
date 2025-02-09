@@ -32,7 +32,9 @@ export const ModalExample: React.FC = () => {
       title="Open modal"
     />
     <Modal
+      navigationBarTranslucent={true}
       onRequestClose={closeModal}
+      statusBarTranslucent={true}
       visible={modalVisible}
     >
       <View>

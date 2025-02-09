@@ -62,10 +62,10 @@
     "@release-it/conventional-changelog": "8.0.2",
     "@types/react": "18.3.12",
     "react": "18.3.1",
-    "react-native": "0.76.0",
+    "react-native": "0.77.0",
     "react-native-builder-bob": "0.30.2",
     "release-it": "17.6.0",
-    "typescript": "5.0.4"
+    "typescript": "5.7.3"
   },
   "peerDependencies": {
     "react": ">=18.2.0",
@@ -110,6 +110,11 @@
     "jsSrcsDir": "./src",
     "android": {
       "javaPackageName": "com.reactnativeavoidsoftinput"
+    },
+    "ios": {
+      "componentProvider": {
+        "AvoidSoftInputView": "AvoidSoftInputViewComponentView"
+      }
     }
   }
 }
