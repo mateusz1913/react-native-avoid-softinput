@@ -1,6 +1,12 @@
 import * as React from 'react';
 import { Platform, Pressable, StyleSheet, View } from 'react-native';
 
+const RIPPLE_CONFIG = {
+  borderless: true,
+  color: '#ccc',
+  foreground: true,
+};
+
 interface Props {
   onPress?: () => void;
 }
@@ -8,10 +14,7 @@ interface Props {
 const CloseButton: React.FC<Props> = ({ onPress }) => {
   return (
     <Pressable
-      android_ripple={{
-        borderless: true,
-        color: 'gray',
-      }}
+      android_ripple={RIPPLE_CONFIG}
       onPress={onPress}
       style={({ pressed }) => [styles.container, pressed && styles.pressed]}>
       <View style={[styles.line, styles.minusLine]} />

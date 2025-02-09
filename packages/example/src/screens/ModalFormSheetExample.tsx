@@ -38,6 +38,7 @@ export const ModalFormSheetExample: React.FC = () => {
       <Button onPress={openFormSheetModal} title="Open formsheet modal" />
       <Modal
         animationType="slide"
+        navigationBarTranslucent={true}
         onRequestClose={closeFormSheetModal}
         presentationStyle="formSheet"
         statusBarTranslucent={true}
