@@ -2,12 +2,11 @@
   "private": true,
   "workspaces": {
     "packages": [
-      "packages/example",
-      "packages/react-native-avoid-softinput"
+      "packages/*"
     ]
   },
   "scripts": {
-    "typescript": "tsc --noEmit -p packages/example/tsconfig.json && tsc --noEmit -p packages/react-native-avoid-softinput/tsconfig.json",
+    "typescript": "tsc --noEmit -p packages/expo-example/tsconfig.json && tsc --noEmit -p packages/react-native-avoid-softinput/tsconfig.json",
     "lint:js": "eslint \"**/*.{js,ts,tsx}\" && prettier --config .prettierrc.js \"packages/**/*.{js,ts,tsx}\"",
     "lint:android": "./packages/react-native-avoid-softinput/android/gradlew -p packages/react-native-avoid-softinput/android spotlessCheck --quiet",
     "lint:ios:objc": "clang-format --dry-run -i ./packages/react-native-avoid-softinput/ios/*.{h,mm}",
@@ -16,8 +15,6 @@
     "format:ios:objc": "clang-format -i ./packages/react-native-avoid-softinput/ios/*.{h,mm} -Werror",
     "prepare": "yarn workspace react-native-avoid-softinput build-library",
     "release": "yarn workspace react-native-avoid-softinput release-library",
-    "install:pods": "pod-install packages/example/ios --quiet",
-    "install:pods:fabric": "RCT_NEW_ARCH_ENABLED=1 pod-install packages/example/ios --quiet",
     "reset": "yarn reset:node_modules && yarn reset:pods",
     "reset:node_modules": "find . -type dir -name node_modules | xargs rm -rf && rm -rf yarn.lock",
     "reset:pods": "find . -type dir -name Pods | xargs rm -rf && find . -type f -name Podfile.lock | xargs rm -rf"
@@ -33,16 +30,15 @@
     "registry": "https://registry.npmjs.org/"
   },
   "devDependencies": {
-    "@commitlint/config-conventional": "19.5.0",
-    "@evilmartians/lefthook": "1.4.3",
-    "@react-native/eslint-config": "0.77.0",
-    "@react-native/typescript-config": "0.77.0",
-    "commitlint": "19.5.0",
-    "eslint": "^8.19.0",
-    "jest": "29.7.0",
-    "pod-install": "0.2.2",
-    "prettier": "2.8.8",
-    "typescript": "5.7.3"
+    "@callstack/eslint-config": "15.0.0",
+    "@commitlint/config-conventional": "19.8.1",
+    "@evilmartians/lefthook": "1.11.4",
+    "commitlint": "19.8.1",
+    "eslint": "9.29.0",
+    "jest": "30.0.2",
+    "pod-install": "0.3.9",
+    "prettier": "3.5.3",
+    "typescript": "5.8.3"
   },
   "commitlint": {
     "extends": [

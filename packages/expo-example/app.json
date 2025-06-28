@@ -1,0 +1,31 @@
+{
+  "expo": {
+    "name": "SoftInputExample",
+    "slug": "expo-example",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/AppIconTransparent.png",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/AppIconTransparent.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.reactnativeavoidsoftinput.expoexample"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/AppIconTransparent.png",
+        "backgroundColor": "#ffffff"
+      },
+      "edgeToEdgeEnabled": true,
+      "package": "com.reactnativeavoidsoftinput.expoexample"
+    },
+    "plugins": [
+      "./withShowTime.js"
+    ]
+  }
+}
