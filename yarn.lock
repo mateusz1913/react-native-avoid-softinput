@@ -6811,7 +6811,7 @@ __metadata:
     expo: "npm:53.0.12"
     react: "npm:19.0.0"
     react-native: "npm:0.79.4"
-    react-native-avoid-softinput: "workspace:"
+    react-native-avoid-softinput: "workspace:*"
     react-native-edge-to-edge: "npm:1.6.0"
     react-native-gesture-handler: "npm:2.24.0"
     react-native-reanimated: "npm:3.17.4"
@@ -11307,7 +11307,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-avoid-softinput@workspace:, react-native-avoid-softinput@workspace:packages/react-native-avoid-softinput":
+"react-native-avoid-softinput@workspace:*, react-native-avoid-softinput@workspace:packages/react-native-avoid-softinput":
   version: 0.0.0-use.local
   resolution: "react-native-avoid-softinput@workspace:packages/react-native-avoid-softinput"
   dependencies:

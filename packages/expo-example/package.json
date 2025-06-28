@@ -17,7 +17,7 @@
     "expo": "53.0.12",
     "react": "19.0.0",
     "react-native": "0.79.4",
-    "react-native-avoid-softinput": "workspace:",
+    "react-native-avoid-softinput": "workspace:*",
     "react-native-edge-to-edge": "1.6.0",
     "react-native-gesture-handler": "2.24.0",
     "react-native-reanimated": "3.17.4",
