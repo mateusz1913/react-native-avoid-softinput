@@ -1,8 +1,9 @@
 package com.reactnativeavoidsoftinput
 
-import com.facebook.react.common.MapBuilder
+import com.facebook.react.bridge.ReadableArray
+import com.facebook.react.module.annotations.ReactModule
+import com.facebook.react.uimanager.BaseViewManagerDelegate
 import com.facebook.react.uimanager.ThemedReactContext
-import com.facebook.react.uimanager.ViewManagerDelegate
 import com.facebook.react.uimanager.annotations.ReactProp
 import com.facebook.react.viewmanagers.AvoidSoftInputViewManagerInterface
 import com.facebook.react.views.view.ReactViewGroup
@@ -12,16 +13,60 @@ import com.reactnativeavoidsoftinput.events.AvoidSoftInputHeightChangedEvent
 import com.reactnativeavoidsoftinput.events.AvoidSoftInputHiddenEvent
 import com.reactnativeavoidsoftinput.events.AvoidSoftInputShownEvent
 
+@ReactModule(name = AvoidSoftInputView.NAME)
 class AvoidSoftInputViewManager :
     ReactViewManager(), AvoidSoftInputViewManagerInterface<AvoidSoftInputView> {
-    override fun getName(): String {
-        return AvoidSoftInputView.NAME
-    }
+    private val delegate =
+        object : BaseViewManagerDelegate<ReactViewGroup, AvoidSoftInputViewManager>(this) {
+            override fun setProperty(view: ReactViewGroup, propName: String, value: Any?) {
+                when (propName) {
+                    "avoidOffset" ->
+                        mViewManager.setAvoidOffset(
+                            view as AvoidSoftInputView,
+                            (value as Double?)?.toFloat() ?: 0f
+                        )
+                    "easing" -> mViewManager.setEasing(view as AvoidSoftInputView, value as String?)
+                    "enabled" ->
+                        mViewManager.setEnabled(
+                            view as AvoidSoftInputView,
+                            value as Boolean? ?: true
+                        )
+                    "hideAnimationDelay" ->
+                        mViewManager.setHideAnimationDelay(
+                            view as AvoidSoftInputView,
+                            (value as Double?)?.toInt() ?: 300
+                        )
+                    "hideAnimationDuration" ->
+                        mViewManager.setHideAnimationDuration(
+                            view as AvoidSoftInputView,
+                            (value as Double?)?.toInt() ?: 220
+                        )
+                    "showAnimationDelay" ->
+                        mViewManager.setShowAnimationDelay(
+                            view as AvoidSoftInputView,
+                            (value as Double?)?.toInt() ?: 0
+                        )
+                    "showAnimationDuration" ->
+                        mViewManager.setShowAnimationDuration(
+                            view as AvoidSoftInputView,
+                            (value as Double?)?.toInt() ?: 660
+                        )
+                    else -> super.setProperty(view, propName, value)
+                }
+            }
 
-    // ReactViewManager is not generic, so it doesn't let to pass any view that extends
-    // ReactViewGroup
-    // However, ReactViewManager does not use any delegate, so we can skip it and handle props here
-    override fun getDelegate(): ViewManagerDelegate<ReactViewGroup>? = null
+            override fun receiveCommand(
+                view: ReactViewGroup,
+                commandName: String,
+                args: ReadableArray?
+            ) {
+                super.receiveCommand(view, commandName, args)
+            }
+        }
+
+    override fun getName() = AvoidSoftInputView.NAME
+
+    override fun getDelegate() = delegate
 
     override fun createViewInstance(reactContext: ThemedReactContext): AvoidSoftInputView {
         return AvoidSoftInputView(reactContext)
@@ -74,18 +119,17 @@ class AvoidSoftInputViewManager :
     }
 
     override fun getExportedCustomDirectEventTypeConstants(): MutableMap<String, Any> {
-        return MapBuilder.of(
-            AvoidSoftInputAppliedOffsetChangedEvent.NAME,
-            MapBuilder.of(
-                "registrationName",
-                AvoidSoftInputView.ON_SOFT_INPUT_APPLIED_OFFSET_CHANGE
-            ),
-            AvoidSoftInputHeightChangedEvent.NAME,
-            MapBuilder.of("registrationName", AvoidSoftInputView.ON_SOFT_INPUT_HEIGHT_CHANGE),
-            AvoidSoftInputHiddenEvent.NAME,
-            MapBuilder.of("registrationName", AvoidSoftInputView.ON_SOFT_INPUT_HIDDEN),
-            AvoidSoftInputShownEvent.NAME,
-            MapBuilder.of("registrationName", AvoidSoftInputView.ON_SOFT_INPUT_SHOWN)
+        return hashMapOf(
+            AvoidSoftInputAppliedOffsetChangedEvent.NAME to
+                hashMapOf(
+                    "registrationName" to AvoidSoftInputView.ON_SOFT_INPUT_APPLIED_OFFSET_CHANGE
+                ),
+            AvoidSoftInputHeightChangedEvent.NAME to
+                hashMapOf("registrationName" to AvoidSoftInputView.ON_SOFT_INPUT_HEIGHT_CHANGE),
+            AvoidSoftInputHiddenEvent.NAME to
+                hashMapOf("registrationName" to AvoidSoftInputView.ON_SOFT_INPUT_HIDDEN),
+            AvoidSoftInputShownEvent.NAME to
+                hashMapOf("registrationName" to AvoidSoftInputView.ON_SOFT_INPUT_SHOWN)
         )
     }
 }

@@ -1,6 +1,6 @@
 package com.reactnativeavoidsoftinput
 
-import com.facebook.react.common.MapBuilder
+import com.facebook.react.module.annotations.ReactModule
 import com.facebook.react.uimanager.ThemedReactContext
 import com.facebook.react.uimanager.annotations.ReactProp
 import com.facebook.react.views.view.ReactViewGroup
@@ -10,6 +10,7 @@ import com.reactnativeavoidsoftinput.events.AvoidSoftInputHeightChangedEvent
 import com.reactnativeavoidsoftinput.events.AvoidSoftInputHiddenEvent
 import com.reactnativeavoidsoftinput.events.AvoidSoftInputShownEvent
 
+@ReactModule(name = AvoidSoftInputView.NAME)
 class AvoidSoftInputViewManager : ReactViewManager() {
     override fun getName(): String {
         return AvoidSoftInputView.NAME
@@ -66,18 +67,17 @@ class AvoidSoftInputViewManager : ReactViewManager() {
     }
 
     override fun getExportedCustomDirectEventTypeConstants(): MutableMap<String, Any> {
-        return MapBuilder.of(
-            AvoidSoftInputAppliedOffsetChangedEvent.NAME,
-            MapBuilder.of(
-                "registrationName",
-                AvoidSoftInputView.ON_SOFT_INPUT_APPLIED_OFFSET_CHANGE
-            ),
-            AvoidSoftInputHeightChangedEvent.NAME,
-            MapBuilder.of("registrationName", AvoidSoftInputView.ON_SOFT_INPUT_HEIGHT_CHANGE),
-            AvoidSoftInputHiddenEvent.NAME,
-            MapBuilder.of("registrationName", AvoidSoftInputView.ON_SOFT_INPUT_HIDDEN),
-            AvoidSoftInputShownEvent.NAME,
-            MapBuilder.of("registrationName", AvoidSoftInputView.ON_SOFT_INPUT_SHOWN)
+        return hashMapOf(
+            AvoidSoftInputAppliedOffsetChangedEvent.NAME to
+                hashMapOf(
+                    "registrationName" to AvoidSoftInputView.ON_SOFT_INPUT_APPLIED_OFFSET_CHANGE
+                ),
+            AvoidSoftInputHeightChangedEvent.NAME to
+                hashMapOf("registrationName" to AvoidSoftInputView.ON_SOFT_INPUT_HEIGHT_CHANGE),
+            AvoidSoftInputHiddenEvent.NAME to
+                hashMapOf("registrationName" to AvoidSoftInputView.ON_SOFT_INPUT_HIDDEN),
+            AvoidSoftInputShownEvent.NAME to
+                hashMapOf("registrationName" to AvoidSoftInputView.ON_SOFT_INPUT_SHOWN)
         )
     }
 }

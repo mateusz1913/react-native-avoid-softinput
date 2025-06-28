@@ -74,6 +74,7 @@ using namespace facebook::react;
 
 - (void)prepareForRecycle
 {
+    [super prepareForRecycle];
     [self cleanupManager];
 }
 
