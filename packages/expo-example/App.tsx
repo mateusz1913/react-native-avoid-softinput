@@ -7,6 +7,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Navigation } from './src/navigation';
 
 const App = () => {
+  // DUMMY
   return (
     <GestureHandlerRootView style={styles.rootView}>
       <SafeAreaProvider>
