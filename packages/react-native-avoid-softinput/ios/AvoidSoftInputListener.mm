@@ -92,6 +92,14 @@
     BOOL isOrientationChange = screenHeight != previousScreenHeight;
 
     CGFloat newSoftInputHeight = screenHeight - softInputUserInfo.CGRectValue.origin.y;
+
+    /// https://github.com/mateusz1913/react-native-avoid-softinput/issues/226
+    /// The frame can be zero, when UIAccessibility.prefersCrossFadeTransitions setting is enabled
+    /// In that case, let's default to "closed" keyboard value
+    if (softInputUserInfo.CGRectValue.origin.y == 0) {
+        newSoftInputHeight = 0;
+    }
+
     // notification begin frame info is not reliable, so instead get previous cached value
     CGFloat oldSoftInputHeight = previousSoftInputHeight;
 
