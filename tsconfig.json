@@ -1,7 +1,10 @@
 {
   "extends": "expo/tsconfig.base",
   "compilerOptions": {
-    "strict": true
+    "strict": true,
+    "paths": {
+      "react-native-avoid-softinput": ["./packages/react-native-avoid-softinput/src/index"]
+    }
   },
-  "exclude": ["packages/react-native-avoid-softinput/lib/**/*"]
+  "exclude": ["packages/react-native-avoid-softinput/lib/**/*", "docs"]
 }

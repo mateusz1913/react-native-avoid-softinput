@@ -12,8 +12,8 @@ jobs:
     name: Lint ObjC
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/cache@v3
+      - uses: actions/checkout@v4
+      - uses: actions/cache@v4
         with:
           path: "**/node_modules"
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
@@ -24,7 +24,6 @@ jobs:
           registry-url: "https://registry.npmjs.org"
           cache-dependency-path: "**/yarn.lock"
       - run: yarn
-      - run: yarn install:pods
       - name: ClangFormat
         run: |
           #!/bin/bash

@@ -6,7 +6,7 @@
     ]
   },
   "scripts": {
-    "typescript": "tsc --noEmit -p packages/expo-example/tsconfig.json && tsc --noEmit -p packages/react-native-avoid-softinput/tsconfig.json",
+    "typescript": "tsc --noEmit",
     "lint:js": "eslint \"**/*.{js,ts,tsx}\" && prettier --config .prettierrc.js \"packages/**/*.{js,ts,tsx}\"",
     "lint:android": "./packages/react-native-avoid-softinput/android/gradlew -p packages/react-native-avoid-softinput/android spotlessCheck --quiet",
     "lint:ios:objc": "clang-format --dry-run -i ./packages/react-native-avoid-softinput/ios/*.{h,mm}",

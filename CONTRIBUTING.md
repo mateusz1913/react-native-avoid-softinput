@@ -7,7 +7,7 @@ We want this community to be friendly and respectful to each other. Please follo
 This project is a monorepo, which uses [yarn workspaces](https://classic.yarnpkg.com/lang/en/docs/workspaces/) and is divided into:
 
 - `docs` - contains library's Docusaurus documentation
-- `packages/example` - contains mobile app example
+- `packages/expo-example` - contains mobile app example
 - `packages/react-native-avoid-softinput` - contains library code
 
 ## Development workflow
@@ -20,21 +20,24 @@ To get started with the project, run `yarn` in the root directory to install the
 yarn
 ```
 
-While developing, you can run the [example app](/packages/example/) to test your changes. Any changes you make in your library's JavaScript code will be reflected in the example app without a rebuild. If you change any native code, then you'll need to rebuild the example app.
+While developing, you can run the [example app](/packages/expo-example/) to test your changes. Any changes you make in your library's JavaScript code will be reflected in the example app without a rebuild. If you change any native code, then you'll need to rebuild the example app.
 
-To start the packager, run `cd packages/example` and then run `yarn start`
+```sh
+cd packages/expo-example
+yarn prebuild
+```
 
 To run the example app on Android:
 
 ```sh
-cd packages/example
+cd packages/expo-example
 yarn android
 ```
 
 To run the example app on iOS:
 
 ```sh
-cd packages/example
+cd packages/expo-example
 yarn ios
 ```
 
@@ -53,11 +56,10 @@ yarn format:js
 
 To edit the Objective-C files
 
-- install Pods with `yarn install:pods`
-- open XCode with
+- install Pods and open XCode with
 
 ```sh
-cd packages/example
+cd packages/expo-example
 xed ios
 ```
 
@@ -65,7 +67,7 @@ xed ios
 
 To edit the Kotlin files:
 
-- open `packages/example/android` in Android Studio and find the source files at `react-native-avoid-softinput` under `Android`.
+- open `packages/expo-example/android` in Android Studio and find the source files at `react-native-avoid-softinput` under `Android`.
 
 To run Docusaurus documentation locally, run the following:
 
@@ -140,8 +142,6 @@ The `package.json` file contains various scripts for common tasks:
 - `yarn format:android`: format (Spotless/Ktfmt) all Kotlin/Java files.
 - `yarn format:ios:objc`: format (ClangFormat) all ObjC/ObjC++ files (install [ClangFormat](https://clang.llvm.org/) e.g. with Homebrew).
 - `yarn release` release library to npm.
-- `yarn install:pods`: setup project's pods.
-- `yarn install:pods:fabric`: setup project's pods with new arch.
 - `yarn reset`: clean all project's dependencies and pods.
 - `yarn reset:node_modules`: clean all project's dependencies.
 - `yarn reset:pods`: clean all project's pods.
