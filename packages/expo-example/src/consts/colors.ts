@@ -1,0 +1,14 @@
+export const backdropColor = 'rgba(0,0,0,0.5)';
+export const blackColor = '#000';
+export const buttonBackground = '#2196F3';
+export const buttonLabelColor = '#007AFF';
+export const buttonRipple = '#2155FF';
+export const closeButtonRipple = '#CCC';
+export const lightGrayColor = 'lightgray';
+export const modalBackground = '#00000033';
+export const royalblueColor = 'royalblue';
+export const separatorColor = '#888';
+export const spacerColor = 'pink';
+export const textFieldPlaceholderColor = '#2E8555';
+export const transparentColor = 'transparent';
+export const whiteColor = '#FFF';

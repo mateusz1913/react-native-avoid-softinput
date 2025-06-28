@@ -3,5 +3,5 @@
   "compilerOptions": {
     "strict": true
   },
-  "exclude": ["lib/**/*"]
+  "exclude": ["packages/react-native-avoid-softinput/lib/**/*"]
 }
