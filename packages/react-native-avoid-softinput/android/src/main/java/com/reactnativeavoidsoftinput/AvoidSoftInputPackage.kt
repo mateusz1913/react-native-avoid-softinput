@@ -1,6 +1,6 @@
 package com.reactnativeavoidsoftinput
 
-import com.facebook.react.TurboReactPackage
+import com.facebook.react.BaseReactPackage
 import com.facebook.react.bridge.NativeModule
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.module.annotations.ReactModule
@@ -9,7 +9,7 @@ import com.facebook.react.module.model.ReactModuleInfoProvider
 import com.facebook.react.turbomodule.core.interfaces.TurboModule
 import com.facebook.react.uimanager.ViewManager
 
-class AvoidSoftInputPackage : TurboReactPackage() {
+class AvoidSoftInputPackage : BaseReactPackage() {
     override fun getModule(name: String, reactContext: ReactApplicationContext): NativeModule? {
         return when (name) {
             AvoidSoftInputModuleImpl.NAME -> AvoidSoftInputModule(reactContext)
