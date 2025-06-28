@@ -77,7 +77,8 @@
       "tagName": "v${version}"
     },
     "npm": {
-      "publish": true
+      "publish": true,
+      "versionArgs": ["--workspaces-update=false"]
     },
     "github": {
       "release": true
