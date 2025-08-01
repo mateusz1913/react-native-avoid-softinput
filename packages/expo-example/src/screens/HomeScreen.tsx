@@ -45,6 +45,11 @@ const DATA: Array<Example> = [
     route: ROUTES.KeyboardType,
   },
   {
+    description: 'Learn how to handle text fields inside scroll views',
+    label: 'Long text',
+    route: ROUTES.LongText,
+  },
+  {
     description: 'Learn how to handle text fields rendered inside modal',
     label: 'Modal',
     route: ROUTES.Modal,

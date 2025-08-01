@@ -6,6 +6,7 @@ export const ROUTES = Object.freeze({
   EnabledViewProp: 'EnabledViewProp',
   Form: 'Form',
   KeyboardType: 'KeyboardType',
+  LongText: 'LongText',
   Modal: 'Modal',
   ModalFormSheet: 'ModalFormSheet',
   PasswordForm: 'PasswordForm',

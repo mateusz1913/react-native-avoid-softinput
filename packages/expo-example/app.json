@@ -25,7 +25,16 @@
       "package": "com.reactnativeavoidsoftinput.expoexample"
     },
     "plugins": [
-      "./withShowTime.js"
+      "./withShowTime.js",
+      [
+        "react-native-edge-to-edge",
+        {
+          "android": {
+            "parentTheme": "Default",
+            "enforceNavigationBarContrast": false
+          }
+        }
+      ]
     ]
   }
 }
