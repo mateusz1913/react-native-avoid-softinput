@@ -9,6 +9,7 @@ export const modalBackground = '#00000033';
 export const royalblueColor = 'royalblue';
 export const separatorColor = '#888';
 export const spacerColor = 'pink';
+export const textFieldBorderColor = '#2155FF';
 export const textFieldPlaceholderColor = '#2E8555';
 export const transparentColor = 'transparent';
 export const whiteColor = '#FFF';

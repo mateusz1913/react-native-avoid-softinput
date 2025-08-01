@@ -7,6 +7,7 @@ import { EnabledViewPropExample } from '../screens/EnabledViewPropExample';
 import { FormExample } from '../screens/FormExample';
 import { HomeScreen } from '../screens/HomeScreen';
 import { KeyboardTypeExample } from '../screens/KeyboardTypeExample';
+import { LongTextExample } from '../screens/LongTextExample';
 import { ModalExample } from '../screens/ModalExample';
 import { ModalFormSheetExample } from '../screens/ModalFormSheetExample';
 import { PasswordFormExample } from '../screens/PasswordFormExample';
@@ -29,6 +30,7 @@ export const Navigation = () => {
       <Stack.Screen name={ROUTES.EnabledViewProp} component={EnabledViewPropExample} />
       <Stack.Screen name={ROUTES.Form} component={FormExample} />
       <Stack.Screen name={ROUTES.KeyboardType} component={KeyboardTypeExample} />
+      <Stack.Screen name={ROUTES.LongText} component={LongTextExample} />
       <Stack.Screen name={ROUTES.Modal} component={ModalExample} />
       <Stack.Screen name={ROUTES.ModalFormSheet} component={ModalFormSheetExample} />
       <Stack.Screen name={ROUTES.PasswordForm} component={PasswordFormExample} />
