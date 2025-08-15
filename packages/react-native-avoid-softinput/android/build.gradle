@@ -1,3 +1,5 @@
+import groovy.json.JsonSlurper
+
 buildscript {
   // Buildscript is evaluated before everything else so we can't use getExtOrDefault
   def kotlin_version = rootProject.ext.has('kotlinVersion') ? rootProject.ext.get('kotlinVersion') : project.properties['AvoidSoftinput_kotlinVersion']
@@ -56,6 +58,31 @@ def resolveReactNativeDirectory() {
   throw new GradleException(
     "[RNAvoidSoftInput] Unable to resolve react-native location in node_modules. You should add project extension property (in `app/build.gradle`) `REACT_NATIVE_NODE_MODULES_DIR` with path to react-native."
   )
+}
+
+def getReactNativeVersion() {
+  def reactNativeDirectory = resolveReactNativeDirectory()
+  def reactNativePackageJsonFile = file("${reactNativeDirectory}/package.json")
+  def packageSlurper = new JsonSlurper()
+  def reactNativePackageJson = packageSlurper.parseText(reactNativePackageJsonFile.text)
+  def reactNativeVersion = reactNativePackageJson.version
+
+  return reactNativeVersion.tokenize('-')[0].tokenize('.')
+}
+
+def getReactNativeMinorVersion() {
+  List reactNativeVersionSegments = getReactNativeVersion()
+  return reactNativeVersionSegments[1].toInteger()
+}
+
+def getReactNativeVersionFlavor() {
+  int minorVersion = getReactNativeMinorVersion()
+
+  if (minorVersion >= 81) {
+    return "reactnative81"
+  } else if (minorVersion >= 77) {
+    return "reactnative77"
+  }
 }
 
 if (isNewArchitectureEnabled()) {
@@ -139,6 +166,26 @@ android {
   compileOptions {
     sourceCompatibility JavaVersion.VERSION_1_8
     targetCompatibility JavaVersion.VERSION_1_8
+  }
+
+  flavorDimensions "RNAS-RNVersion"
+  productFlavors {
+    reactnative77 {
+      dimension "RNAS-RNVersion"
+      buildConfigField("int", "RNAS_RN_V_MINOR", "77")
+    }
+    reactnative81 {
+      dimension "RNAS-RNVersion"
+      buildConfigField("int", "RNAS_RN_V_MINOR", "81")
+    }
+  }
+
+  def flavor = getReactNativeVersionFlavor()
+  variantFilter { variant ->
+    def names = variant.flavors*.name
+    if (!names.contains(flavor)) {
+      setIgnore(true)
+    }
   }
 }
 

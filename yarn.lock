@@ -11320,8 +11320,8 @@ __metadata:
     release-it: "npm:19.0.3"
     typescript: "npm:5.8.3"
   peerDependencies:
-    react: ">=18.3.1"
-    react-native: ">=0.76.0"
+    react: ">=19.0.0"
+    react-native: ">=0.78.0"
   languageName: unknown
   linkType: soft
 
