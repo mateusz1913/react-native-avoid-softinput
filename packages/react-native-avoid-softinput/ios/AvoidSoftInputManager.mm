@@ -6,6 +6,13 @@
 @implementation AvoidSoftInputManager {
     AvoidSoftInputAnimationHandler *animationHandler;
     AvoidSoftInputListener *listener;
+    CGFloat currentNewSoftInputHeight;
+    BOOL isDebounceActive;
+}
+
++ (int64_t)animationDebounceTimeout
+{
+    return (int64_t)(0.048 * NSEC_PER_SEC);
 }
 
 - (instancetype)init
@@ -16,6 +23,8 @@
         animationHandler.delegate = self;
         listener = [AvoidSoftInputListener new];
         listener.delegate = self;
+        currentNewSoftInputHeight = 0;
+        isDebounceActive = NO;
     }
     return self;
 }
@@ -119,9 +128,40 @@
                           isOrientationChange:(BOOL)isOrientationChange
 {
     [self.delegate onHeightChanged:newSoftInputHeight];
-    [animationHandler startAnimationFrom:oldSoftInputHeight
-                                      to:newSoftInputHeight
-                   withOrientationChange:isOrientationChange];
+    [self debounceAnimation:oldSoftInputHeight
+         newSoftInputHeight:newSoftInputHeight
+        isOrientationChange:isOrientationChange];
+}
+
+- (void)debounceAnimation:(CGFloat)oldSoftInputHeight
+       newSoftInputHeight:(CGFloat)newSoftInputHeight
+      isOrientationChange:(BOOL)isOrientationChange
+{
+    // Save latest target value
+    currentNewSoftInputHeight = newSoftInputHeight;
+    // If animation call was already scheduled, let's return early
+    if (isDebounceActive) {
+        return;
+    }
+    // Activated debounce flag
+    isDebounceActive = YES;
+    __weak AvoidSoftInputManager *weakSelf = self;
+    // Debounce animation call for 48ms and invoke with the latest target value
+    dispatch_after(
+        dispatch_time(DISPATCH_TIME_NOW, [AvoidSoftInputManager animationDebounceTimeout]),
+        dispatch_get_main_queue(),
+        ^{
+          AvoidSoftInputManager *strongSelf = weakSelf;
+          if (!strongSelf) {
+              return;
+          }
+          CGFloat targetHeight = strongSelf->currentNewSoftInputHeight;
+          [strongSelf->animationHandler startAnimationFrom:oldSoftInputHeight
+                                                        to:targetHeight
+                                     withOrientationChange:isOrientationChange];
+          strongSelf->isDebounceActive = NO;
+          strongSelf->currentNewSoftInputHeight = 0;
+        });
 }
 
 @end
