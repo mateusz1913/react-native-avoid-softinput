@@ -37,12 +37,12 @@ class AvoidSoftInputViewManager : ReactViewManager() {
     }
 
     @ReactProp(name = "easing")
-    fun setEasing(view: AvoidSoftInputView, easing: String) {
+    fun setEasing(view: AvoidSoftInputView, easing: String?) {
         view.setEasing(easing)
     }
 
     @ReactProp(name = "enabled", defaultBoolean = true)
-    fun setIsEnabled(view: AvoidSoftInputView, enabled: Boolean) {
+    fun setEnabled(view: AvoidSoftInputView, enabled: Boolean) {
         view.setIsEnabled(enabled)
     }
 
