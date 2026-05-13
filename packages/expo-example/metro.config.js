@@ -22,5 +22,7 @@ config.resolver.nodeModulesPaths = [
 ];
 // 3. Force Metro to resolve (sub)dependencies only from the `nodeModulesPaths`
 config.resolver.disableHierarchicalLookup = true;
+// 4. Expo app fails to run when package exports are enabled (and I don't want to spend time now to find why)
+config.resolver.unstable_enablePackageExports = false;
 
 module.exports = wrapWithReanimatedMetroConfig(config);

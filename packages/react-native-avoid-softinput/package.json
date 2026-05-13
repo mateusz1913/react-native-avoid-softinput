@@ -60,12 +60,12 @@
   },
   "devDependencies": {
     "@release-it/conventional-changelog": "^11.0.0",
-    "@types/react": "19.0.10",
-    "react": "19.0.0",
-    "react-native": "0.79.4",
+    "@types/react": "~19.2.10",
+    "react": "19.2.6",
+    "react-native": "0.83.6",
     "react-native-builder-bob": "^0.41.0",
     "release-it": "^20.0.1",
-    "typescript": "5.8.3"
+    "typescript": "~5.9.2"
   },
   "peerDependencies": {
     "react": ">=19.0.0",
