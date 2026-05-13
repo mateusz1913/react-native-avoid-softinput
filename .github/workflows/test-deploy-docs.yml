@@ -1,0 +1,30 @@
+name: test-deploy-docs
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "docs/**"
+      - "packages/react-native-avoid-softinput/**"
+      - ".github/workflows/test-deploy-docs.yml"
+
+jobs:
+  prepare-test-docs:
+    name: Prepare test docs
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd #v6.0.2
+        with:
+          fetch-depth: 0
+
+      - name: Setup JS
+        uses: ./.github/actions/setup-js
+        with:
+          enable-cache: false
+
+      - name: Install Docs npm packages
+        run: yarn docs/ install --immutable
+
+      - name: Build Docs artifacts
+        run: yarn docs/ build

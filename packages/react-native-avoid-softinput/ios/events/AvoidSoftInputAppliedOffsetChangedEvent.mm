@@ -51,7 +51,7 @@
     return @[
         self.viewTag,
         RCTNormalizeInputEventName(self.eventName),
-        @{ AvoidSoftInputConstants.softInputAppliedOffsetKey: @(eventOffset) }
+        @{AvoidSoftInputConstants.softInputAppliedOffsetKey : @(eventOffset)}
     ];
 }
 

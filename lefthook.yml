@@ -21,14 +21,7 @@ pre-commit:
       # if any ObjC/ObjC++ file changed, run ObjC linter
       files: git diff --name-only --cached
       glob: "*.{h,m,mm,cpp}"
-      run: |
-        #!/bin/bash
-        if command -v clang-format &> /dev/null
-        then
-          yarn lint:ios:objc --Werror
-        else
-          echo "ClangFormat is not installed. Skipping"
-        fi
+      run: ./scripts/clang-format.sh lint
 commit-msg:
   commands:
     commitlint:

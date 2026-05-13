@@ -227,11 +227,10 @@
         }
         onAnimate:^{
           [primaryAnimator setupAnimationTimersWithRootView:rootView];
-          [rootView setFrame:CGRectMake(
-                                 rootView.frame.origin.x,
-                                 -newBottomOffset,
-                                 rootView.frame.size.width,
-                                 rootView.frame.size.height)];
+          [rootView setFrame:CGRectMake(rootView.frame.origin.x,
+                                        -newBottomOffset,
+                                        rootView.frame.size.width,
+                                        rootView.frame.size.height)];
         }
         onComplete:^{
           [primaryAnimator completeAnimationWithNewBottomOffset:newBottomOffset shouldSaveCurrentAppliedOffset:NO];
@@ -263,11 +262,10 @@
           [self->hideAnimator setupAnimationTimersWithRootView:rootView];
 
           /// at the end, origin.y should be equal to 0
-          [rootView setFrame:CGRectMake(
-                                 rootView.frame.origin.x,
-                                 rootView.frame.origin.y + self->bottomOffset,
-                                 rootView.frame.size.width,
-                                 rootView.frame.size.height)];
+          [rootView setFrame:CGRectMake(rootView.frame.origin.x,
+                                        rootView.frame.origin.y + self->bottomOffset,
+                                        rootView.frame.size.width,
+                                        rootView.frame.size.height)];
         }
         onComplete:^{
           if (initialRootViewFrameOriginY == rootView.frame.origin.y) {
@@ -309,11 +307,10 @@
         onAnimate:^{
           [self->showAnimator setupAnimationTimersWithRootView:rootView];
 
-          [rootView setFrame:CGRectMake(
-                                 rootView.frame.origin.x,
-                                 -self->bottomOffset,
-                                 rootView.frame.size.width,
-                                 rootView.frame.size.height)];
+          [rootView setFrame:CGRectMake(rootView.frame.origin.x,
+                                        -self->bottomOffset,
+                                        rootView.frame.size.width,
+                                        rootView.frame.size.height)];
         }
         onComplete:^{
           [self->showAnimator completeAnimationWithNewBottomOffset:self->bottomOffset
@@ -445,8 +442,8 @@
         onComplete:^{
           BOOL areContentInsetsEqual =
               UIEdgeInsetsEqualToEdgeInsets(initialScrollViewContentInset, scrollView.contentInset);
-          BOOL areScrollIndicatorInsetsEqual = UIEdgeInsetsEqualToEdgeInsets(
-              initialScrollViewScrollIndicatorInsets, scrollView.verticalScrollIndicatorInsets);
+          BOOL areScrollIndicatorInsetsEqual = UIEdgeInsetsEqualToEdgeInsets(initialScrollViewScrollIndicatorInsets,
+                                                                             scrollView.verticalScrollIndicatorInsets);
           if (areContentInsetsEqual && areScrollIndicatorInsetsEqual) {
               /// https://github.com/mateusz1913/react-native-avoid-softinput/issues/54
               /// Handle case when user tries to swipe-to-dismiss screen, but finally aborts it
@@ -527,8 +524,8 @@
     CGFloat firstResponderDistanceToBottom =
         [rootView getScreenHeight] - firstResponderBottomEdgeY - rootView.safeAreaInsets.bottom;
 
-    return MIN(
-        MAX(softInputHeight - firstResponderDistanceToBottom, 0), firstResponderPosition.y - scrollViewPosition.y);
+    return MIN(MAX(softInputHeight - firstResponderDistanceToBottom, 0),
+               firstResponderPosition.y - scrollViewPosition.y);
 }
 
 @end

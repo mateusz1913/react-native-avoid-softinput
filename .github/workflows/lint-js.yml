@@ -27,21 +27,23 @@ jobs:
     name: Lint JS/TS
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/cache@v4
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd #v6.0.2
         with:
-          path: "**/node_modules"
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
-      - name: Install modules
-        uses: actions/setup-node@v4
+          fetch-depth: 0
+
+      - name: Setup JS
+        uses: ./.github/actions/setup-js
         with:
-          cache: "yarn"
-          registry-url: "https://registry.npmjs.org"
-          cache-dependency-path: "**/yarn.lock"
-      - run: yarn
+          enable-cache: true
       - name: Lint JS/TS
         run: yarn lint:js
+        shell: bash
+
       - name: TypeScript
         run: yarn typescript
+        shell: bash
+
       - name: Prepare library
         run: yarn prepare
+        shell: bash

@@ -41,7 +41,7 @@
     return @[
         self.viewTag,
         RCTNormalizeInputEventName(self.eventName),
-        @{ AvoidSoftInputConstants.softInputHeightKey: @(eventHeight) }
+        @{AvoidSoftInputConstants.softInputHeightKey : @(eventHeight)}
     ];
 }
 

@@ -147,21 +147,20 @@
     isDebounceActive = YES;
     __weak AvoidSoftInputManager *weakSelf = self;
     // Debounce animation call for 48ms and invoke with the latest target value
-    dispatch_after(
-        dispatch_time(DISPATCH_TIME_NOW, [AvoidSoftInputManager animationDebounceTimeout]),
-        dispatch_get_main_queue(),
-        ^{
-          AvoidSoftInputManager *strongSelf = weakSelf;
-          if (!strongSelf) {
-              return;
-          }
-          CGFloat targetHeight = strongSelf->currentNewSoftInputHeight;
-          [strongSelf->animationHandler startAnimationFrom:oldSoftInputHeight
-                                                        to:targetHeight
-                                     withOrientationChange:isOrientationChange];
-          strongSelf->isDebounceActive = NO;
-          strongSelf->currentNewSoftInputHeight = 0;
-        });
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, [AvoidSoftInputManager animationDebounceTimeout]),
+                   dispatch_get_main_queue(),
+                   ^{
+                     AvoidSoftInputManager *strongSelf = weakSelf;
+                     if (!strongSelf) {
+                         return;
+                     }
+                     CGFloat targetHeight = strongSelf->currentNewSoftInputHeight;
+                     [strongSelf->animationHandler startAnimationFrom:oldSoftInputHeight
+                                                                   to:targetHeight
+                                                withOrientationChange:isOrientationChange];
+                     strongSelf->isDebounceActive = NO;
+                     strongSelf->currentNewSoftInputHeight = 0;
+                   });
 }
 
 @end
