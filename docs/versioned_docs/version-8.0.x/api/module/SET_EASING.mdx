@@ -1,0 +1,22 @@
+---
+id: set-easing
+title: setEasing
+sidebar_label: setEasing
+keywords: [react-native-avoid-softinput, setEasing, module]
+---
+
+Use `setEasing` method, to customize animation's easing, available values are `easeIn`, `easeInOut`, `easeOut` and `linear`.
+
+### Parameters
+
+| Type                                             | Required | Description        |
+| ------------------------------------------------ | -------- | ------------------ |
+| `easeIn` or `easeInOut` or `easeOut` or `linear` | yes      | animation's easing |
+
+### Example
+
+```ts
+import { AvoidSoftInput } from "react-native-avoid-softinput";
+
+AvoidSoftInput.setEasing("easeInOut"); // Changes animation's easing to `easeInOut` curve
+```

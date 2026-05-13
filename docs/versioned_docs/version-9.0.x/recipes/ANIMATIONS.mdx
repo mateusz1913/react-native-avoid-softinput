@@ -1,0 +1,129 @@
+---
+id: recipes-animations
+title: Animations recipe
+sidebar_label: Animations
+keywords: [react-native-avoid-softinput, animations, recipe]
+---
+
+### Animations based on AvoidSoftInput module events
+
+You can use `AvoidSoftInput.onSoftInputShown`, `AvoidSoftInput.onSoftInputHidden`, `AvoidSoftInput.onSoftInputHeightChange` and `AvoidSoftInput.onSoftInputAppliedOffsetChange` methods to listen for soft input events.
+
+If you plan to use those methods in `useEffect`, you can instead use shortcut hooks:
+
+- `useSoftInputShown`
+- `useSoftInputHidden`
+- `useSoftInputHeightChanged`
+- `useSoftInputAppliedOffsetChanged`
+
+Example
+
+```tsx
+const useAnimatedValue = (initialValue: number) => {
+  const animatedValue = useRef<Animated.Value>(null);
+
+  if (animatedValue.current === null) {
+    animatedValue.current = new Animated.Value(initialValue);
+  }
+
+  return animatedValue.current;
+}
+
+export const AnimationExample = () => {
+  /**
+   * You can make animations with React Native's Animated API or Reanimated library
+   */
+  const animatedValue = useAnimatedValue(0);
+
+  useSoftInputShown(({ softInputHeight }) => {
+    /**
+     * Animate based on event value
+     */
+    Animated.timing(animatedValue, {
+      toValue: softInputHeight,
+      duration: 1000,
+    }).start();
+  });
+
+  useSoftInputHidden(() => {
+    /**
+     * Animate based on event value
+     */
+    Animated.timing(animatedValue, {
+      toValue: 0,
+      duration: 1000,
+    }).start();
+  });
+
+  return (
+    <View>
+      // ... some JSX
+      <Animated.View /** apply animated style */>
+        // ... animated content
+      </Animated.View>
+      // ... some JSX
+    </View>
+  );
+};
+```
+
+### Animations based on AvoidSoftInputView callbacks
+
+`AvoidSoftInputView` receives events through `onSoftInputShown`, `onSoftInputHidden`, `onSoftInputHeightChange`, `onSoftInputAppliedOffsetChange` callbacks.
+
+Based on those callbacks, you can apply animations in similar way as when using `useSoftInputShown`, `useSoftInputHidden`, `useSoftInputHeightChanged` and `useSoftInputAppliedOffsetChanged` hooks.
+
+Additionally, when using Reanimated library from v2.3.0, you can create [custom event handlers](https://docs.swmansion.com/react-native-reanimated/docs/fundamentals/custom_events)
+
+```js
+export function useSoftInputAppliedOffsetHandler(handlers, dependencies) {
+  const { context, doDependenciesDiffer } = useHandler(handlers, dependencies);
+
+  return useEvent(
+    (event) => {
+      "worklet";
+      const { onSoftInputAppliedOffsetChange } = handlers;
+
+      if (
+        onSoftInputAppliedOffsetChange &&
+        event.eventName.endsWith("onSoftInputAppliedOffsetChange")
+      ) {
+        onSoftInputAppliedOffsetChange(event, context);
+      }
+    },
+    ["onSoftInputAppliedOffsetChange"],
+    doDependenciesDiffer
+  );
+}
+
+export function useSoftInputHandler(handlers, dependencies) {
+  const { context, doDependenciesDiffer } = useHandler(handlers, dependencies);
+
+  return useEvent(
+    (event) => {
+      "worklet";
+      const { onSoftInputHidden, onSoftInputShown, onSoftInputHeightChange } =
+        handlers;
+
+      if (onSoftInputHidden && event.eventName.endsWith("onSoftInputHidden")) {
+        onSoftInputHidden(event, context);
+      }
+
+      if (onSoftInputShown && event.eventName.endsWith("onSoftInputShown")) {
+        onSoftInputShown(event, context);
+      }
+
+      if (
+        onSoftInputHeightChange &&
+        event.eventName.endsWith("onSoftInputHeightChange")
+      ) {
+        onSoftInputHeightChange(event, context);
+      }
+    },
+    ["onSoftInputHidden", "onSoftInputShown", "onSoftInputHeightChange"],
+    doDependenciesDiffer
+  );
+}
+```
+
+Check [example app](https://github.com/mateusz1913/react-native-avoid-softinput/tree/main/packages/mobile) for a detailed usage example.
