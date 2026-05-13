@@ -4,11 +4,7 @@
 #import "AvoidSoftInputAnimator.h"
 #import "AvoidSoftInputConstants.h"
 #import "AvoidSoftInputUtils.h"
-#if RCT_NEW_ARCH_ENABLED
 #import "AvoidSoftInputViewComponentView.h"
-#else
-#import "AvoidSoftInputView.h"
-#endif
 
 @implementation AvoidSoftInputAnimationHandler {
     AvoidSoftInputAnimator *hideAnimator;
@@ -106,11 +102,7 @@
 // MARK: Private methods
 - (BOOL)isCustomRootView
 {
-#if RCT_NEW_ARCH_ENABLED
     return [self.customView isKindOfClass:[AvoidSoftInputViewComponentView class]];
-#else
-    return [self.customView isKindOfClass:[AvoidSoftInputView class]];
-#endif
 }
 
 - (void)runAnimatorWithDuration:(double)duration

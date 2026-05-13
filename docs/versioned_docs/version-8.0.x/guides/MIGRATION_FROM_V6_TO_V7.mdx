@@ -1,0 +1,19 @@
+---
+id: migration_from_v6_to_v7
+title: Migration from v6 to v7
+sidebar_label: Migration from v6 to v7
+keywords: [react-native-avoid-softinput, migration]
+---
+
+## Migrate to [`react-native-edge-to-edge`](https://github.com/zoontek/react-native-edge-to-edge) to provide best support for Android 15 "edge to edge" mode
+
+Since v7, the library supports detection of `react-native-edge-to-edge`.
+Follow the [installation page](./INSTALLATION.mdx) for the recommended setup for keyboard handling on Android.
+Existing `AvoidSoftInput.setShouldMimicIOSBehavior` function is considered deprecated from v7 and will be removed in future major versions.
+
+```diff
+useEffect(() => {
+-  AvoidSoftInput.setShouldMimicIOSBehavior(true); // <---- Tell Android that library will handle keyboard insets manually to match iOS behavior
+  AvoidSoftInput.setEnabled(true); // <---- Enable module
+}, []);
+```

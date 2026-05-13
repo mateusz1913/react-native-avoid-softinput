@@ -1,0 +1,24 @@
+---
+id: use-soft-input-shown
+title: useSoftInputShown
+sidebar_label: useSoftInputShown
+keywords: [react-native-avoid-softinput, useSoftInputShown, react hooks]
+---
+
+`useSoftInputShown` is a shortcut for using `AvoidSoftInput.onSoftInputShown` method inside `useEffect`.
+
+### Parameters
+
+| Type                                                           | Required | Description                                                                 |
+| -------------------------------------------------------------- | -------- | --------------------------------------------------------------------------- |
+| (\{ softInputHeight \}: \{ softInputHeight: number \}) => void | yes      | function called with current soft input height when soft input is displayed |
+
+### Example
+
+```ts
+import { useSoftInputShown } from "react-native-avoid-softinput";
+
+useSoftInputShown(({ softInputHeight }) => {
+  // Do sth
+});
+```

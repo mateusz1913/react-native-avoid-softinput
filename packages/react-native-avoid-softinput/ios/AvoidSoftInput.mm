@@ -3,13 +3,6 @@
 #import "AvoidSoftInputManager.h"
 #import "RCTConvert+UIViewAnimationOptions.h"
 
-#if RCT_NEW_ARCH_ENABLED
-#import "rnavoidsoftinput.h"
-
-@interface AvoidSoftInput () <NativeAvoidSoftInputModuleSpec>
-@end
-#endif
-
 @interface AvoidSoftInput () <AvoidSoftInputManagerDelegate>
 @end
 
@@ -20,7 +13,10 @@
     BOOL hasListeners;
 }
 
-RCT_EXPORT_MODULE(AvoidSoftInput)
++ (NSString *)moduleName
+{
+    return @"AvoidSoftInput";
+}
 
 + (BOOL)requiresMainQueueSetup
 {
@@ -124,49 +120,49 @@ RCT_EXPORT_MODULE(AvoidSoftInput)
 
 // MARK: Exposed methods
 
-RCT_EXPORT_METHOD(setEnabled : (BOOL)enabled)
+- (void)setEnabled:(BOOL)enabled
 {
     dispatch_async(dispatch_get_main_queue(), ^{
       [self.manager setIsEnabled:enabled];
     });
 }
 
-RCT_EXPORT_METHOD(setAvoidOffset : (double)offset)
+- (void)setAvoidOffset:(double)offset
 {
     dispatch_async(dispatch_get_main_queue(), ^{
       [self.manager setAvoidOffset:offset];
     });
 }
 
-RCT_EXPORT_METHOD(setEasing : (nonnull NSString *)easing)
+- (void)setEasing:(nonnull NSString *)easing
 {
     dispatch_async(dispatch_get_main_queue(), ^{
       [self.manager setEasing:[RCTConvert UIViewAnimationOptions:easing]];
     });
 }
 
-RCT_EXPORT_METHOD(setHideAnimationDelay : (nonnull NSNumber *)delay)
+- (void)setHideAnimationDelay:(nonnull NSNumber *)delay
 {
     dispatch_async(dispatch_get_main_queue(), ^{
       [self.manager setHideAnimationDelay:delay];
     });
 }
 
-RCT_EXPORT_METHOD(setHideAnimationDuration : (nonnull NSNumber *)duration)
+- (void)setHideAnimationDuration:(nonnull NSNumber *)duration
 {
     dispatch_async(dispatch_get_main_queue(), ^{
       [self.manager setHideAnimationDuration:duration];
     });
 }
 
-RCT_EXPORT_METHOD(setShowAnimationDelay : (nonnull NSNumber *)delay)
+- (void)setShowAnimationDelay:(nonnull NSNumber *)delay
 {
     dispatch_async(dispatch_get_main_queue(), ^{
       [self.manager setShowAnimationDelay:delay];
     });
 }
 
-RCT_EXPORT_METHOD(setShowAnimationDuration : (nonnull NSNumber *)duration)
+- (void)setShowAnimationDuration:(nonnull NSNumber *)duration
 {
     dispatch_async(dispatch_get_main_queue(), ^{
       [self.manager setShowAnimationDuration:duration];
@@ -203,12 +199,10 @@ RCT_EXPORT_METHOD(setShowAnimationDuration : (nonnull NSNumber *)duration)
     // NOOP - Android-only
 }
 
-#if RCT_NEW_ARCH_ENABLED
 - (std::shared_ptr<facebook::react::TurboModule>)getTurboModule:
     (const facebook::react::ObjCTurboModule::InitParams &)params
 {
     return std::make_shared<facebook::react::NativeAvoidSoftInputModuleSpecJSI>(params);
 }
-#endif
 
 @end

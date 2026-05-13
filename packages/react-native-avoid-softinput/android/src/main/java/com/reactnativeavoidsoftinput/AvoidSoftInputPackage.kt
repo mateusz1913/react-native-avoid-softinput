@@ -6,7 +6,6 @@ import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.module.annotations.ReactModule
 import com.facebook.react.module.model.ReactModuleInfo
 import com.facebook.react.module.model.ReactModuleInfoProvider
-import com.facebook.react.turbomodule.core.interfaces.TurboModule
 import com.facebook.react.uimanager.ViewManager
 
 class AvoidSoftInputPackage : BaseReactPackage() {
@@ -23,14 +22,7 @@ class AvoidSoftInputPackage : BaseReactPackage() {
         for (moduleClass in moduleList) {
             val reactModule = moduleClass.getAnnotation(ReactModule::class.java) ?: continue
             reactModuleInfoMap[reactModule.name] =
-                ReactModuleInfo(
-                    reactModule.name,
-                    moduleClass.name,
-                    true,
-                    reactModule.needsEagerInit,
-                    reactModule.isCxxModule,
-                    TurboModule::class.java.isAssignableFrom(moduleClass)
-                )
+                ReactModuleInfo(reactModule.name, moduleClass.name, true, false, false, true)
         }
         return ReactModuleInfoProvider { reactModuleInfoMap }
     }

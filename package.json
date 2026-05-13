@@ -35,14 +35,14 @@
   },
   "devDependencies": {
     "@callstack/eslint-config": "15.0.0",
-    "@commitlint/config-conventional": "19.8.1",
-    "@evilmartians/lefthook": "1.11.4",
-    "commitlint": "19.8.1",
-    "eslint": "9.29.0",
-    "jest": "30.0.2",
-    "pod-install": "0.3.9",
-    "prettier": "3.5.3",
-    "typescript": "5.8.3"
+    "@commitlint/config-conventional": "^21.0.1",
+    "@evilmartians/lefthook": "^2.1.6",
+    "commitlint": "^21.0.1",
+    "eslint": "^9.29.0",
+    "jest": "^30.4.2",
+    "pod-install": "^1.0.18",
+    "prettier": "^3.8.3",
+    "typescript": "~5.9.2"
   },
   "commitlint": {
     "extends": [

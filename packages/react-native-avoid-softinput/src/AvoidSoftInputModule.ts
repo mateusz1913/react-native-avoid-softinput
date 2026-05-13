@@ -1,5 +1,4 @@
+import myModule from './NativeAvoidSoftInputModule';
 import type { AvoidSoftInputNativeModuleType } from './types';
 
-const myModule: AvoidSoftInputNativeModuleType = require('./NativeAvoidSoftInputModule').default;
-
-export default myModule;
+export default myModule as AvoidSoftInputNativeModuleType;

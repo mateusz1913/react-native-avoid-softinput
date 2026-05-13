@@ -1,16 +1,8 @@
-#if RCT_NEW_ARCH_ENABLED
 #include <React/RCTSurfaceHostingProxyRootView.h>
-#else
-#include <React/RCTRootView.h>
-#endif
 
 #import "AvoidSoftInputUtils.h"
 
-#if RCT_NEW_ARCH_ENABLED
 #import "AvoidSoftInputViewComponentView.h"
-#else
-#import "AvoidSoftInputView.h"
-#endif
 
 @implementation UIViewController (AvoidSoftInputUtils)
 
@@ -26,11 +18,7 @@
 - (UIView *)getReactRootView
 {
     BOOL isRootView = NO;
-#if RCT_NEW_ARCH_ENABLED
     isRootView = [self.view isKindOfClass:[RCTSurfaceHostingProxyRootView class]];
-#else
-    isRootView = [self.view isKindOfClass:[RCTRootView class]];
-#endif
 
     if (isRootView && self.view.subviews.count > 0) {
         return self.view.subviews[0];
@@ -49,13 +37,7 @@
         return false;
     }
 
-    if ([self.superview
-#if RCT_NEW_ARCH_ENABLED
-            isKindOfClass:[AvoidSoftInputViewComponentView class]
-#else
-            isKindOfClass:[AvoidSoftInputView class]
-#endif
-    ]) {
+    if ([self.superview isKindOfClass:[AvoidSoftInputViewComponentView class]]) {
         return true;
     }
 

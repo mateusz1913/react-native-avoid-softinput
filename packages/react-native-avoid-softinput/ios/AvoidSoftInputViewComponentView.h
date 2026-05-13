@@ -1,5 +1,3 @@
-#if RCT_NEW_ARCH_ENABLED
-
 #import <React/RCTViewComponentView.h>
 #import <UIKit/UIKit.h>
 
@@ -14,5 +12,3 @@
 @property (nonatomic, copy) NSNumber *showAnimationDuration;
 
 @end
-
-#endif

@@ -2,8 +2,6 @@ require "json"
 
 package = JSON.parse(File.read(File.join(__dir__, "package.json")))
 
-new_arch_enabled = ENV['RCT_NEW_ARCH_ENABLED'] == '1'
-
 Pod::Spec.new do |s|
   s.name         = "ReactNativeAvoidSoftinput"
   s.version      = package["version"]
@@ -17,25 +15,10 @@ Pod::Spec.new do |s|
 
   s.source_files = "ios/**/*.{h,m,mm,cpp}"
 
-  if new_arch_enabled
-    s.pod_target_xcconfig    = {
-        "DEFINES_MODULE" => "YES",
-        "SWIFT_OBJC_INTERFACE_HEADER_NAME" => "ReactNativeAvoidSoftinput-Swift.h",
-        # This is handy when we want to detect if new arch is enabled in Swift code
-        # and can be used like:
-        # #if AVOID_SOFTINPUT_NEW_ARCH_ENABLED
-        # // do sth when new arch is enabled
-        # #else
-        # // do sth when old arch is enabled
-        # #endif
-        "OTHER_SWIFT_FLAGS" => "-DAVOID_SOFTINPUT_NEW_ARCH_ENABLED"
-    }
-  else
-    s.pod_target_xcconfig = {
+  s.pod_target_xcconfig    = {
       "DEFINES_MODULE" => "YES",
-      "SWIFT_OBJC_INTERFACE_HEADER_NAME" => "ReactNativeAvoidSoftinput-Swift.h"
-    }
-  end
+      "SWIFT_OBJC_INTERFACE_HEADER_NAME" => "ReactNativeAvoidSoftinput-Swift.h",
+  }
 
   install_modules_dependencies(s)
 end

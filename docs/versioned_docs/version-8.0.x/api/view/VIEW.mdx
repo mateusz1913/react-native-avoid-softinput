@@ -1,0 +1,48 @@
+---
+id: view
+title: AvoidSoftInputView
+sidebar_label: AvoidSoftInputView
+keywords: [react-native-avoid-softinput, AvoidSoftInputView, view]
+---
+
+Wrap your content inside `AvoidSoftInputView`, if your form is rendered inside modal or you don't want to apply padding, or translation to React root view.
+
+### Props
+
+Extends `View` props
+
+| Prop                             | Type                                                         | Default value       |
+| -------------------------------- | ------------------------------------------------------------ | ------------------- |
+| `avoidOffset`                    | number                                                       | 0                   |
+| `easing`                         | `easeIn` or `easeInOut` or `easeOut` or `linear`             | `linear`            |
+| `enabled`                        | boolean                                                      | true                |
+| `hideAnimationDelay`             | number                                                       | 0                   |
+| `hideAnimationDuration`          | number                                                       | 220                 |
+| `onSoftInputAppliedOffsetChange` | function(e: \{ nativeEvent: \{ appliedOffset: number \}\})   | undefined           |
+| `onSoftInputHeightChange`        | function(e: \{ nativeEvent: \{ softInputHeight: number \}\}) | undefined           |
+| `onSoftInputHidden`              | function(e: \{ nativeEvent: \{ softInputHeight: number \}\}) | undefined           |
+| `onSoftInputShown`               | function(e: \{ nativeEvent: \{ softInputHeight: number \}\}) | undefined           |
+| `showAnimationDelay`             | number                                                       | 300/0 (iOS/Android) |
+| `showAnimationDuration`          | number                                                       | 660                 |
+
+### Example
+
+```tsx
+import { AvoidSoftInput } from "react-native-avoid-softinput";
+
+<AvoidSoftInputView
+  avoidOffset={10}
+  easing="easeIn"
+  enabled={true}
+  hideAnimationDelay={100}
+  hideAnimationDuration={300}
+  onSoftInputShown={onSoftInputShown}
+  onSoftInputHidden={onSoftInputHidden}
+  onSoftInputHeightChange={onSoftInputHeightChange}
+  showAnimationDelay={100}
+  showAnimationDuration={800}
+  style={styles.avoidSoftInputView}
+>
+  {/** Content that should be pushed above the keyboard */}
+</AvoidSoftInputView>;
+```

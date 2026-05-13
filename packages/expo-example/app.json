@@ -21,7 +21,6 @@
         "foregroundImage": "./assets/AppIconTransparent.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true,
       "package": "com.reactnativeavoidsoftinput.expoexample"
     },
     "plugins": [

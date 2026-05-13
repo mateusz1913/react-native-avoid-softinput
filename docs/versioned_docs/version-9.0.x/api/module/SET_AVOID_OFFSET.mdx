@@ -1,0 +1,26 @@
+---
+id: set-avoid-offset
+title: setAvoidOffset
+sidebar_label: setAvoidOffset
+keywords: [react-native-avoid-softinput, setAvoidOffset, module]
+---
+
+Use `setAvoidOffset` method, if you want to increase/decrease amount of translation/padding applied to react root view/scroll view.
+
+### Parameters
+
+| Type   | Required | Description                                            |
+| ------ | -------- | ------------------------------------------------------ |
+| number | yes      | additional offset added to react root view/scroll view |
+
+### Example
+
+```ts
+import { AvoidSoftInput } from "react-native-avoid-softinput";
+
+AvoidSoftInput.setAvoidOffset(40); // It will result in applied value 40dp greater than standard one
+```
+
+:::info
+**Value applied to that method is persisted, so if you want to use that in a single use case, remember to clear it (just pass 0 as an argument)**
+:::

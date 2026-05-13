@@ -1,0 +1,22 @@
+---
+id: use-soft-input-state
+title: useSoftInputState
+sidebar_label: useSoftInputState
+keywords: [react-native-avoid-softinput, useSoftInputState, react hooks]
+---
+
+`useSoftInputState` returns object with properties determining whether soft input is shown and how much screen it covers.
+
+### Return value
+
+```
+{ isSoftInputShown: boolean, softInputHeight: number }
+```
+
+### Example
+
+```ts
+import { useSoftInputState } from "react-native-avoid-softinput";
+
+const { isSoftInputShown, softInputHeight } = useSoftInputState();
+```
