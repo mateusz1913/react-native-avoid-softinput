@@ -1,5 +1,3 @@
-#if RCT_NEW_ARCH_ENABLED
-
 #import "AvoidSoftInputViewComponentView.h"
 
 #import <react/renderer/components/rnavoidsoftinput/ComponentDescriptors.h>
@@ -199,5 +197,3 @@ Class<RCTComponentViewProtocol> AvoidSoftInputViewCls(void)
 {
     return AvoidSoftInputViewComponentView.class;
 }
-
-#endif
