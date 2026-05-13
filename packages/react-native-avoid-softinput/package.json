@@ -59,12 +59,12 @@
     "react-native-is-edge-to-edge": "^1.1.6"
   },
   "devDependencies": {
-    "@release-it/conventional-changelog": "10.0.1",
+    "@release-it/conventional-changelog": "^11.0.0",
     "@types/react": "19.0.10",
     "react": "19.0.0",
     "react-native": "0.79.4",
-    "react-native-builder-bob": "0.40.12",
-    "release-it": "19.0.3",
+    "react-native-builder-bob": "^0.41.0",
+    "release-it": "^20.0.1",
     "typescript": "5.8.3"
   },
   "peerDependencies": {
