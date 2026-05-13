@@ -68,8 +68,8 @@
     "typescript": "~5.9.2"
   },
   "peerDependencies": {
-    "react": ">=19.0.0",
-    "react-native": ">=0.78.0"
+    "react": ">=19.1.0",
+    "react-native": ">=0.80.0"
   },
   "release-it": {
     "git": {
@@ -98,7 +98,12 @@
     "output": "lib",
     "targets": [
       "commonjs",
-      "module",
+      [
+        "module",
+        {
+          "esm": false
+        }
+      ],
       [
         "typescript",
         {
@@ -115,8 +120,10 @@
       "javaPackageName": "com.reactnativeavoidsoftinput"
     },
     "ios": {
-      "componentProvider": {
-        "AvoidSoftInputView": "AvoidSoftInputViewComponentView"
+      "components": {
+        "AvoidSoftInputView": {
+          "className": "AvoidSoftInputViewComponentView"
+        }
       }
     }
   }
