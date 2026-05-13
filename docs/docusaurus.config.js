@@ -12,10 +12,14 @@ const config = {
   url: 'https://mateusz1913.github.io',
   baseUrl: '/react-native-avoid-softinput/',
   onBrokenLinks: 'throw',
-  onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
   organizationName: 'mateusz1913',
   projectName: 'react-native-avoid-softinput',
+  markdown: {
+    hooks: {
+      onBrokenMarkdownLinks: 'warn',
+    },
+  },
 
   presets: [
     [
