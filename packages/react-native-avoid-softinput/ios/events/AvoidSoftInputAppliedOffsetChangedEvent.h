@@ -3,10 +3,8 @@
 
 @class AvoidSoftInputConstants;
 
-@interface AvoidSoftInputAppliedOffsetChangedEvent : NSObject<RCTEvent>
+@interface AvoidSoftInputAppliedOffsetChangedEvent : NSObject <RCTEvent>
 
-- (nonnull instancetype)initWithReactTag:(NSNumber * _Nonnull)reactTag
-                                  offset:(CGFloat)offset;
+- (nonnull instancetype)initWithReactTag:(NSNumber *_Nonnull)reactTag offset:(CGFloat)offset;
 
 @end
-

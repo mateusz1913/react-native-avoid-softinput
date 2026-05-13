@@ -3,9 +3,8 @@
 
 @class AvoidSoftInputConstants;
 
-@interface BaseAvoidSoftInputEvent : NSObject<RCTEvent>
+@interface BaseAvoidSoftInputEvent : NSObject <RCTEvent>
 
-- (nonnull instancetype)initWithReactTag:(NSNumber * _Nonnull)reactTag
-                                  height:(CGFloat)height;
+- (nonnull instancetype)initWithReactTag:(NSNumber *_Nonnull)reactTag height:(CGFloat)height;
 
 @end
