@@ -11170,7 +11170,7 @@ __metadata:
     typescript: "npm:~5.9.2"
   peerDependencies:
     react: ">=19.1.0"
-    react-native: ">=0.80.0"
+    react-native: ">=0.81.0"
   languageName: unknown
   linkType: soft
 
