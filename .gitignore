@@ -68,3 +68,7 @@ android/keystores/debug.keystore
 packages/react-native-avoid-softinput/lib/
 
 .npmrc
+
+# SPM
+.build/
+.swiftpm/
