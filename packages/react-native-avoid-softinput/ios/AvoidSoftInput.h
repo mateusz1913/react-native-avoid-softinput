@@ -1,12 +1,10 @@
 #import <React/RCTEventEmitter.h>
 
-#import "rnavoidsoftinput.h"
-
 @class AvoidSoftInputConstants;
 @class AvoidSoftInputManager;
 @protocol AvoidSoftInputManagerDelegate;
 
-@interface AvoidSoftInput : RCTEventEmitter <NativeAvoidSoftInputModuleSpec>
+@interface AvoidSoftInput : RCTEventEmitter
 
 @property (nonatomic, readonly, strong) AvoidSoftInputManager *_Nonnull manager;
 

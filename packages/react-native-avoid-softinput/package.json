@@ -36,6 +36,7 @@
     "android",
     "ios",
     "cpp",
+    "Package.swift",
     "ReactNativeAvoidSoftinput.podspec",
     "jest",
     "LICENSE",

@@ -3,6 +3,15 @@
 #import "AvoidSoftInputManager.h"
 #import "RCTConvert+UIViewAnimationOptions.h"
 
+#ifdef REACT_NATIVE_AVOID_SOFTINPUT_USING_SPM
+#import <rnavoidsoftinput/rnavoidsoftinput.h>
+#else
+#import "rnavoidsoftinput.h"
+#endif
+
+@interface AvoidSoftInput () <NativeAvoidSoftInputModuleSpec>
+@end
+
 @interface AvoidSoftInput () <AvoidSoftInputManagerDelegate>
 @end
 
